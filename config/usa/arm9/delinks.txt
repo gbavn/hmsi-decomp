@@ -219,3 +219,7 @@ libs/NitroSystem/libraries/snd/src/stream.c:
     complete
     .text       start:0x0200faf4 end:0x020100c0
     .bss        start:0x020ce9e4 end:0x020ceab4
+
+libs/NitroSDK/libraries/card/src/card_backup.c:
+    complete
+    .text       start:0x0201d954 end:0x0201d9a4
