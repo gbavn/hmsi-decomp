@@ -10,6 +10,10 @@ libs/NitroSDK/libraries/init/src/crt0.c:
     complete
     .text       start:0x02000b98 end:0x02000ba0
 
+libs/NitroSDK/libraries/card/src/card_backup_version.c:
+    complete
+    .text       start:0x02000bc4 end:0x02000bdc
+
 src/game_main.c:
     complete
     .text       start:0x02000bdc end:0x02000bf4
@@ -478,7 +482,7 @@ libs/NitroSDK/libraries/rtc/src/convert.c:
 
 libs/NitroSDK/libraries/card/src/card_backup.c:
     complete
-    .text       start:0x0201d954 end:0x0201d9a4
+    .text       start:0x0201d67c end:0x0201daf4
 
 libs/NitroSDK/libraries/card/src/card_request.c:
     complete
@@ -580,3 +584,8 @@ libs/NitroSDK/libraries/rtc/src/external.c:
     complete
     .text       start:0x0201c774 end:0x0201ce74
     .bss        start:0x020d2030 end:0x020d2060
+
+libs/NitroSDK/libraries/card/src/card_common.c:
+    complete
+    .text       start:0x0201cf78 end:0x0201d2f8
+    .bss        start:0x020d2060 end:0x020d2700

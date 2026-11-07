@@ -107,7 +107,7 @@ def gap_data_symbols():
         _, _, files = delinks.read_text().partition("\n\n")
         for block in re.split(r"\n\s*\n", files):
             if re.search(r"^\s+complete\s*$", block, re.M):
-                for m in re.finditer(r"\.(?:rodata|data|bss|sbss|sdata)\s+start:0x([0-9a-f]+) end:0x([0-9a-f]+)",
+                for m in re.finditer(r"\.(?:text|rodata|data|bss|sbss|sdata)\s+start:0x([0-9a-f]+) end:0x([0-9a-f]+)",
                                      block):
                     covered.append((int(m.group(1), 16), int(m.group(2), 16)))
         for line in delinks.with_name("symbols.txt").read_text().splitlines():
@@ -154,10 +154,13 @@ def main():
     text = re.sub(r"([\w.]+)_dtcm\.o\(\.data\)", r"\1.o(.dtcm)", text)
     text = re.sub(r"([\w.]+)_dtcm\.o\(\.bss\)", r"\1.o(.dtcm.bss)", text)
     text = re.sub(r"\s*[\w.]+_dtcm\.o\(\.\w+\)", "", text)  # other (empty) sections of the alias
+    # Middleware tags (SDK_DEFINE_MIDDLEWARE): units named <file>_version.c place <file>.o(.version).
+    text = re.sub(r"([\w.]+)_version\.o\(\.text\)", r"\1.o(.version)", text)
+    text = re.sub(r"\s*[\w.]+_version\.o\(\.\w+\)", "", text)
     lcf.write_text(text)
     objects = BUILD / "objects.txt"
     objects.write_text("".join(l for l in objects.read_text().splitlines(True)
-                               if "_itcm.o" not in l and "_dtcm.o" not in l))
+                               if not re.search(r"_(itcm|dtcm|version)\.o", l)))
 
     files = json.loads(subprocess.run([str(DSD), "json", "delinks", "-c", str(CONFIG)], cwd=ROOT,
                                       capture_output=True, text=True, check=True).stdout)["files"]
