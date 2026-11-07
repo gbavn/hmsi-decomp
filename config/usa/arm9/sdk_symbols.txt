@@ -1,6 +1,11 @@
 # Linker-script constants that Nintendo's LCF defined for the SDK (values read from the ROM
 # with scripts/sdksyms.py). build.py defines them in the generated LCF.
 SDK_AUTOLOAD_DTCM_START = 0x027e0000
+SDK_AUTOLOAD_LIST = 0x020c8620
+SDK_AUTOLOAD_LIST_END = 0x020c8638
+SDK_AUTOLOAD_START = 0x020c6da0
+SDK_STATIC_BSS_START = 0x020c6da0
+SDK_STATIC_BSS_END = 0x02155c80
 SDK_IRQ_STACKSIZE = 0x400
 SDK_MAIN_ARENA_LO = 0x02229200
 SDK_SECTION_ARENA_DTCM_START = 0x027e0080

@@ -47,6 +47,9 @@ def flags_for(src):
         if len(parts) > 3 and parts[2] == "libraries":
             lib = PurePath(*parts[:4])
             extra = ["-i", str(lib / "include"), "-i", str(lib / "src")]
+        if parts[-1] == "crt0.c":
+            # dsd finds the module params and autoload callback by these names.
+            extra += ["-D_start_ModuleParams=BuildInfo", "-D_start_AutoloadDoneCallback=AutoloadCallback"]
         return list(VENDOR_FLAGS) + extra
     if "nnsys" in parts or "nitro" in parts:
         return list(LIB_FLAGS)

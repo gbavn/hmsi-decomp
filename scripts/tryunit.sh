@@ -3,6 +3,10 @@
 # Usage: scripts/tryunit.sh <source> [addlib args]
 cd "$(dirname "$0")/.."
 src=$1; shift
+if [ -n "$(git status --porcelain config/)" ]; then
+    echo "config/ has uncommitted changes; commit them first (tryunit reverts config/ when done)"
+    exit 1
+fi
 python scripts/addlib.py "$src" "$@" 2>&1 | grep -E "warning|start:|functions:|itcm" | sed 's/^/  addlib: /'
 python scripts/build.py --quick > /tmp/tryunit.log 2>&1
 if grep -q "^MATCH" /tmp/tryunit.log; then

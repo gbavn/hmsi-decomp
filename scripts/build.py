@@ -154,13 +154,14 @@ def main():
     text = re.sub(r"([\w.]+)_dtcm\.o\(\.data\)", r"\1.o(.dtcm)", text)
     text = re.sub(r"([\w.]+)_dtcm\.o\(\.bss\)", r"\1.o(.dtcm.bss)", text)
     text = re.sub(r"\s*[\w.]+_dtcm\.o\(\.\w+\)", "", text)  # other (empty) sections of the alias
-    # Middleware tags (SDK_DEFINE_MIDDLEWARE): units named <file>_version.c place <file>.o(.version).
-    text = re.sub(r"([\w.]+)_version\.o\(\.text\)", r"\1.o(.version)", text)
-    text = re.sub(r"\s*[\w.]+_version\.o\(\.\w+\)", "", text)
+    # Sections the original LCF put inside .text right after crt0 (crt0.o(.rodata), *(.version)):
+    # units named <file>_version.c / <file>_rodata.c place <file>.o(.version) / <file>.o(.rodata).
+    text = re.sub(r"([\w.]+)_(version|rodata)\.o\(\.text\)", r"\1.o(.\2)", text)
+    text = re.sub(r"\s*[\w.]+_(?:version|rodata)\.o\(\.\w+\)", "", text)
     lcf.write_text(text)
     objects = BUILD / "objects.txt"
     objects.write_text("".join(l for l in objects.read_text().splitlines(True)
-                               if not re.search(r"_(itcm|dtcm|version)\.o", l)))
+                               if not re.search(r"_(itcm|dtcm|version|rodata)\.o", l)))
 
     files = json.loads(subprocess.run([str(DSD), "json", "delinks", "-c", str(CONFIG)], cwd=ROOT,
                                       capture_output=True, text=True, check=True).stdout)["files"]
@@ -175,7 +176,7 @@ def main():
     print(f"compiled {len(jobs)} units", flush=True)
 
     run(MW / "mwldarm.exe", "-proc", "arm946e", "-nostdlib", "-interworking", "-dead",
-        "-m", "Entry", "-map", "closure,unused", "-o", BUILD / "arm9.o",
+        "-m", "_start", "-map", "closure,unused", "-o", BUILD / "arm9.o",
         BUILD / "arm9.lcf", "@" + str(BUILD / "objects.txt"))
     run(DSD, "check", "modules", "-c", CONFIG, "--fail")
     if a.quick:
