@@ -906,7 +906,7 @@ PXIi_HandlerRecvFifoNotEmpty kind:function(arm,size=0x118) addr:0x0201a0e0
 func_0201a1f8 kind:function(arm,size=0x50) addr:0x0201a1f8
 func_0201a248 kind:function(arm,size=0x154) addr:0x0201a248
 func_0201a39c kind:function(arm,size=0x1fc) addr:0x0201a39c
-func_0201a598 kind:function(arm,size=0x94) addr:0x0201a598
+DGT_Hash2CalcHmac kind:function(arm,size=0x94) addr:0x0201a598
 func_0201a62c kind:function(arm,size=0x1b8) addr:0x0201a62c
 func_0201a7f8 kind:function(arm,size=0x280) addr:0x0201a7f8
 CP_SaveContext kind:function(arm,size=0x40) addr:0x0201aa78
@@ -5606,18 +5606,18 @@ FSi_ReadDummyCallback kind:function(arm,size=0x8) addr:0x020af1f4 local
 FSi_EmptyArchiveProc kind:function(arm,size=0x8) addr:0x020af1fc local
 FSi_InitRom kind:function(arm,size=0x148) addr:0x020af204
 FS_TryLoadTable kind:function(arm,size=0x20) addr:0x020af34c
-func_020af36c kind:function(arm,size=0x1c) addr:0x020af36c
-func_020af388 kind:function(arm,size=0x3c) addr:0x020af388
-func_020af3c4 kind:function(arm,size=0x28) addr:0x020af3c4
-func_020af3ec kind:function(arm,size=0xf8) addr:0x020af3ec
-func_020af4e4 kind:function(arm,size=0xfc) addr:0x020af4e4
-func_020af5e0 kind:function(arm,size=0x90) addr:0x020af5e0
-func_020af670 kind:function(arm,size=0x94) addr:0x020af670
-func_020af704 kind:function(arm,size=0xf4) addr:0x020af704
-func_020af7f8 kind:function(arm,size=0xf0) addr:0x020af7f8
-func_020af8e8 kind:function(arm,size=0x10) addr:0x020af8e8
-func_020af8f8 kind:function(arm,size=0x54) addr:0x020af8f8
-func_020af94c kind:function(arm,size=0x4c) addr:0x020af94c
+FSi_GetOverlayBinarySize kind:function(arm,size=0x1c) addr:0x020af36c local
+FS_ClearOverlayImage kind:function(arm,size=0x3c) addr:0x020af388
+FS_GetOverlayFileID kind:function(arm,size=0x28) addr:0x020af3c4
+FSi_LoadOverlayInfoCore kind:function(arm,size=0xf8) addr:0x020af3ec
+FS_LoadOverlayInfo kind:function(arm,size=0xfc) addr:0x020af4e4
+FS_LoadOverlayImage kind:function(arm,size=0x90) addr:0x020af5e0
+FSi_CompareDigest kind:function(arm,size=0x94) addr:0x020af670 local
+FS_StartOverlay kind:function(arm,size=0xf4) addr:0x020af704
+FS_EndOverlay kind:function(arm,size=0xf0) addr:0x020af7f8
+FS_UnloadOverlayImage kind:function(arm,size=0x10) addr:0x020af8e8
+FS_LoadOverlay kind:function(arm,size=0x54) addr:0x020af8f8
+FS_UnloadOverlay kind:function(arm,size=0x4c) addr:0x020af94c
 __sinit_020af998 kind:function(arm,size=0x248) addr:0x020af998
 __sinit_020afbe0 kind:function(arm,size=0x178) addr:0x020afbe0
 __sinit_020afd58 kind:function(arm,size=0x40) addr:0x020afd58
@@ -8092,7 +8092,7 @@ data_020c6d74 kind:data(any) addr:0x020c6d74
 data_020c6d88 kind:data(any) addr:0x020c6d88
 data_020c6d8c kind:data(any) addr:0x020c6d8c
 data_020c6d90 kind:data(any) addr:0x020c6d90
-data_020c6d98 kind:data(any) addr:0x020c6d98
+SDK_OVERLAY_DIGEST kind:data(any) addr:0x020c6d98
 sRootListInitialized kind:bss addr:0x020c6da0
 sRootList kind:bss addr:0x020c6da4 local
 numRegisterdInstance_ kind:bss addr:0x020c6db0 local
@@ -8236,7 +8236,7 @@ data_020d3280 kind:bss addr:0x020d3280
 data_020d3380 kind:bss addr:0x020d3380
 data_020d3480 kind:bss addr:0x020d3480
 data_020d3484 kind:bss addr:0x020d3484
-data_020d34a0 kind:bss addr:0x020d34a0
+__global_destructor_chain kind:bss addr:0x020d34a0
 data_020d34a4 kind:bss addr:0x020d34a4
 data_020d34a8 kind:bss addr:0x020d34a8
 data_020d34b0 kind:bss addr:0x020d34b0
