@@ -561,9 +561,9 @@ func_02013624 kind:function(arm,size=0xb8) addr:0x02013624
 func_020136dc kind:function(arm,size=0x290) addr:0x020136dc
 GX_SetBankForBGExtPltt kind:function(arm,size=0x100) addr:0x0201396c
 GX_SetBankForOBJExtPltt kind:function(arm,size=0xac) addr:0x02013a6c
-func_02013b18 kind:function(arm,size=0x1d8) addr:0x02013b18
-func_02013cf0 kind:function(arm,size=0xe8) addr:0x02013cf0
-func_02013dd8 kind:function(arm,size=0x134) addr:0x02013dd8
+GX_SetBankForTex kind:function(arm,size=0x1d8) addr:0x02013b18
+GX_SetBankForTexPltt kind:function(arm,size=0xe8) addr:0x02013cf0
+GX_SetBankForClearImage kind:function(arm,size=0x134) addr:0x02013dd8
 func_02013f0c kind:function(arm,size=0x20) addr:0x02013f0c
 func_02013f2c kind:function(arm,size=0xa8) addr:0x02013f2c
 func_02013fd4 kind:function(arm,size=0x70) addr:0x02013fd4
@@ -572,9 +572,9 @@ GX_SetBankForSubOBJExtPltt kind:function(arm,size=0x80) addr:0x020140c4
 func_02014144 kind:function(arm,size=0x34) addr:0x02014144
 GX_ResetBankForBGExtPltt kind:function(arm,size=0x24) addr:0x02014178
 GX_ResetBankForOBJExtPltt kind:function(arm,size=0x24) addr:0x0201419c
-func_020141c0 kind:function(arm,size=0x14) addr:0x020141c0
-func_020141d4 kind:function(arm,size=0x14) addr:0x020141d4
-func_020141e8 kind:function(arm,size=0x14) addr:0x020141e8
+GX_ResetBankForTex kind:function(arm,size=0x14) addr:0x020141c0
+GX_ResetBankForTexPltt kind:function(arm,size=0x14) addr:0x020141d4
+GX_ResetBankForClearImage kind:function(arm,size=0x14) addr:0x020141e8
 GX_ResetBankForSubBGExtPltt kind:function(arm,size=0x28) addr:0x020141fc
 GX_ResetBankForSubOBJExtPltt kind:function(arm,size=0x28) addr:0x02014224
 func_0201424c kind:function(arm,size=0xe0) addr:0x0201424c
@@ -5658,6 +5658,7 @@ data_020b1044 kind:data(any) addr:0x020b1044
 data_020b1054 kind:data(any) addr:0x020b1054
 data_020b1056 kind:data(any) addr:0x020b1056
 data_020b1058 kind:data(any) addr:0x020b1058
+data_020b10b4 kind:data(any) addr:0x020b10b4
 data_020b11b4 kind:data(any) addr:0x020b11b4
 data_020b18b4 kind:data(any) addr:0x020b18b4
 data_020b1b88 kind:data(any) addr:0x020b1b88
