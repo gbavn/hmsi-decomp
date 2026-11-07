@@ -216,3 +216,7 @@ libs/NitroSystem/libraries/snd/src/sndarc.c:
     complete
     .text       start:0x02010334 end:0x02010a74
     .bss        start:0x020cf0b0 end:0x020cf0b4
+
+libs/NitroSystem/libraries/snd/src/sndarc_player.c:
+    complete
+    .text       start:0x02011800 end:0x020119e0
