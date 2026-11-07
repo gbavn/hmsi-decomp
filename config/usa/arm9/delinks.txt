@@ -189,3 +189,8 @@ libs/NitroSystem/libraries/gfd/src/VramTransferMan/gfd_VramTransferManager.c:
     .text       start:0x0200e274 end:0x0200e72c
     .rodata     start:0x020b0ec0 end:0x020b0f50
     .bss        start:0x020cbcac end:0x020cbcc0
+
+libs/NitroSystem/libraries/snd/src/capture.c:
+    complete
+    .text       start:0x020100c0 end:0x02010334
+    .bss        start:0x020ceab4 end:0x020cf0b0
