@@ -51,3 +51,8 @@ src/ov005/TitleCamera.cpp:
     .text       start:0x0215aab4 end:0x0215ad30
     .rodata     start:0x0215b3ac end:0x0215b3d0
     .data       start:0x0215baac end:0x0215bac8
+
+src/ov005/TitleChar.cpp:
+    complete
+    .text       start:0x0215ad30 end:0x0215b1e0
+    .data       start:0x0215bac8 end:0x0215bb60

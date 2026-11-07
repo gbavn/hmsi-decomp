@@ -2,7 +2,10 @@
 #define OV005_TITLE_H
 
 #include <nitro.h>
+#include <nnsys/g2d/g2d_CellAnimation.h>
+#include <nnsys/g2d/load/g2d_NAN_load.h>
 #include "Screen2D.h"
+#include "XbbSprite.h"
 #include "Button.h"
 #include "Archive.h"
 #include "Task.h"
@@ -109,6 +112,24 @@ public:
     VecFx32 mTarget;
 };
 
+// A villager or animal shown on the title screen's 3D stage, with an optional mark sprite
+// (overlay 5, 0x0215ad30).
+class TitleChar : public XbbSprite {
+public:
+    TitleChar(int person, Sprite2D mark);
+    TitleChar(u32 animal, Sprite2D mark);
+    virtual ~TitleChar();
+    virtual BOOL Update();
+    virtual void Func3();
+    virtual void Func4();
+
+    void InitMark();
+
+    int mPerson;
+    int mAnimal;
+    Sprite2D *mMark;
+};
+
 // Screens of the title overlay implemented in ARM9 (names unknown).
 class TitleSubScene4D : public Task {
 public:
@@ -127,10 +148,18 @@ struct Sprite2D {
     fx32 y;
     u8 unk14[0xa];
     u8 alpha;
+    u8 unk1F[0x48 - 0x1F];
+    const NNSG2dCellDataBank *cellBank;
+    const NNSG2dAnimBankData *animBank;
+    NNSG2dCellAnimation *cellAnim;
+    u8 unk54[0x17C - 0x54];
 };
 extern "C" {
 void func_0202bc20(void *renderer, Sprite2D *sprite);   // draw
 void func_0202b088(Sprite2D *sprite, int value);
+void func_0202b064(Sprite2D *sprite, int palette);
+void func_0202b1a4(Sprite2D *sprite, fx32 x, fx32 y, fx32 z);   // set position
+void func_0202ba04(Sprite2D *sprite, int unk);                   // release
 }
 
 class TitleMenu;
