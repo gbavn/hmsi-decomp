@@ -224,3 +224,7 @@ libs/NitroSDK/libraries/card/src/card_backup.c:
 libs/NitroSDK/libraries/card/src/card_request.c:
     complete
     .text       start:0x0201e1e8 end:0x0201e3c0
+
+libs/NitroSDK/libraries/cp/src/cp_context.c:
+    complete
+    .text       start:0x0201aa78 end:0x0201aaf4
