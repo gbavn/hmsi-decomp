@@ -410,6 +410,15 @@ void MI_StopDma (u32 dmaNo)
     (void)OS_RestoreInterrupts(enabled);
 }
 
+// Present in this game's SDK version (not in the reference revision).
+void MI_StopAllDma (void)
+{
+    MI_StopDma(0);
+    MI_StopDma(1);
+    MI_StopDma(2);
+    MI_StopDma(3);
+}
+
 #ifdef SDK_ARM9
     void MIi_CheckAnotherAutoDMA (u32 dmaNo, u32 dmaType)
     {

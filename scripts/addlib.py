@@ -357,6 +357,54 @@ def main():
     with delinks.open("a") as f:
         f.write(entry)
     print("added to", delinks.relative_to(match.ROOT))
+    add_itcm(a, b, secs, syms, relocs)
+
+
+def add_itcm(a, b, secs, syms, relocs):
+    """Functions the file puts in the .itcm section live in the ITCM module: add a unit there too."""
+    funcs = [s for s in syms if s["type"] == 2 and s["size"] and 0 < s["shndx"] < len(secs)
+             and secs[s["shndx"]]["name"] == ".itcm"]
+    if not funcs:
+        return
+    syms_file, ofuncs, orelocs, obin, obase = load_module("itcm")
+    found = {}
+    for s in funcs:
+        sec = secs[s["shndx"]]
+        start = s["value"] & ~1
+        data = bytearray(b[sec["off"] + start: sec["off"] + start + s["size"]])
+        cmask = set()
+        for off, *_ in relocs.get(s["shndx"], ()):
+            if start <= off < start + s["size"]:
+                cmask.update(range(off - start, off - start + 4))
+        for addr, size, name in ofuncs:
+            if size != len(data):
+                continue
+            orig = obin[addr - obase: addr - obase + size]
+            omask = {i for i in range(size) if (addr + i - i % 4) in orelocs}
+            if not match.compare(orig, omask, data, cmask) and addr not in found.values():
+                found[s["name"]] = addr
+                break
+    if len(found) != len(funcs):
+        print(f"itcm: only {len(found)}/{len(funcs)} functions found; not adding an ITCM unit")
+        return
+    lo = min(found.values())
+    hi = max(addr + next(f["size"] for f in funcs if f["name"] == n) for n, addr in found.items())
+    inside = [f for f in ofuncs if lo <= f[0] < hi]
+    if len(inside) != len(found):
+        print("itcm: matched functions are not contiguous; not adding an ITCM unit")
+        return
+    renames = []
+    for n, addr in found.items():
+        old = next(f[2] for f in ofuncs if f[0] == addr)
+        if old != n:
+            renames += [old, n]
+    if renames:
+        subprocess.run([sys.executable, str(Path(__file__).parent / "rename.py"), *renames], check=True)
+    delinks = syms_file.with_name("delinks.txt")
+    with delinks.open("a") as f:
+        alias = a.source[:-2] + "_itcm.c"  # dsd needs a distinct name; build.py maps it to <file>.o(.itcm)
+        f.write(f"\n{alias}:\n    complete\n    .text       start:{lo:#010x} end:{hi:#010x}\n")
+    print(f"itcm unit: .text {lo:#x}..{hi:#x} ({len(found)} functions)")
 
 
 if __name__ == "__main__":

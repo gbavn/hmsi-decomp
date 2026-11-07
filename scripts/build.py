@@ -136,12 +136,17 @@ def main():
     text = lcf.read_text()
     force = "FORCE_ACTIVE {\n    " + ",\n    ".join(gap_data_symbols()) + "\n}\n\n"
     text = text.replace("SECTIONS {", force + "SECTIONS {", 1)
+    # ITCM units named <file>_itcm.c are aliases: link <file>.o(.itcm) in their place.
+    for alias in re.findall(r"([\w.]+)_itcm\.o\(\.text\)", text):
+        text = text.replace(alias + "_itcm.o(.text)", alias + ".o(.itcm)")
     lcf.write_text(text)
+    objects = BUILD / "objects.txt"
+    objects.write_text("".join(l for l in objects.read_text().splitlines(True) if "_itcm.o" not in l))
 
     files = json.loads(subprocess.run([str(DSD), "json", "delinks", "-c", str(CONFIG)], cwd=ROOT,
                                       capture_output=True, text=True, check=True).stdout)["files"]
-    jobs = [(Path(f["name"]), ROOT / f["object_to_link"]) for f in files
-            if f["object_to_link"] != f["delink_file"]]
+    jobs = sorted({(Path(f["name"]), ROOT / f["object_to_link"]) for f in files
+                   if f["object_to_link"] != f["delink_file"] and (ROOT / f["name"]).exists()})
     stamp = tree_stamp("include", "libs")
     with ThreadPoolExecutor(max_workers=os.cpu_count() or 4) as pool:
         errors = [e for e in pool.map(lambda j: compile_unit(j[0], j[1], stamp), jobs) if e]
