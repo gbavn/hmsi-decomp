@@ -446,3 +446,8 @@ libs/NitroSDK/libraries/mi/src/mi_dma_gxcommand.c:
     complete
     .text       start:0x02018550 end:0x02018838
     .bss        start:0x020d03a0 end:0x020d03c0
+
+libs/NitroSDK/libraries/snd/src/snd_util.c:
+    complete
+    .text       start:0x02019a78 end:0x02019ae8
+    .rodata     start:0x020b10b4 end:0x020b1b88

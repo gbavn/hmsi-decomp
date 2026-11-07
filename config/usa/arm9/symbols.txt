@@ -5658,7 +5658,7 @@ data_020b1044 kind:data(any) addr:0x020b1044
 data_020b1054 kind:data(any) addr:0x020b1054
 data_020b1056 kind:data(any) addr:0x020b1056
 data_020b1058 kind:data(any) addr:0x020b1058
-data_020b10b4 kind:data(any) addr:0x020b10b4
+SNDi_DecibelSquareTable kind:data(any) addr:0x020b10b4
 SNDi_DecibelTable kind:data(any) addr:0x020b11b4
 data_020b18b4 kind:data(any) addr:0x020b18b4
 data_020b1b88 kind:data(any) addr:0x020b1b88
