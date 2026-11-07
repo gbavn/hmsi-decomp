@@ -259,19 +259,19 @@ NNSi_G3dGetTexPatAnmTexNameByIdx kind:function(arm,size=0x2c) addr:0x0200a570
 NNSi_G3dGetTexPatAnmPlttNameByIdx kind:function(arm,size=0x2c) addr:0x0200a59c
 NNSi_G3dGetTexPatAnmFV kind:function(arm,size=0x74) addr:0x0200a5c8
 NNSi_G3dGetTexPatAnmDataByIdx kind:function(arm,size=0x34) addr:0x0200a63c
-func_0200a670 kind:function(arm,size=0x7c) addr:0x0200a670
-func_0200a6ec kind:function(arm,size=0x3c) addr:0x0200a6ec
-func_0200a728 kind:function(arm,size=0x98) addr:0x0200a728
-func_0200a7c0 kind:function(arm,size=0x90) addr:0x0200a7c0
-func_0200a850 kind:function(arm,size=0x180) addr:0x0200a850
-func_0200a9d0 kind:function(arm,size=0x3b4) addr:0x0200a9d0
-func_0200ad84 kind:function(arm,size=0x160) addr:0x0200ad84
-func_0200aee4 kind:function(arm,size=0x15c) addr:0x0200aee4
-func_0200b040 kind:function(arm,size=0x1f4) addr:0x0200b040
-func_0200b234 kind:function(arm,size=0x194) addr:0x0200b234
-func_0200b3c8 kind:function(arm,size=0x418) addr:0x0200b3c8
-func_0200b7e0 kind:function(arm,size=0x344) addr:0x0200b7e0
-func_0200bb24 kind:function(arm,size=0x16c) addr:0x0200bb24
+NNSi_G3dAnmObjInitNsBca kind:function(arm,size=0x7c) addr:0x0200a670
+NNSi_G3dAnmCalcNsBca kind:function(arm,size=0x3c) addr:0x0200a6ec
+getMdlTrans_ kind:function(arm,size=0x98) addr:0x0200a728 local
+getMdlScale_ kind:function(arm,size=0x90) addr:0x0200a7c0 local
+getMdlRot_ kind:function(arm,size=0x180) addr:0x0200a850 local
+getJntSRTAnmResult_ kind:function(arm,size=0x3b4) addr:0x0200a9d0 local
+getTransData_ kind:function(arm,size=0x160) addr:0x0200ad84 local
+getTransDataEx_ kind:function(arm,size=0x15c) addr:0x0200aee4 local
+getScaleData_ kind:function(arm,size=0x1f4) addr:0x0200b040 local
+getScaleDataEx_ kind:function(arm,size=0x194) addr:0x0200b234 local
+getRotData_ kind:function(arm,size=0x418) addr:0x0200b3c8 local
+getRotDataEx_ kind:function(arm,size=0x344) addr:0x0200b7e0 local
+getRotDataByIdx_ kind:function(arm,size=0x16c) addr:0x0200bb24 local
 GetMatColAnmValue_ kind:function(arm,size=0x168) addr:0x0200bc90 local
 GetMatColAnmuAlphaValue_ kind:function(arm,size=0xec) addr:0x0200bdf8 local
 NNSi_G3dAnmObjInitNsBma kind:function(arm,size=0xd4) addr:0x0200bee4
@@ -6015,7 +6015,7 @@ data_020bb57c kind:data(any) addr:0x020bb57c
 data_020bb594 kind:data(any) addr:0x020bb594
 NNS_G3dAnmFmtNum kind:data(any) addr:0x020bb598
 NNS_G3dFuncAnmVisNsBvaDefault kind:data(any) addr:0x020bb59c
-data_020bb5a0 kind:data(any) addr:0x020bb5a0
+NNS_G3dFuncAnmJntNsBcaDefault kind:data(any) addr:0x020bb5a0
 NNS_G3dFuncAnmMatNsBtaDefault kind:data(any) addr:0x020bb5a4
 NNS_G3dFuncAnmMatNsBtpDefault kind:data(any) addr:0x020bb5a8
 NNS_G3dFuncAnmMatNsBmaDefault kind:data(any) addr:0x020bb5ac

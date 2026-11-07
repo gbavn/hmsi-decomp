@@ -614,3 +614,8 @@ libs/NitroSDK/libraries/snd/src/snd_command.c:
     complete
     .text       start:0x020191d4 end:0x020198e4
     .bss        start:0x020d03e0 end:0x020d1ec0
+
+libs/NitroSystem/libraries/g3d/src/anm/nsbca.c:
+    complete
+    .text       start:0x0200a670 end:0x0200bc90
+    .rodata     start:0x020b0e9c end:0x020b0ec0

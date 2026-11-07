@@ -25,3 +25,6 @@ data_020cf768 = 0x020cf768
 data_020cf780 = 0x020cf780
 data_020d13e0 = 0x020d13e0
 data_020d1ea8 = 0x020d1ea8
+data_020b0e9d = 0x020b0e9d
+data_020b0e9e = 0x020b0e9e
+data_020b0e9f = 0x020b0e9f
