@@ -146,6 +146,8 @@ def main():
         if m:
             names_at.setdefault(int(m.group(2), 16), m.group(1))
 
+    unique_owner = {h[0][0]: i for i, h in cands.items() if len(h) == 1}
+
     def consistency(idx, addr):
         """+1 per relocation whose original target already carries the expected name, -1 per conflict."""
         s = syms[idx]
@@ -164,9 +166,12 @@ def main():
             if o is None:
                 continue
             # calls into this file's own functions: check against their unique match, if any
+            target = ((o[1] - addend) if rtype == 2 else o[1]) & ~1
             if symi in cands and len(cands[symi]) == 1:
-                target = ((o[1] - addend) if rtype == 2 else o[1]) & ~1
                 score += 2 if cands[symi][0][0] == target else -2
+                continue
+            if target in unique_owner and unique_owner[target] != symi:
+                score -= 2  # the original calls a function we matched to something else
                 continue
             if not want or syms[symi]["shndx"] != 0:
                 continue  # only external symbols say anything about the pairing
