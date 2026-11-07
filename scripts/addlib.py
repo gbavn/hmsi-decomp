@@ -241,6 +241,7 @@ def main():
             if secs[s["shndx"]]["name"] in DATA_SECTIONS and not bases[s["shndx"]]:
                 bases[s["shndx"]].add(name_addr[s["name"]] - s["value"])
     sections = [(".text", text_start, text_end)]
+    sec_addr = {}
     for name in DATA_SECTIONS:
         parts = [(i, sec) for i, sec in enumerate(secs) if sec["name"] == name and sec["type"] in (1, 8) and sec["size"]]
         if not parts:
@@ -251,6 +252,7 @@ def main():
             if len(bases[i]) == 1:
                 b0 = next(iter(bases[i]))
                 placed.append((b0, b0 + sec["size"]))
+                sec_addr[i] = b0
             else:
                 unplaced.append((i, sec))
         if not placed:
@@ -263,6 +265,7 @@ def main():
             b0 = (placed[-1][1] + align - 1) // align * align
             print(f"warning: {name} section {i} (size {sec['size']:#x}) unreferenced; assuming {b0:#x}")
             placed.append((b0, b0 + sec["size"]))
+            sec_addr[i] = b0
         lo, hi = placed[0][0], placed[-1][1]
         gaps = [(a[1], b[0]) for a, b in zip(placed, placed[1:]) if b[0] - a[1] >= 0x20 or b[0] < a[1]]
         if gaps:
@@ -326,6 +329,28 @@ def main():
     for old, new in ext.items():
         renames += [old, new]
 
+    # Original symbols inside our data that don't start a compiled object (dsd named every address
+    # something referenced): references to them become "containing object + offset".
+    interior = []  # (old name, old addr, new target name, new target addr)
+    starts = {}
+    for s in syms:
+        if s["type"] == 1 and s["size"] and s["shndx"] in sec_addr:
+            starts[sec_addr[s["shndx"]] + s["value"]] = (re.sub(r"\$.*", "", s["name"]), s["size"], s["bind"])
+    ranges = [(s0, e0) for n, s0, e0 in sections if n != ".text"]
+    for line in syms_file.read_text().splitlines():
+        m = re.match(r"^(\S+) kind:(?:data|bss)\S* addr:0x([0-9a-f]+)", line)
+        if not m:
+            continue
+        addr = int(m.group(2), 16)
+        if addr in starts or not any(s0 <= addr < e0 for s0, e0 in ranges):
+            continue
+        cont = [(a0, v) for a0, v in starts.items() if a0 < addr < a0 + v[1] and v[2] == 1]
+        if cont:
+            a0, v = cont[0]
+            interior.append((m.group(1), addr, v[0], a0))
+        else:
+            print(f"warning: {m.group(1)} at {addr:#x} is inside no global object of the unit")
+
     # global data symbols
     sec_base = {n: s for n, s, e in sections}
     known = {}
@@ -336,9 +361,8 @@ def main():
     for s in syms:
         if s["type"] != 1 or not (0 < s["shndx"] < len(secs)) or s["bind"] != 1:
             continue
-        sname = secs[s["shndx"]]["name"]
-        if sname in sec_base:
-            addr = sec_base[sname] + s["value"]
+        if s["shndx"] in sec_addr:
+            addr = sec_addr[s["shndx"]] + s["value"]
             if addr in known and known[addr] != s["name"]:
                 renames += [known[addr], s["name"]]
     print(f"unit: {a.source}")
@@ -352,6 +376,16 @@ def main():
         if local:
             cmd += ["--local", *local]
         subprocess.run(cmd, check=True)
+    if interior:
+        drop = {n for n, *_ in interior}
+        lines = [l for l in syms_file.read_text().splitlines() if l.split(" ", 1)[0] not in drop]
+        syms_file.write_text("\n".join(lines) + "\n")
+        relocs_file = syms_file.with_name("relocs.txt")
+        text = relocs_file.read_text()
+        for n, addr, tn, a0 in interior:
+            text = text.replace(f"to:{addr:#010x} module", f"to:{a0:#010x} add:{addr - a0:#x} module")
+        relocs_file.write_text(text)
+        print(f"rewrote references to {len(interior)} interior symbols")
     delinks = syms_file.with_name("delinks.txt")
     entry = f"\n{a.source}:\n    complete\n" + "".join(
         f"    {n:11} start:{s:#010x} end:{e:#010x}\n" for n, s, e in sections)
