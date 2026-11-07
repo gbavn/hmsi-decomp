@@ -22,3 +22,23 @@ src/nnsys/fnd/heapcommon.c:
 src/nnsys/fnd/frameheap.c:
     complete
     .text       start:0x02000ef0 end:0x02001170
+
+src/nnsys/g2d/load/g2d_NAN_load.c:
+    complete
+    .text       start:0x02001170 end:0x02001320
+
+src/nnsys/g2d/load/g2d_NCE_load.c:
+    complete
+    .text       start:0x02001320 end:0x02001450
+
+src/nnsys/g2d/load/g2d_NCG_load.c:
+    complete
+    .text       start:0x02001450 end:0x0200149c
+
+src/nnsys/g2d/load/g2d_NCL_load.c:
+    complete
+    .text       start:0x0200149c end:0x02001534
+
+src/nnsys/g2d/load/g2d_Load.c:
+    complete
+    .text       start:0x02001534 end:0x020015c4
