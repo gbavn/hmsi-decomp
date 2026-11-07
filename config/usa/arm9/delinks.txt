@@ -326,3 +326,7 @@ libs/NitroSDK/libraries/os/src/os_init.c:
 libs/NitroSDK/libraries/os/src/os_message.c:
     complete
     .text       start:0x020171b0 end:0x02017254
+
+libs/NitroSDK/libraries/os/src/os_mutex.c:
+    complete
+    .text       start:0x02017254 end:0x02017444
