@@ -179,3 +179,7 @@ libs/NitroSystem/libraries/gfd/src/VramManager/gfd_LinkedListTexVramMan.c:
     .text       start:0x0200eb90 end:0x0200ef24
     .rodata     start:0x020b0f50 end:0x020b0f80
     .bss        start:0x020cbcc0 end:0x020cbcdc
+
+libs/NitroSystem/libraries/gfd/src/VramManager/gfdi_LinkedListVramMan_Common.c:
+    complete
+    .text       start:0x0200e72c end:0x0200eb90
