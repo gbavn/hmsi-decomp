@@ -211,3 +211,8 @@ libs/NitroSystem/libraries/snd/src/resource_mgr.c:
 libs/NitroSystem/libraries/snd/src/seqdata.c:
     complete
     .text       start:0x02086bd8 end:0x02086be0
+
+libs/NitroSystem/libraries/snd/src/sndarc.c:
+    complete
+    .text       start:0x02010334 end:0x02010a74
+    .bss        start:0x020cf0b0 end:0x020cf0b4
