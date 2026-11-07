@@ -507,3 +507,8 @@ libs/NitroSDK/libraries/fx/src/fx_atanidx.c:
     complete
     .text       start:0x020ad5ec end:0x020ad794
     .rodata     start:0x020bb3bc end:0x020bb4c0
+
+libs/NitroSDK/libraries/gx/src/gxstate.c:
+    complete
+    .text       start:0x020135c4 end:0x02013624
+    .bss        start:0x020cff64 end:0x020cff80
