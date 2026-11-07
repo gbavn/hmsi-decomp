@@ -165,3 +165,7 @@ libs/NitroSystem/libraries/g3d/src/util.c:
 libs/NitroSystem/libraries/g2d/src/g2d_Entity.c:
     complete
     .text       start:0x0207bddc end:0x0207bde4
+
+libs/NitroSystem/libraries/g2d/src/internal/g2di_Mtx32.c:
+    complete
+    .text       start:0x02004338 end:0x0200445c
