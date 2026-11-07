@@ -512,3 +512,8 @@ libs/NitroSDK/libraries/gx/src/gxstate.c:
     complete
     .text       start:0x020135c4 end:0x02013624
     .bss        start:0x020cff64 end:0x020cff80
+
+libs/NitroSDK/libraries/os/src/os_vramExclusive.c:
+    complete
+    .text       start:0x02017fc4 end:0x02018088
+    .bss        start:0x020d0388 end:0x020d03a0
