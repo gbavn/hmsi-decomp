@@ -1288,10 +1288,10 @@ _Z10GFile_LoadP5GFilePKci kind:function(arm,size=0x14) addr:0x02028c8c
 _Z12GFile_LoadExP5GFilePKcPmi kind:function(arm,size=0xc4) addr:0x02028ca0
 _Z15GFile_LoadAsyncP5GFilePKc kind:function(arm,size=0x10) addr:0x02028d64
 _Z17GFile_LoadAsyncExP5GFilePKcPm kind:function(arm,size=0x40) addr:0x02028d74
-func_02028db4 kind:function(arm,size=0x30) addr:0x02028db4
-func_02028de4 kind:function(arm,size=0x3c) addr:0x02028de4
-func_02028e20 kind:function(arm,size=0x270) addr:0x02028e20
-func_02029090 kind:function(arm,size=0x30) addr:0x02029090
+_Z12Input_InitTPv kind:function(arm,size=0x30) addr:0x02028db4
+_Z13Input_StartTPv kind:function(arm,size=0x3c) addr:0x02028de4
+_Z12Input_Updatev kind:function(arm,size=0x270) addr:0x02028e20
+_Z11Input_Clearv kind:function(arm,size=0x30) addr:0x02029090
 _Z11Memory_Initv kind:function(arm,size=0x60) addr:0x020290c0
 _Z12Memory_Allocm kind:function(arm,size=0x20) addr:0x02029120
 _Z11Memory_FreePv kind:function(arm,size=0x28) addr:0x02029140
@@ -8278,15 +8278,7 @@ sMMAllocCount kind:bss addr:0x020ec7e8
 data_020ec7ec kind:bss addr:0x020ec7ec
 sFSTable kind:bss addr:0x020ec7f0
 data_020ec7f4 kind:bss addr:0x020ec7f4
-data_020ec7f8 kind:bss addr:0x020ec7f8
-data_020ec7fa kind:bss addr:0x020ec7fa
-data_020ec7fc kind:bss addr:0x020ec7fc
-data_020ec7fe kind:bss addr:0x020ec7fe
-data_020ec800 kind:bss addr:0x020ec800
-data_020ec802 kind:bss addr:0x020ec802
-data_020ec804 kind:bss addr:0x020ec804
-data_020ec806 kind:bss addr:0x020ec806
-data_020ec82e kind:bss addr:0x020ec82e
+gInput kind:bss addr:0x020ec7f8
 sHeap kind:bss addr:0x020ec850 local
 data_020ec854 kind:bss addr:0x020ec854
 data_020ec858 kind:bss addr:0x020ec858
