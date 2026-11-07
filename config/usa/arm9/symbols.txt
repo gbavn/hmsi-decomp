@@ -1171,7 +1171,7 @@ func_02025460 kind:function(arm,size=0x68) addr:0x02025460
 func_020254c8 kind:function(arm,size=0x1e0) addr:0x020254c8
 func_020256b4 kind:function(arm,size=0x278) addr:0x020256b4
 func_0202592c kind:function(arm,size=0x1c0) addr:0x0202592c
-.L_0202593c kind:label(arm) addr:0x0202593c
+_ll_sdiv kind:label(arm) addr:0x0202593c
 _ll_udiv kind:function(arm,size=0x48) addr:0x02025aec
 .L_02025af8 kind:label(arm) addr:0x02025af8
 _s32_div_f kind:function(arm,size=0x20c) addr:0x02025b34
