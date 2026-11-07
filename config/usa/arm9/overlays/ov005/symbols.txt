@@ -151,9 +151,11 @@ data_ov005_0215b700 kind:data(any) addr:0x0215b700
 data_ov005_0215b714 kind:data(any) addr:0x0215b714
 data_ov005_0215b728 kind:data(any) addr:0x0215b728
 data_ov005_0215b73c kind:data(any) addr:0x0215b73c
+gSplashFileVtable kind:data(any) addr:0x0215b750
 _ZTV12SplashScreen kind:data(any) addr:0x0215b760
 data_ov005_0215b77c kind:data(any) addr:0x0215b77c
 _ZTV10TitleScene kind:data(any) addr:0x0215b794
+gTitleSceneFileVtable kind:data(any) addr:0x0215b7b0
 gTitleMenuStrings kind:data(any) addr:0x0215b7c0
 _ZTV9TitleMenu kind:data(any) addr:0x0215b8d0
 _ZTV9TitleMain kind:data(any) addr:0x0215b8e0
@@ -189,6 +191,7 @@ data_ov005_0215ba60 kind:data(any) addr:0x0215ba60
 data_ov005_0215ba68 kind:data(any) addr:0x0215ba68
 data_ov005_0215ba70 kind:data(any) addr:0x0215ba70
 data_ov005_0215ba78 kind:data(any) addr:0x0215ba78
+gStageFileVtable kind:data(any) addr:0x0215ba80
 _ZTV10TitleStage kind:data(any) addr:0x0215ba90
 _ZTV11TitleCamera kind:data(any) addr:0x0215baac
 data_ov005_0215bac8 kind:data(any) addr:0x0215bac8
@@ -200,6 +203,3 @@ data_ov005_0215bb3c kind:data(any) addr:0x0215bb3c
 _ZTV9TitleChar kind:data(any) addr:0x0215bb44
 sTitleManagers kind:bss addr:0x0215bb60
 sTitleFlow kind:bss addr:0x0215bb88
-gSplashFileVtable kind:data(any) addr:0x0215b750
-gTitleSceneFileVtable kind:data(any) addr:0x0215b7b0
-gStageFileVtable kind:data(any) addr:0x0215ba80

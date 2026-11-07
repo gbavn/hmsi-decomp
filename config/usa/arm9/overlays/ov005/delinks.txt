@@ -4,6 +4,14 @@
     .data       start:0x0215b3e0 end:0x0215bb60 kind:data align:32
     .bss        start:0x0215bb60 end:0x0215bba0 kind:bss align:32
 
+src/ov005/TitleMainManagers.cpp:
+    complete
+    .bss        start:0x0215bb60 end:0x0215bb88
+
+src/ov005/TitleFlowData.cpp:
+    complete
+    .bss        start:0x0215bb88 end:0x0215bba0
+
 src/ov005/TitleLogo.cpp:
     complete
     .text       start:0x02155c80 end:0x021562f4
@@ -28,45 +36,6 @@ src/ov005/TitleSceneFileVtable.cpp:
     complete
     .data       start:0x0215b7b0 end:0x0215b7c0
 
-src/ov005/TitleMainManagers.cpp:
-    complete
-    .bss        start:0x0215bb60 end:0x0215bb88
-
-src/ov005/TitleMain.cpp:
-    complete
-    .text       start:0x02158d20 end:0x02159478
-    .data       start:0x0215b8e0 end:0x0215b8fc
-
-src/ov005/TitleFlow.cpp:
-    complete
-    .text       start:0x02159478 end:0x021597ac
-    .data       start:0x0215b8fc end:0x0215b918
-
-src/ov005/TitleFlowData.cpp:
-    complete
-    .bss        start:0x0215bb88 end:0x0215bba0
-
-src/ov005/TitleCamera.cpp:
-    complete
-    .text       start:0x0215aab4 end:0x0215ad30
-    .rodata     start:0x0215b3ac end:0x0215b3d0
-    .data       start:0x0215baac end:0x0215bac8
-
-src/ov005/TitleChar.cpp:
-    complete
-    .text       start:0x0215ad30 end:0x0215b1e0
-    .data       start:0x0215bac8 end:0x0215bb60
-
-src/ov005/TitleStage.cpp:
-    complete
-    .text       start:0x021597ac end:0x0215aab4
-    .data       start:0x0215b918 end:0x0215baac
-
-src/ov005/TitleMenu.cpp:
-    complete
-    .text       start:0x02157310 end:0x02158d20
-    .data       start:0x0215b8d0 end:0x0215b8e0
-
 src/ov005/TitleMenuData.cpp:
     complete
     .rodata     start:0x0215b1e0 end:0x0215b20c
@@ -79,3 +48,34 @@ src/ov005/TitleMenuPriorities.cpp:
 src/ov005/TitleMenuData2.cpp:
     complete
     .rodata     start:0x0215b228 end:0x0215b3ac
+
+src/ov005/TitleMenu.cpp:
+    complete
+    .text       start:0x02157310 end:0x02158d20
+    .data       start:0x0215b8d0 end:0x0215b8e0
+
+src/ov005/TitleMain.cpp:
+    complete
+    .text       start:0x02158d20 end:0x02159478
+    .data       start:0x0215b8e0 end:0x0215b8fc
+
+src/ov005/TitleFlow.cpp:
+    complete
+    .text       start:0x02159478 end:0x021597ac
+    .data       start:0x0215b8fc end:0x0215b918
+
+src/ov005/TitleStage.cpp:
+    complete
+    .text       start:0x021597ac end:0x0215aab4
+    .data       start:0x0215b918 end:0x0215baac
+
+src/ov005/TitleCamera.cpp:
+    complete
+    .text       start:0x0215aab4 end:0x0215ad30
+    .rodata     start:0x0215b3ac end:0x0215b3d0
+    .data       start:0x0215baac end:0x0215bac8
+
+src/ov005/TitleChar.cpp:
+    complete
+    .text       start:0x0215ad30 end:0x0215b1e0
+    .data       start:0x0215bac8 end:0x0215bb60

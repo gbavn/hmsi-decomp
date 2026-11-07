@@ -4,3 +4,16 @@
     .ctor       start:0x0215c04c end:0x0215c054 kind:rodata align:4
     .data       start:0x0215c060 end:0x0215d620 kind:data align:32
     .bss        start:0x0215d620 end:0x0215d6c0 kind:bss align:32
+
+src/ov004/MiniGameData.cpp:
+    complete
+    .bss        start:0x0215d620 end:0x0215d624
+
+src/ov004/MiniGame.cpp:
+    complete
+    .text       start:0x02155c80 end:0x02155fdc
+    .data       start:0x0215c060 end:0x0215c07c
+
+src/ov004/MiniGameBaseVtable.cpp:
+    complete
+    .data       start:0x0215c07c end:0x0215c08c
