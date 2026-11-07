@@ -517,3 +517,7 @@ libs/NitroSDK/libraries/os/src/os_vramExclusive.c:
     complete
     .text       start:0x02017fc4 end:0x02018088
     .bss        start:0x020d0388 end:0x020d03a0
+
+libs/NitroSDK/libraries/fx/src/fx_mtx44.c:
+    complete
+    .text       start:0x020ac448 end:0x020ace60
