@@ -34,10 +34,10 @@ NNS_FndInsertListObject kind:function(arm,size=0x64) addr:0x02000cdc
 NNS_FndRemoveListObject kind:function(arm,size=0x60) addr:0x02000d40
 NNS_FndGetNextListObject kind:function(arm,size=0x18) addr:0x02000da0
 NNS_FndGetPrevListObject kind:function(arm,size=0x14) addr:0x02000db8
-func_02000dcc kind:function(arm,size=0x68) addr:0x02000dcc
-func_02000e34 kind:function(arm,size=0x28) addr:0x02000e34
-func_02000e5c kind:function(arm,size=0x7c) addr:0x02000e5c
-func_02000ed8 kind:function(arm,size=0x18) addr:0x02000ed8
+FindContainHeap kind:function(arm,size=0x68) addr:0x02000dcc local
+FindListContainHeap kind:function(arm,size=0x28) addr:0x02000e34 local
+NNSi_FndInitHeapHead kind:function(arm,size=0x7c) addr:0x02000e5c
+NNSi_FndFinalizeHeap kind:function(arm,size=0x18) addr:0x02000ed8
 func_02000ef0 kind:function(arm,size=0x48) addr:0x02000ef0
 func_02000f38 kind:function(arm,size=0x5c) addr:0x02000f38
 func_02000f94 kind:function(arm,size=0x58) addr:0x02000f94
@@ -825,7 +825,7 @@ func_02018754 kind:function(arm,size=0xb8) addr:0x02018754
 func_0201880c kind:function(arm,size=0x2c) addr:0x0201880c
 func_02018838 kind:function(arm,size=0x28) addr:0x02018838
 func_02018860 kind:function(arm,size=0x34) addr:0x02018860
-func_02018894 kind:function(arm,size=0x1c) addr:0x02018894
+MIi_CpuClear32 kind:function(arm,size=0x1c) addr:0x02018894
 func_020188b0 kind:function(arm,size=0x28) addr:0x020188b0
 func_020188d8 kind:function(arm,size=0x28) addr:0x020188d8
 func_02018900 kind:function(arm,size=0x5c) addr:0x02018900
@@ -8088,8 +8088,8 @@ data_020c6d88 kind:data(any) addr:0x020c6d88
 data_020c6d8c kind:data(any) addr:0x020c6d8c
 data_020c6d90 kind:data(any) addr:0x020c6d90
 data_020c6d98 kind:data(any) addr:0x020c6d98
-data_020c6da0 kind:bss addr:0x020c6da0
-data_020c6da4 kind:bss addr:0x020c6da4
+sRootListInitialized kind:bss addr:0x020c6da0
+sRootList kind:bss addr:0x020c6da4 local
 data_020c6db0 kind:bss addr:0x020c6db0
 data_020c6db4 kind:bss addr:0x020c6db4
 data_020c6eb4 kind:bss addr:0x020c6eb4
