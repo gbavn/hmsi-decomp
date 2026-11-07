@@ -14,11 +14,12 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from flags import flags_for  # noqa: E402
+from flags import compiler_for, flags_for  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 DSD = ROOT / "tools" / "dsd.exe"
-MW = ROOT / "tools" / "mwccarm" / "2.0" / "sp2p2"
+MWROOT = ROOT / "tools" / "mwccarm"
+MW = MWROOT / "2.0" / "sp2p2"  # linker
 CONFIG_DIR = ROOT / "config" / "usa" / "arm9"
 CONFIG = CONFIG_DIR / "config.yaml"
 BUILD = ROOT / "build" / "usa"
@@ -48,12 +49,13 @@ def tree_stamp(*dirs):
 
 def compile_unit(src, obj, header_stamp):
     flags = flags_for(src)
-    key = hashlib.sha1(("\0".join(flags) + header_stamp).encode() + (ROOT / src).read_bytes()).hexdigest()
+    compiler = compiler_for(src)
+    key = hashlib.sha1(("\0".join([compiler, *flags]) + header_stamp).encode() + (ROOT / src).read_bytes()).hexdigest()
     stamp = obj.with_suffix(".key")
     if obj.exists() and stamp.exists() and stamp.read_text() == key:
         return None
     obj.parent.mkdir(parents=True, exist_ok=True)
-    r = subprocess.run([str(MW / "mwccarm.exe"), *flags, "-c", str(src), "-o", str(obj)], cwd=ROOT, env=env,
+    r = subprocess.run([str(MWROOT / compiler / "mwccarm.exe"), *flags, "-c", str(src), "-o", str(obj)], cwd=ROOT, env=env,
                        capture_output=True, text=True)
     if r.returncode != 0:
         return f"{src}:\n{r.stdout}{r.stderr}"

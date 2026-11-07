@@ -295,7 +295,7 @@ libs/NitroSDK/libraries/os/src/os_valarm.c:
 
 libs/NitroSDK/libraries/os/src/os_system.c:
     complete
-    .text       start:0x02017da8 end:0x02017e38
+    .text       start:0x02017da8 end:0x02017e54
 
 libs/NitroSDK/libraries/os/src/os_terminate_proc.c:
     complete
@@ -530,3 +530,8 @@ libs/NitroSDK/libraries/os/src/os_exception.c:
     complete
     .text       start:0x02017960 end:0x02017b74
     .bss        start:0x020d02a4 end:0x020d0350
+
+libs/NitroSDK/libraries/os/src/os_reset.c:
+    complete
+    .text       start:0x02017e54 end:0x02017fc4
+    .bss        start:0x020d0384 end:0x020d0388

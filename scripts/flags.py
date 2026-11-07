@@ -23,9 +23,21 @@ VENDOR_FLAGS = [
     "-gccext,on", "-ipa", "file", "-interworking", "-inline", "on,noauto", "-char", "signed",
     "-nosyspath", "-gccinc", "-nolink", "-msgstyle", "gcc",
     "-DSDK_CW_FORCE_EXPORT_SUPPORT", "-DSDK_TS", "-DSDK_4M", "-DSDK_ARM9", "-DSDK_CW", "-DSDK_FINALROM",
-    "-DSDK_CODE_ARM", "-DNNS_FINALROM",
+    "-DSDK_CODE_ARM", "-DNNS_FINALROM", "-DSP1P3_BUG_FOR_CONDITIONAL_ASM_INSTRUCTIONS",
     "-i", "libs/stub", "-i", "libs/NitroSDK/include", "-i", "libs/NitroSystem/include",
 ]
+
+
+# Compiler version per source area (tools/mwccarm/<version>).
+DEFAULT_COMPILER = "2.0/sp2p2"
+SDK_COMPILER = "2.0/sp1p5"  # the game's NitroSDK was built with an older compiler than NitroSystem
+
+
+def compiler_for(src):
+    parts = PurePath(str(src).replace("\\", "/")).parts
+    if len(parts) > 1 and parts[0] == "libs" and parts[1] == "NitroSDK":
+        return SDK_COMPILER
+    return DEFAULT_COMPILER
 
 
 def flags_for(src):

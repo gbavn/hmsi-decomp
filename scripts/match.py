@@ -17,13 +17,13 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from flags import flags_for  # noqa: E402
+from flags import compiler_for, flags_for  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config" / "usa" / "arm9"
 EXTRACT = ROOT / "extract" / "usa"
 MWROOT = ROOT / "tools" / "mwccarm"
-DEFAULT_COMPILER = "2.0/sp2p2"
+DEFAULT_COMPILER = None  # None: per-area version from flags.compiler_for
 DEFAULT_FLAGS = ("-O4,p -enum int -char signed -str noreuse -proc arm946e -gccext,on -fp soft "
                  "-inline noauto -Cpp_exceptions off -RTTI off -interworking -w off -sym on "
                  "-gccinc -nolink -msgstyle gcc -i include")
@@ -141,6 +141,7 @@ def compiled_bytes(obj, func):
 
 def compile_src(src, compiler, flags, out):
     env = dict(os.environ, LM_LICENSE_FILE=str(MWROOT / "license.dat"))
+    compiler = compiler or compiler_for(Path(src).relative_to(ROOT) if Path(src).is_absolute() else src)
     flag_list = flags.split() if flags else flags_for(Path(src).relative_to(ROOT) if Path(src).is_absolute() else src)
     cmd = [str(MWROOT / compiler / "mwccarm.exe"), *flag_list, "-c", str(src), "-o", str(out)]
     r = subprocess.run(cmd, cwd=ROOT, env=env, capture_output=True, text=True, timeout=120)
@@ -181,7 +182,7 @@ def main():
     at = int(a.addr, 16) if a.addr else None
     mode, addr, orig, omask = original_bytes(a.function, module, at=at)
     compilers = ([f"{fam}/{v.name}" for fam in ("2.0", "1.2", "dsi") for v in sorted((MWROOT / fam).iterdir())]
-                 if a.all_compilers else [a.compiler])
+                 if a.all_compilers else [a.compiler or compiler_for(a.source)])
     ok_any = False
     with tempfile.TemporaryDirectory() as tmp:
         for comp in compilers:

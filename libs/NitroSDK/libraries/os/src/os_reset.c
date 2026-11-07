@@ -113,13 +113,13 @@ static void OSi_SendToPxi (u16 data)
             CARD_LockRom(id);
         }
 
+        (void)OS_SetIrqMask(OS_IE_FIFO_RECV);
+        (void)OS_ResetRequestIrqMask((u32)~OS_IE_FIFO_RECV);
+
         MI_StopDma(0);
         MI_StopDma(1);
         MI_StopDma(2);
         MI_StopDma(3);
-
-        (void)OS_SetIrqMask(OS_IE_FIFO_RECV);
-        (void)OS_ResetRequestIrqMask(0xffffffff);
 
         *(u32 *)HW_RESET_PARAMETER_BUF = parameter;
 
@@ -138,13 +138,13 @@ static void OSi_SendToPxi (u16 data)
     void OS_ResetSystem (void)
     {
 
+        (void)OS_SetIrqMask(OS_IE_FIFO_RECV);
+        (void)OS_ResetRequestIrqMask((u32)~OS_IE_FIFO_RECV);
+
         MI_StopDma(0);
         MI_StopDma(1);
         MI_StopDma(2);
         MI_StopDma(3);
-
-        (void)OS_SetIrqMask(OS_IE_FIFO_RECV);
-        (void)OS_ResetRequestIrqMask(0xffffffff);
 
         SND_Shutdown();
 

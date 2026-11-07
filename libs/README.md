@@ -12,5 +12,6 @@
 Every edit to the vendored sources is listed here.
 
 - `NitroSDK/libraries/mi/src/mi_dma.c`: added `MI_StopAllDma` (missing from the reference revision).
-- `NitroSDK/libraries/os/src/os_exception.c`: defined `SP1P3_BUG_FOR_CONDITIONAL_ASM_INSTRUCTIONS` (this game's
-  `OSi_ExceptionHandler` uses the branch-around variant instead of `movne`/`bxne`).
+- `scripts/flags.py` defines `SP1P3_BUG_FOR_CONDITIONAL_ASM_INSTRUCTIONS` for all vendored sources: this game's SDK
+  was built with the branch-around variant of conditional asm instructions (os_exception, os_reset, ...).
+- `NitroSDK/libraries/os/src/os_reset.c`: `OS_ResetSystem` masks IRQs (`~OS_IE_FIFO_RECV`) before stopping DMA.
