@@ -106,3 +106,7 @@ libs/NitroSystem/libraries/g3d/src/anm/nsbma.c:
 libs/NitroSystem/libraries/g3d/src/anm/nsbta.c:
     complete
     .text       start:0x0200c0a8 end:0x0200c4cc
+
+libs/NitroSystem/libraries/g3d/src/anm/nsbtp.c:
+    complete
+    .text       start:0x0200c4cc end:0x0200c75c
