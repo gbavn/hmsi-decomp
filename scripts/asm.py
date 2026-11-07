@@ -12,7 +12,7 @@ ASM = Path(__file__).resolve().parents[1] / "build" / "usa" / "asm"
 
 def find(name):
     start = re.compile(rf"^\s+(arm|thumb)_func_start {re.escape(name)}$")
-    for f in sorted(ASM.glob("*.s")):
+    for f in sorted(ASM.rglob("*.s")):
         out, on = [], False
         with f.open(encoding="utf-8", errors="replace") as fh:
             for line in fh:

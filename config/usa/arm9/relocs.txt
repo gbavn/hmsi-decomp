@@ -2061,10 +2061,12 @@ from:0x02017a58 kind:arm_call to:0x02017a68 module:main
 from:0x02017a5c kind:arm_call to:0x02017af8 module:main
 from:0x02017af4 kind:load to:0x020d02d0 module:main
 from:0x02017b28 kind:arm_call to:0x0201791c module:main
+from:0x02017b48 kind:arm_call to:0x0201792c module:main
 from:0x02017b5c kind:load to:0x020d02a4 module:main
 from:0x02017b64 kind:load to:0x020d02d0 module:main
 from:0x02017b68 kind:load to:0x020d02a8 module:main
 from:0x02017b6c kind:load to:0x020d02ac module:main
+from:0x02017b70 kind:load to:0x02017af8 add:0x50 module:main
 from:0x02017b8c kind:load to:0x020d0350 module:main
 from:0x02017bb0 kind:arm_call to:0x02017b74 module:main
 from:0x02017be0 kind:arm_call to:0x02016200 module:main
