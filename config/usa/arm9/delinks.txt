@@ -189,6 +189,11 @@ libs/NitroSystem/libraries/gfd/src/VramManager/gfd_LinkedListTexVramMan.c:
     .rodata     start:0x020b0f50 end:0x020b0f80
     .bss        start:0x020cbcc0 end:0x020cbcdc
 
+libs/NitroSystem/libraries/gfd/src/VramManager/gfd_LinkedListPlttVramMan.c:
+    complete
+    .text       start:0x0200ef24 end:0x0200f108
+    .bss        start:0x020cbcdc end:0x020cbcf0
+
 libs/NitroSystem/libraries/snd/src/resource_mgr.c:
     complete
     .text       start:0x0200f210 end:0x0200f328
@@ -364,6 +369,11 @@ libs/NitroSDK/libraries/ctrdg/src/ctrdg.c:
     .text       start:0x0201e58c end:0x0201e8a4
     .bss        start:0x020d2948 end:0x020d2950
 
+libs/NitroSDK/libraries/ctrdg/src/ctrdg_proc.c:
+    complete
+    .text       start:0x0201e8a4 end:0x0201ebfc
+    .bss        start:0x020d2960 end:0x020d2b28
+
 libs/NitroSDK/libraries/ctrdg/src/ctrdg_task.c:
     complete
     .text       start:0x0201ebfc end:0x0201ed8c
@@ -408,8 +418,3 @@ libs/NitroSDK/libraries/fs/src/fs_rom.c:
     .text       start:0x020af114 end:0x020af36c
     .data       start:0x020c6d8c end:0x020c6d90
     .bss        start:0x02155bf4 end:0x02155c68
-
-libs/NitroSDK/libraries/ctrdg/src/ctrdg_proc.c:
-    complete
-    .text       start:0x0201e8a4 end:0x0201ebfc
-    .bss        start:0x020d2960 end:0x020d2b28

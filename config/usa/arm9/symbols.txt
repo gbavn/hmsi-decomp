@@ -389,12 +389,12 @@ NNS_GfdInitLnkTexVramManager kind:function(arm,size=0x58) addr:0x0200ebcc
 NNS_GfdAllocLnkTexVram kind:function(arm,size=0x90) addr:0x0200ec24
 NNS_GfdFreeLnkTexVram kind:function(arm,size=0x74) addr:0x0200ecb4
 NNS_GfdResetLnkTexVramState kind:function(arm,size=0x1fc) addr:0x0200ed28
-func_0200ef24 kind:function(arm,size=0x1c) addr:0x0200ef24
-func_0200ef40 kind:function(arm,size=0x8) addr:0x0200ef40
-func_0200ef48 kind:function(arm,size=0x54) addr:0x0200ef48
-func_0200ef9c kind:function(arm,size=0xcc) addr:0x0200ef9c
-func_0200f068 kind:function(arm,size=0x44) addr:0x0200f068
-func_0200f0ac kind:function(arm,size=0x5c) addr:0x0200f0ac
+NNS_GfdDumpLnkPlttVramManager kind:function(arm,size=0x1c) addr:0x0200ef24
+NNS_GfdGetLnkPlttVramManagerWorkSize kind:function(arm,size=0x8) addr:0x0200ef40
+NNS_GfdInitLnkPlttVramManager kind:function(arm,size=0x54) addr:0x0200ef48
+NNS_GfdAllocLnkPlttVram kind:function(arm,size=0xcc) addr:0x0200ef9c
+NNS_GfdFreeLnkPlttVram kind:function(arm,size=0x44) addr:0x0200f068
+NNS_GfdResetLnkPlttVramState kind:function(arm,size=0x5c) addr:0x0200f0ac
 func_0200f108 kind:function(arm,size=0x88) addr:0x0200f108
 func_0200f190 kind:function(arm,size=0x30) addr:0x0200f190
 func_0200f1c0 kind:function(arm,size=0xc) addr:0x0200f1c0
@@ -8144,6 +8144,7 @@ data_020cbcc4 kind:bss addr:0x020cbcc4
 data_020cbcc8 kind:bss addr:0x020cbcc8
 data_020cbcdc kind:bss addr:0x020cbcdc
 data_020cbce0 kind:bss addr:0x020cbce0
+data_020cbcf0 kind:bss addr:0x020cbcf0
 data_020cbd00 kind:bss addr:0x020cbd00
 data_020cbd10 kind:bss addr:0x020cbd10
 data_020cbd1c kind:bss addr:0x020cbd1c
