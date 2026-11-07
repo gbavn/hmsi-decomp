@@ -150,9 +150,14 @@ def main():
     # ITCM units named <file>_itcm.c are aliases: link <file>.o(.itcm) in their place.
     for alias in re.findall(r"([\w.]+)_itcm\.o\(\.text\)", text):
         text = text.replace(alias + "_itcm.o(.text)", alias + ".o(.itcm)")
+    # DTCM units named <file>_dtcm.c likewise: <file>.o(.dtcm) for data, <file>.o(.dtcm.bss) for bss.
+    text = re.sub(r"([\w.]+)_dtcm\.o\(\.data\)", r"\1.o(.dtcm)", text)
+    text = re.sub(r"([\w.]+)_dtcm\.o\(\.bss\)", r"\1.o(.dtcm.bss)", text)
+    text = re.sub(r"\s*[\w.]+_dtcm\.o\(\.\w+\)", "", text)  # other (empty) sections of the alias
     lcf.write_text(text)
     objects = BUILD / "objects.txt"
-    objects.write_text("".join(l for l in objects.read_text().splitlines(True) if "_itcm.o" not in l))
+    objects.write_text("".join(l for l in objects.read_text().splitlines(True)
+                               if "_itcm.o" not in l and "_dtcm.o" not in l))
 
     files = json.loads(subprocess.run([str(DSD), "json", "delinks", "-c", str(CONFIG)], cwd=ROOT,
                                       capture_output=True, text=True, check=True).stdout)["files"]

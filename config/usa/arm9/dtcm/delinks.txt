@@ -1,2 +1,10 @@
     .data       start:0x027e0000 end:0x027e0060 kind:data align:32
     .bss        start:0x027e0060 end:0x027e0080 kind:bss align:32
+
+libs/NitroSDK/libraries/os/src/os_irqHandler_dtcm.c:
+    complete
+    .bss        start:0x027e0060 end:0x027e0068
+
+libs/NitroSDK/libraries/os/src/os_irqTable_dtcm.c:
+    complete
+    .data       start:0x027e0000 end:0x027e0058
