@@ -27,6 +27,9 @@ def units():
             if not lines or not re.search(r"^\s+complete\s*$", block, re.M):
                 continue
             src = lines[0].rstrip(":")
+            alias = re.sub(r"_(itcm|dtcm|version|rodata)\.c$", ".c", src)
+            if alias != src and (ROOT / alias).exists():
+                src = alias  # alias unit: the code lives in the real file
             for m in re.finditer(r"\.text\s+start:0x([0-9a-f]+) end:0x([0-9a-f]+)", block):
                 s, e = int(m.group(1), 16), int(m.group(2), 16)
                 funcs = [(n, a) for a, n in syms if s <= a < e]

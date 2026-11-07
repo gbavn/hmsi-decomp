@@ -30,12 +30,12 @@ VENDOR_FLAGS = [
 
 # Compiler version per source area (tools/mwccarm/<version>).
 DEFAULT_COMPILER = "2.0/sp2p2"
-SDK_COMPILER = "2.0/sp1p5"  # the game's NitroSDK was built with an older compiler than NitroSystem
+SDK_COMPILER = "2.0/sp1p5"  # NitroSDK/NitroSystem were built with an older compiler (<= sp1p5)
 
 
 def compiler_for(src):
     parts = PurePath(str(src).replace("\\", "/")).parts
-    if len(parts) > 1 and parts[0] == "libs" and parts[1] == "NitroSDK":
+    if len(parts) > 1 and parts[0] == "libs":
         return SDK_COMPILER
     return DEFAULT_COMPILER
 
