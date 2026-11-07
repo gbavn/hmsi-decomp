@@ -486,3 +486,7 @@ libs/NitroSystem/libraries/g2d/src/g2d_Renderer.c:
 libs/NitroSDK/libraries/gx/src/gx_vramcnt.c:
     complete
     .text       start:0x02013624 end:0x02014478
+
+libs/NitroSDK/libraries/gx/src/g3_util.c:
+    complete
+    .text       start:0x02014e84 end:0x02014f34
