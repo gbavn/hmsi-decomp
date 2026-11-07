@@ -273,3 +273,7 @@ libs/NitroSDK/libraries/fx/src/fx_vec.c:
 libs/NitroSDK/libraries/gx/src/g3imm.c:
     complete
     .text       start:0x02014904 end:0x02014974
+
+libs/NitroSDK/libraries/gx/src/g3x.c:
+    complete
+    .text       start:0x02014974 end:0x02014e84
