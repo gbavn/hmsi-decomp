@@ -277,3 +277,9 @@ libs/NitroSDK/libraries/gx/src/g3imm.c:
 libs/NitroSDK/libraries/gx/src/g3x.c:
     complete
     .text       start:0x02014974 end:0x02014e84
+
+libs/NitroSDK/libraries/gx/src/gx.c:
+    complete
+    .text       start:0x02013278 end:0x020135c4
+    .data       start:0x020bb824 end:0x020bb82c
+    .bss        start:0x020cff60 end:0x020cff64
