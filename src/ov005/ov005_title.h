@@ -156,7 +156,7 @@ public:
     void MoveShip(const VecFx32 *delta);
     void SetShipPos(const VecFx32 *pos);
     void SetShipPos(fx32 x, fx32 y, fx32 z);
-    Model3D *GetShip() { return mShip == -1 ? mObjects[0] : mObjects[mShip]; }
+    VecFx32 *GetShipPos() { return &(mShip == -1 ? mObjects[0] : mObjects[mShip])->trans; }
 
     NNSG3dResFileHeader *mMdlRes;
     void *mTexRes;
@@ -245,6 +245,12 @@ void func_0202b088(Sprite2D *sprite, int value);
 void func_0202b064(Sprite2D *sprite, int palette);
 void func_0202b1a4(Sprite2D *sprite, fx32 x, fx32 y, fx32 z);   // set position
 void func_0202ba04(Sprite2D *sprite, int unk);                   // release
+Sprite2D *func_0202b41c(void *ncbr, void *nclr, void *ncer, void *nanr, const char *ncbrName,
+                        const char *nclrName, const char *ncerName, const char *nanrName, int x, int y);
+void func_0202b0ec(Sprite2D *sprite, int priority);
+Sprite2D *func_0202b824(const char *ncbr, const char *nclr, const char *ncer, const char *nanr, int a, int b,
+                        int c);
+int func_020358d0(int n);   // random number below n
 }
 
 class TitleMenu;
@@ -345,24 +351,62 @@ public:
     u8 unk28[4];
 };
 
-// The bottom-screen title menu (overlay 5, 0x02157310..).
+// Placement of one title-screen character (passed by value to TitleMenu::PlaceChar).
+struct CharPlace {
+    f32 unk0;
+    f32 unk4;
+    f32 x;
+    f32 z;
+    int unk10;
+    int unk14;
+};
+
+class TitleChar;
+class TitleStage;
+class TitleCamera;
+
+// The bottom-screen title menu (overlay 5, 0x02157310): the two buttons, the cursor, the "touch the
+// screen" prompt and the 3D stage with the ship and the island's people.
 class TitleMenu {
 public:
     TitleMenu(TitleScene *scene);
     virtual ~TitleMenu();
-    void Animate();                             // 0x021578a4
-    void Draw();                                // 0x02157bac
-    void DrawBlend();                           // 0x02157bb0
-    void ResetButtons();                        // 0x02157bb4
-    void UpdateButtons(BOOL active);            // 0x02157be4
-    void BlinkPrompt();                         // 0x02157db8
-    u8 HasSaveData();                           // 0x02158ba8
-    TitleScene *GetScene();                     // 0x02158bb8
-    Sprite2D *GetButtonSprite(u8 index, int part);   // 0x02158bc0
-    Sprite2D *GetCursorSprite();                // 0x02158bfc
-    void Show();                                // 0x02158c04
+    BOOL Animate();
+    void Draw();
+    void DrawBlend();
+    void ResetButtons();
+    void UpdateButtons(BOOL active);
+    void BlinkPrompt();
+    void PlaceChar(int index, CharPlace place);
+    void DebugPlace(int index, f32 value);
+    void PlaceChars();
+    BOOL IsPerson(int index);
+    int GetPersonId(int index);
+    int GetAnimalId(int index);
+    u8 HasSaveData();
+    TitleScene *GetScene();
+    Sprite2D *GetButtonSprite(u8 index, int part);
+    Sprite2D *GetCursorSprite();
+    void Show();
 
-    u8 unk4[0x370 - 4];
+    u8 unk4;
+    u8 mBlink;
+    TitleScene *mScene;
+    TitleButton *mButtons;
+    int mCursor;
+    Sprite2D *mCursorSprite;
+    Sprite2D *mSprites[7];
+    Sprite2D *mMark;
+    TitleStage *mStage;
+    TitleCamera *mCamera;
+    TitleChar *mChars[47];
+    u8 mCharFlags[47];
+    u8 unk12B[0x364 - 0x12B];
+    TitleChar *mShipChar;
+    TitleChar *mShoreChar;
+    u8 mShown;
+    u8 mLeaving;
 };
+
 
 #endif

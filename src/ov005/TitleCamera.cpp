@@ -125,12 +125,12 @@ extern "C" {
 void _ZN4TaskD2Ev(void);
 void _ZN4Task5Func4Ev(void);
 void _ZN11TitleCameraD1Ev(void);
-void func_ov005_02157888(void);   // TitleCamera's deleting destructor
+void _ZN11TitleCameraD0Ev(void);   // TitleCamera's deleting destructor
 void _ZN11TitleCamera6UpdateEv(void);
 void _ZN11TitleCamera4DrawEv(void);
 
 void *_ZTV11TitleCamera[7] = {
-    NULL, NULL, (void *)_ZN11TitleCameraD1Ev, (void *)func_ov005_02157888, (void *)_ZN11TitleCamera6UpdateEv,
+    NULL, NULL, (void *)_ZN11TitleCameraD1Ev, (void *)_ZN11TitleCameraD0Ev, (void *)_ZN11TitleCamera6UpdateEv,
     (void *)_ZN11TitleCamera4DrawEv, (void *)_ZN4Task5Func4Ev,
 };
 }
