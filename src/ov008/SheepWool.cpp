@@ -20,7 +20,7 @@ SheepWool::SheepWool()
     }
     for (int i = 0; i < WOOL_COUNT; i++) {
         int angle = RandRange(0, 0xFFFF);
-        int speed = RandRange(2, 6);
+        u32 speed = RandRange(2, 6);
 
         mVel[i].x = 0;
         mVel[i].y = FX32_CONST(0.2f * speed);
