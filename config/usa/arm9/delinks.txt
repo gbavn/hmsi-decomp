@@ -265,3 +265,7 @@ libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
 libs/NitroSDK/libraries/fx/src/fx_mtx43.c:
     complete
     .text       start:0x020abbb0 end:0x020ac448
+
+libs/NitroSDK/libraries/fx/src/fx_vec.c:
+    complete
+    .text       start:0x020acf94 end:0x020ad30c
