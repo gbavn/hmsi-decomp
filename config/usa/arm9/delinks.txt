@@ -451,3 +451,8 @@ libs/NitroSDK/libraries/snd/src/snd_util.c:
     complete
     .text       start:0x02019a78 end:0x02019ae8
     .rodata     start:0x020b10b4 end:0x020b1b88
+
+libs/NitroSystem/libraries/snd/src/main.c:
+    complete
+    .text       start:0x0200f108 end:0x0200f210
+    .bss        start:0x020cbd00 end:0x020ce100
