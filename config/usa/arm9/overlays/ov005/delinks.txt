@@ -45,3 +45,9 @@ src/ov005/TitleFlow.cpp:
 src/ov005/TitleFlowData.cpp:
     complete
     .bss        start:0x0215bb88 end:0x0215bba0
+
+src/ov005/TitleCamera.cpp:
+    complete
+    .text       start:0x0215aab4 end:0x0215ad30
+    .rodata     start:0x0215b3ac end:0x0215b3d0
+    .data       start:0x0215baac end:0x0215bac8

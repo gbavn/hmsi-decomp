@@ -93,11 +93,11 @@ func_ov005_0215a920 kind:function(arm,size=0xa0) addr:0x0215a920
 func_ov005_0215a9c0 kind:function(arm,size=0x64) addr:0x0215a9c0
 func_ov005_0215aa24 kind:function(arm,size=0x4c) addr:0x0215aa24
 func_ov005_0215aa70 kind:function(arm,size=0x44) addr:0x0215aa70
-func_ov005_0215aab4 kind:function(arm,size=0xa4) addr:0x0215aab4
-func_ov005_0215ab58 kind:function(arm,size=0xb4) addr:0x0215ab58
-func_ov005_0215ac0c kind:function(arm,size=0xe8) addr:0x0215ac0c
-func_ov005_0215acf4 kind:function(arm,size=0x28) addr:0x0215acf4
-func_ov005_0215ad1c kind:function(arm,size=0x14) addr:0x0215ad1c
+_ZN11TitleCameraC1Ev kind:function(arm,size=0xa4) addr:0x0215aab4
+_ZN11TitleCamera6UpdateEv kind:function(arm,size=0xb4) addr:0x0215ab58
+_ZN11TitleCamera4DrawEv kind:function(arm,size=0xe8) addr:0x0215ac0c
+_ZN11TitleCamera8SetFocusEll kind:function(arm,size=0x28) addr:0x0215acf4
+_ZN11TitleCameraD1Ev kind:function(arm,size=0x14) addr:0x0215ad1c
 func_ov005_0215ad30 kind:function(arm,size=0x1dc) addr:0x0215ad30
 func_ov005_0215af0c kind:function(arm,size=0x130) addr:0x0215af0c
 func_ov005_0215b03c kind:function(arm,size=0x38) addr:0x0215b03c
@@ -113,9 +113,9 @@ data_ov005_0215b20c kind:data(any) addr:0x0215b20c
 data_ov005_0215b228 kind:data(any) addr:0x0215b228
 data_ov005_0215b234 kind:data(any) addr:0x0215b234
 data_ov005_0215b2f0 kind:data(any) addr:0x0215b2f0
-data_ov005_0215b3ac kind:data(any) addr:0x0215b3ac
-data_ov005_0215b3b8 kind:data(any) addr:0x0215b3b8
-data_ov005_0215b3c4 kind:data(any) addr:0x0215b3c4
+sUp kind:data(any) addr:0x0215b3ac local
+sDrawPos kind:data(any) addr:0x0215b3b8 local
+sDrawUp kind:data(any) addr:0x0215b3c4 local
 data_ov005_0215b3e0 kind:data(any) addr:0x0215b3e0
 data_ov005_0215b3f4 kind:data(any) addr:0x0215b3f4
 data_ov005_0215b408 kind:data(any) addr:0x0215b408
@@ -205,7 +205,7 @@ data_ov005_0215ba68 kind:data(any) addr:0x0215ba68
 data_ov005_0215ba70 kind:data(any) addr:0x0215ba70
 data_ov005_0215ba78 kind:data(any) addr:0x0215ba78
 data_ov005_0215ba98 kind:data(any) addr:0x0215ba98
-data_ov005_0215bab4 kind:data(any) addr:0x0215bab4
+_ZTV11TitleCamera kind:data(any) addr:0x0215baac
 data_ov005_0215bac8 kind:data(any) addr:0x0215bac8
 data_ov005_0215bae4 kind:data(any) addr:0x0215bae4
 data_ov005_0215bafc kind:data(any) addr:0x0215bafc

@@ -94,6 +94,21 @@ public:
     TitleMain *mMain;
 };
 
+// The title screen's 3D camera (overlay 5, 0x0215aab4): orthographic projection, looking at the
+// stage from above-front.
+class TitleCamera : public Task {
+public:
+    TitleCamera();
+    virtual ~TitleCamera();   // D1 at 0x0215ad1c; D0 at 0x02157888 (in TitleMenu.cpp's code)
+    virtual BOOL Update();
+    virtual void Draw();
+
+    void SetFocus(fx32 x, fx32 z);
+
+    VecFx32 mPos;
+    VecFx32 mTarget;
+};
+
 // Screens of the title overlay implemented in ARM9 (names unknown).
 class TitleSubScene4D : public Task {
 public:

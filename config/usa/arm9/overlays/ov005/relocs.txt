@@ -785,7 +785,7 @@ from:0x0215a970 kind:arm_call to:0x02021efc module:main
 from:0x0215aac0 kind:arm_call to:0x02030550 module:main
 from:0x0215ab14 kind:arm_call to:0x020acc58 module:main
 from:0x0215ab34 kind:arm_call to:0x0215acf4 module:overlay(5)
-from:0x0215ab44 kind:load to:0x0215bab4 module:overlay(5)
+from:0x0215ab44 kind:load to:0x0215baac add:0x8 module:overlay(5)
 from:0x0215ab4c kind:load to:0x020c8d38 module:main
 from:0x0215ab54 kind:load to:0x020c8d38 add:0x8 module:main
 from:0x0215abdc kind:arm_call to:0x020ac340 module:main
