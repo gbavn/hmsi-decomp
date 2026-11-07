@@ -1,5 +1,5 @@
 from:0x02155c88 kind:arm_call to:0x02030550 module:main
-from:0x02155c9c kind:load to:0x02155d08 module:overlay(1)
+from:0x02155c9c kind:load to:0x02155d00 add:0x8 module:overlay(1)
 from:0x02155ca8 kind:arm_call to:0x0203060c module:main
 from:0x02155cbc kind:arm_call to:0x0203060c module:main
 from:0x02155cc4 kind:arm_call to:0x02030638 module:main

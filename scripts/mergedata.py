@@ -33,18 +33,31 @@ def main():
             continue
         keep.append(line)
     home.write_text("\n".join(keep) + "\n")
+    # Overlays share addresses: only rewrite references that target the symbol's own module.
+    rel = home.parent.relative_to(CONFIG).parts
+    if not rel:
+        module = "main"
+    elif rel[0] == "overlays":
+        module = f"overlay({int(rel[1][2:])})"
+    else:
+        module = rel[0]
     fixed = 0
     for relocs in CONFIG.rglob("relocs.txt"):
-        lines = relocs.read_text().splitlines()
+        text = relocs.read_text()
+        lines = text.splitlines()
         out = []
+        changed = False
         for line in lines:
-            m = re.match(r"^(from:\S+ kind:\S+ )to:0x([0-9a-f]+)( add:\S+)?( .*)$", line)
-            if m and base < int(m.group(2), 16) < base + size and not m.group(3):
+            m = re.match(r"^(from:\S+ kind:\S+ )to:0x([0-9a-f]+)( add:\S+)?( module:(\S+).*)$", line)
+            if (m and m.group(5) == module and base < int(m.group(2), 16) < base + size
+                    and not m.group(3)):
                 off = int(m.group(2), 16) - base
                 line = f"{m.group(1)}to:{base:#010x} add:{off:#x}{m.group(4)}"
                 fixed += 1
+                changed = True
             out.append(line)
-        relocs.write_text("\n".join(out) + "\n")
+        if changed:
+            relocs.write_text("\n".join(out) + "\n")
     print(f"{name}: dropped {dropped} inner symbols, rewrote {fixed} relocations")
 
 
