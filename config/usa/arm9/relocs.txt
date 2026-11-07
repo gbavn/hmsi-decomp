@@ -2726,7 +2726,6 @@ from:0x0201de64 kind:arm_call to:0x020163d0 module:main
 from:0x0201de6c kind:arm_call to:0x02017dd0 module:main
 from:0x0201de70 kind:arm_call to:0x0201dbe0 module:main
 from:0x0201de7c kind:load to:0x020d20e0 module:main
-from:0x0201de80 kind:load to:0x01ff8000 module:itcm
 from:0x0201de88 kind:load to:0x020bb960 module:main
 from:0x0201de8c kind:load to:0x0201dc34 module:main
 from:0x0201dee0 kind:arm_call to:0x0201db80 module:main

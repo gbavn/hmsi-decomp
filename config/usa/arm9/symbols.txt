@@ -1002,18 +1002,18 @@ CARD_GetBackupPageSize kind:function(arm,size=0x14) addr:0x0201d990
 CARD_IdentifyBackup kind:function(arm,size=0x138) addr:0x0201d9a4
 CARD_WaitBackupAsync kind:function(arm,size=0xc) addr:0x0201dadc
 CARD_TryWaitBackupAsync kind:function(arm,size=0xc) addr:0x0201dae8
-func_0201daf4 kind:function(arm,size=0x8c) addr:0x0201daf4
-func_0201db80 kind:function(arm,size=0x60) addr:0x0201db80
-func_0201dbe0 kind:function(arm,size=0x54) addr:0x0201dbe0
-func_0201dc34 kind:function(arm,size=0xd0) addr:0x0201dc34
-func_0201dd04 kind:function(arm,size=0x18c) addr:0x0201dd04
-func_0201de90 kind:function(arm,size=0xf0) addr:0x0201de90
-func_0201df80 kind:function(arm,size=0x5c) addr:0x0201df80
-func_0201dfdc kind:function(arm,size=0x98) addr:0x0201dfdc
+CARDi_ReadFromCache kind:function(arm,size=0x8c) addr:0x0201daf4 local
+CARDi_SetRomOp kind:function(arm,size=0x60) addr:0x0201db80 local
+CARDi_SetCardDma kind:function(arm,size=0x54) addr:0x0201dbe0 local
+CARDi_OnReadCard kind:function(arm,size=0xd0) addr:0x0201dc34 local
+CARDi_TryReadCardDma kind:function(arm,size=0x18c) addr:0x0201dd04
+CARDi_ReadCard kind:function(arm,size=0xf0) addr:0x0201de90
+CARDi_ReadRomIDCore kind:function(arm,size=0x5c) addr:0x0201df80
+CARDi_ReadRomSyncCore kind:function(arm,size=0x98) addr:0x0201dfdc local
 CARDi_ReadRom kind:function(arm,size=0xf8) addr:0x0201e074
 CARD_Init kind:function(arm,size=0x64) addr:0x0201e16c
-func_0201e1d0 kind:function(arm,size=0xc) addr:0x0201e1d0
-func_0201e1dc kind:function(arm,size=0xc) addr:0x0201e1dc
+CARD_WaitRomAsync kind:function(arm,size=0xc) addr:0x0201e1d0
+CARDi_GetRomAccessor kind:function(arm,size=0xc) addr:0x0201e1dc
 CARDi_OnFifoRecv kind:function(arm,size=0x34) addr:0x0201e1e8
 CARDi_TaskThread kind:function(arm,size=0x50) addr:0x0201e21c
 CARDi_Request kind:function(arm,size=0x154) addr:0x0201e26c
@@ -6065,7 +6065,7 @@ data_020bb8c4 kind:data(any) addr:0x020bb8c4
 data_020bb8dc kind:data(any) addr:0x020bb8dc
 data_020bb918 kind:data(any) addr:0x020bb918
 data_020bb95c kind:data(any) addr:0x020bb95c
-data_020bb960 kind:data(any) addr:0x020bb960
+cardi_rom_header_addr kind:data(any) addr:0x020bb960
 data_020bb964 kind:data(any) addr:0x020bb964
 data_020bb9b0 kind:data(any) addr:0x020bb9b0
 data_020bba48 kind:data(any) addr:0x020bba48
@@ -8212,8 +8212,8 @@ data_020d203c kind:bss addr:0x020d203c
 data_020d2060 kind:bss addr:0x020d2060
 data_020d2080 kind:bss addr:0x020d2080
 cardi_common kind:bss addr:0x020d20e0
-data_020d2700 kind:bss addr:0x020d2700
-data_020d2720 kind:bss addr:0x020d2720
+cardi_rom_base kind:bss addr:0x020d2700
+rom_stat kind:bss addr:0x020d2720
 data_020d2940 kind:bss addr:0x020d2940
 data_020d2948 kind:bss addr:0x020d2948
 CTRDGi_Work kind:bss addr:0x020d294c
