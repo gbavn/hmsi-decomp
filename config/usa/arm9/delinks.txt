@@ -202,3 +202,8 @@ libs/NitroSystem/libraries/snd/src/fader.c:
 libs/NitroSystem/libraries/snd/src/heap.c:
     complete
     .text       start:0x02010a74 end:0x02010de0
+
+libs/NitroSystem/libraries/snd/src/resource_mgr.c:
+    complete
+    .text       start:0x0200f210 end:0x0200f328
+    .bss        start:0x020ce100 end:0x020ce10c
