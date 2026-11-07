@@ -87,3 +87,9 @@ src/nnsys/g2d/g2d_OamSoftwareSpriteDraw.c:
     .rodata     start:0x020b0db0 end:0x020b0e38
     .data       start:0x020bb594 end:0x020bb598
     .bss        start:0x020c8d18 end:0x020c8d34
+
+src/nnsys/g2d/g2d_RendererCore.c:
+    complete
+    .text       start:0x02004c88 end:0x02005a8c
+    .rodata     start:0x020b0e40 end:0x020b0e58
+    .bss        start:0x020c8d34 end:0x020c8d38

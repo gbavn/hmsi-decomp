@@ -1,6 +1,7 @@
 #include "nnsys/g2d/g2d_OAM.h"
 #include "nnsys/g2d/g2d_Image.h"
 #include "nitro/gx/g3.h"
+#include "nnsys/g2d/g2d_Internal.h"
 
 #define NNSI_G2D_SHIFT_SIZEOF_256PLTT 9
 #define NNSI_G2D_SHIFT_SIZEOF_16PLTT 5
@@ -11,8 +12,6 @@
 typedef void (*NNS_G2dOamSoftEmuUVFlipCorrectFunc)(fx32 *pRetU0, fx32 *pRetV0, fx32 *pRetU1, fx32 *pRetV1,
                                                    BOOL bFlipH, BOOL bFlipV);
 
-extern const u16 NNSi_objSizeWTbl[3][4];
-extern const u16 NNSi_objSizeHTbl[3][4];
 
 typedef struct SoftwareSpriteParamCache {
     fx32 u0;
@@ -49,30 +48,6 @@ static const GXTexSizeS gxTexSizeSTbl[3][4] = {
     { GX_TEXSIZE_S16, GX_TEXSIZE_S32, GX_TEXSIZE_S32, GX_TEXSIZE_S64 },
     { GX_TEXSIZE_S8, GX_TEXSIZE_S8, GX_TEXSIZE_S16, GX_TEXSIZE_S32 },
 };
-
-static inline GXOamShape NNS_G2dGetOAMSize(const GXOamAttr *pOam) {
-    return (GXOamShape)(pOam->attr01 & (GX_OAM_ATTR01_SHAPE_MASK | GX_OAM_ATTR01_SIZE_MASK));
-}
-
-static inline int NNS_G2dGetOamSizeX(const GXOamShape *pShape) {
-    const u32 shapeBit = (*pShape & GX_OAM_ATTR01_SHAPE_MASK) >> GX_OAM_ATTR01_SHAPE_SHIFT;
-    const u32 sizeBit = (*pShape & GX_OAM_ATTR01_SIZE_MASK) >> GX_OAM_ATTR01_SIZE_SHIFT;
-    return NNSi_objSizeWTbl[shapeBit][sizeBit];
-}
-
-static inline int NNS_G2dGetOamSizeY(const GXOamShape *pShape) {
-    const u32 shapeBit = (*pShape & GX_OAM_ATTR01_SHAPE_MASK) >> GX_OAM_ATTR01_SHAPE_SHIFT;
-    const u32 sizeBit = (*pShape & GX_OAM_ATTR01_SIZE_MASK) >> GX_OAM_ATTR01_SIZE_SHIFT;
-    return NNSi_objSizeHTbl[shapeBit][sizeBit];
-}
-
-static inline BOOL NNSi_G2dGetOamFlipH(const GXOamAttr *pOam) {
-    return pOam->flipH;
-}
-
-static inline BOOL NNSi_G2dGetOamFlipV(const GXOamAttr *pOam) {
-    return pOam->flipV;
-}
 
 static inline u32 GetNumTexChar_(GXTexSizeS texSize) {
     static const u32 texSize_[] = { 1, 2, 4, 8, 16, 32, 64, 128 };

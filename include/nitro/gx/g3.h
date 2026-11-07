@@ -5,6 +5,8 @@
 #include "nitro/gx/gx_vramcnt.h"
 
 #define reg_G3_MTX_MODE (*(vu32 *)0x04000440)
+#define reg_G3_MTX_PUSH (*(vu32 *)0x04000444)
+#define reg_G3_MTX_POP (*(vu32 *)0x04000448)
 #define reg_G3_MTX_STORE (*(vu32 *)0x0400044c)
 #define reg_G3_VIEWPORT (*(vu32 *)0x04000580)
 #define reg_G3_MTX_SCALE (*(vu32 *)0x0400046c)
@@ -76,6 +78,16 @@ static inline void G3_Begin(GXBegin primitive) {
 
 static inline void G3_End(void) {
     reg_G3_END_VTXS = 0;
+}
+
+void G3_LoadMtx43(const MtxFx43 *m);
+
+static inline void G3_PushMtx(void) {
+    reg_G3_MTX_PUSH = 0;
+}
+
+static inline void G3_PopMtx(int num) {
+    reg_G3_MTX_POP = (u32)num;
 }
 
 static inline void G3_MtxMode(GXMtxMode mode) {

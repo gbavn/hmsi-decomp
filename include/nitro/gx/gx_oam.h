@@ -66,6 +66,16 @@ typedef struct {
     s16 PD;
 } GXOamAffine;
 
+#define GX_OAM_ATTR01_Y_SHIFT 0
+#define GX_OAM_ATTR01_Y_MASK 0x000000ff
+#define GX_OAM_ATTR01_X_SHIFT 16
+#define GX_OAM_ATTR01_X_MASK 0x01ff0000
+#define GX_OAM_ATTR01_RS_SHIFT 25
+#define GX_OAM_ATTR01_RS_MASK 0x3e000000
+#define GX_OAM_ATTR01_HF_SHIFT 28
+#define GX_OAM_ATTR01_HF_MASK 0x10000000
+#define GX_OAM_ATTR01_VF_SHIFT 29
+#define GX_OAM_ATTR01_VF_MASK 0x20000000
 #define GX_OAM_ATTR01_RSENABLE_MASK 0x00000300
 #define GX_OAM_ATTR01_FLIP_MASK 0x30000000
 #define GX_OAM_ATTR01_SHAPE_MASK 0x0000c000
@@ -95,6 +105,20 @@ static inline GXOamEffect G2_GetOBJEffect(const GXOamAttr *oam) {
     }
 
     return (GXOamEffect)(effect | (oam->attr01 & GX_OAM_ATTR01_FLIP_MASK));
+}
+
+static inline void G2_SetOBJEffect(GXOamAttr *oam, GXOamEffect effect, int rsParam) {
+    if (GX_OAM_EFFECT_AFFINE != effect && GX_OAM_EFFECT_AFFINE_DOUBLE != effect) {
+        oam->attr01 = ((oam->attr01 & ~(GX_OAM_ATTR01_RSENABLE_MASK | GX_OAM_ATTR01_RS_MASK)) | effect);
+    } else {
+        oam->attr01 = ((oam->attr01 & ~(GX_OAM_ATTR01_RSENABLE_MASK | GX_OAM_ATTR01_RS_MASK)) | effect |
+                       (rsParam << GX_OAM_ATTR01_RS_SHIFT));
+    }
+}
+
+static inline void G2_SetOBJPosition(GXOamAttr *oam, int x, int y) {
+    oam->attr01 = ((oam->attr01 & ~(GX_OAM_ATTR01_Y_MASK | GX_OAM_ATTR01_X_MASK)) | (y & GX_OAM_ATTR01_Y_MASK) |
+                   ((x & (GX_OAM_ATTR01_X_MASK >> GX_OAM_ATTR01_X_SHIFT)) << GX_OAM_ATTR01_X_SHIFT));
 }
 
 static inline void G2_SetOBJAffine(GXOamAffine *oam, const MtxFx22 *mtx) {

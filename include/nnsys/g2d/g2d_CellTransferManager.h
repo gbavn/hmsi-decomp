@@ -52,4 +52,9 @@ static inline BOOL NNSi_G2dGetCellTransferStateCellDrawnFlag(const NNSG2dCellTra
     return (BOOL)(pState->bDrawn & (0x1 << type));
 }
 
+static inline void NNSi_G2dSetVramTransferCellDrawnFlag(u32 handle, NNS_G2D_VRAM_TYPE type, BOOL flag) {
+    NNSG2dCellTransferState *pState = NNSi_G2dGetCellTransferState(handle);
+    NNSi_G2dSetCellTransferStateCellDrawnFlag(pState, type, flag);
+}
+
 #endif
