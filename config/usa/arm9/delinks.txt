@@ -428,3 +428,8 @@ libs/NitroSystem/libraries/snd/src/player.c:
     complete
     .text       start:0x0200f328 end:0x0200faf4
     .bss        start:0x020ce10c end:0x020ce9e4
+
+libs/NitroSystem/libraries/snd/src/sndarc_loader.c:
+    complete
+    .text       start:0x02010de0 end:0x02011800
+    .bss        start:0x020cf0b4 end:0x020cf0f0
