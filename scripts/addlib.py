@@ -221,6 +221,7 @@ def main():
             if r is not best:
                 print("  skipped run:", ", ".join(f"{x[2]}@{x[0]:#x}" for x in r))
     text_start, text_end = best[0][0], best[-1][0] + best[-1][1]
+    text_end = (text_end + 3) & ~3  # Thumb-sized functions leave 2 bytes of padding
     if text_end - text_start <= 0x20 and len(best) == 1 and not a.force:
         sys.exit(f"only one tiny function matched ({best[0][2]}@{best[0][0]:#x}); likely a coincidence (use --force)")
     keep = {idx: v for idx, v in chosen.items() if text_start <= v[0] < text_end}
