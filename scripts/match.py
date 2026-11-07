@@ -155,7 +155,9 @@ def compare(orig, omask, comp, cmask):
     for i in range(0, n, 4):
         a, c = orig[i:i + 4], comp[i:i + 4]
         if i in omask or i in cmask:
-            if (i in omask) != (i in cmask) or len(a) != len(c):
+            # A relocation in our object where the original has a plain word is allowed: it is
+            # usually a linker-defined constant (SDK_*). The full build verifies the final value.
+            if (i in omask and i not in cmask) or len(a) != len(c):
                 bad.append(i)
             continue
         if a != c:

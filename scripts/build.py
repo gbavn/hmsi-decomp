@@ -136,6 +136,15 @@ def main():
     text = lcf.read_text()
     force = "FORCE_ACTIVE {\n    " + ",\n    ".join(gap_data_symbols()) + "\n}\n\n"
     text = text.replace("SECTIONS {", force + "SECTIONS {", 1)
+    # Constants that Nintendo's LCF defined for the SDK.
+    consts = []
+    sdk_file = CONFIG_DIR / "sdk_symbols.txt"
+    if sdk_file.exists():
+        for line in sdk_file.read_text().splitlines():
+            m = re.match(r"^\s*(\w+)\s*=\s*(0x[0-9a-fA-F]+)", line)
+            if m:
+                consts.append(f"    {m.group(1)} = {m.group(2)};\n")
+    text = text.replace("SECTIONS {\n", "SECTIONS {\n" + "".join(consts), 1)
     # ITCM units named <file>_itcm.c are aliases: link <file>.o(.itcm) in their place.
     for alias in re.findall(r"([\w.]+)_itcm\.o\(\.text\)", text):
         text = text.replace(alias + "_itcm.o(.text)", alias + ".o(.itcm)")

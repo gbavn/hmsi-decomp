@@ -82,6 +82,7 @@ def main():
     ap.add_argument("source")
     ap.add_argument("--module", default="main")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--force", action="store_true", help="accept a lone tiny function match")
     a = ap.parse_args()
 
     syms_file, ofuncs, orelocs, obin, obase = load_module(a.module)
@@ -208,7 +209,7 @@ def main():
             if r is not best:
                 print("  skipped run:", ", ".join(f"{x[2]}@{x[0]:#x}" for x in r))
     text_start, text_end = best[0][0], best[-1][0] + best[-1][1]
-    if text_end - text_start <= 0x20 and len(best) == 1 and "--force" not in sys.argv:
+    if text_end - text_start <= 0x20 and len(best) == 1 and not a.force:
         sys.exit(f"only one tiny function matched ({best[0][2]}@{best[0][0]:#x}); likely a coincidence (use --force)")
     keep = {idx: v for idx, v in chosen.items() if text_start <= v[0] < text_end}
 
