@@ -53,6 +53,40 @@ public:
     void *mRes;
 };
 
+// An animated sprite resource (overlay 4, 0x021585f8..).
+class SpriteAnim {
+public:
+    void Load(const char *ncbr, const char *ncer, const char *nanr, const char *nclr, int w, int h, int unk);
+
+    u8 unk0[4];
+};
+
+// A screen rectangle with a virtual destructor (ARM9; vtable 0x020bdf44, destructors 0x02047840 and
+// 0x020488a4). The constructor is inline.
+class MgRect {
+public:
+    MgRect(int x1, int y1, int x2, int y2) : mX1(x1), mY1(y1), mX2(x2), mY2(y2) {}
+    virtual ~MgRect();
+
+    int mX1;
+    int mY1;
+    int mX2;
+    int mY2;
+};
+
+// A touch button task of the minigames (overlay 4, 0x021581ec..).
+class MgButton : public Task {
+public:
+    MgButton(MgRect *rect, int unk);
+    virtual ~MgButton();
+    virtual BOOL Update();   // 0x021582f8
+    virtual void Draw();     // 0x021584cc
+    virtual void Func4();
+    virtual void OnDecide();
+
+    SpriteAnim mSprite;
+};
+
 // A minigame's 2D layer (overlay 4, 0x02155f40..).
 class MgLayer : public SpriteRef {
 public:
@@ -140,6 +174,16 @@ public:
     int mTimer;
     u8 mTouching;
     u8 mOnAnimal;
+};
+
+// The "end" button of the minigames (overlay 4, 0x021563f4).
+class EndButton : public MgButton {
+public:
+    EndButton();
+    virtual ~EndButton();
+    virtual void OnDecide();
+
+    static void *operator new(size_t size);
 };
 
 #endif
