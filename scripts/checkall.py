@@ -29,7 +29,7 @@ def units():
             src = lines[0].rstrip(":")
             for m in re.finditer(r"\.text\s+start:0x([0-9a-f]+) end:0x([0-9a-f]+)", block):
                 s, e = int(m.group(1), 16), int(m.group(2), 16)
-                funcs = [n for a, n in syms if s <= a < e]
+                funcs = [(n, a) for a, n in syms if s <= a < e]
                 yield module, src, funcs
 
 
@@ -42,8 +42,9 @@ def main():
     for module, src, funcs in units():
         if a.only and a.only not in src:
             continue
-        for f in funcs:
-            cmd = [sys.executable, str(ROOT / "scripts" / "match.py"), src, f, "--module", module, "-q"]
+        for f, addr in funcs:
+            cmd = [sys.executable, str(ROOT / "scripts" / "match.py"), src, f, "--module", module, "-q",
+                   "--addr", hex(addr)]
             if a.flags:
                 cmd += ["--flags", a.flags]
             r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)

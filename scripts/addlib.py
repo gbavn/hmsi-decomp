@@ -109,13 +109,21 @@ def main():
         if not sec["name"].startswith(".text"):
             continue
         start = s["value"] & ~1
-        data = bytearray(b[sec["off"] + start: sec["off"] + start + s["size"]])
+        # a function alone in its section owns the trailing literal pool too
+        nxt = min([o["value"] & ~1 for o in syms if o["shndx"] == s["shndx"] and o["type"] == 2
+                   and (o["value"] & ~1) > start] + [sec["size"]])
+        size = nxt - start if nxt - start > s["size"] else s["size"]
+        data = bytearray(b[sec["off"] + start: sec["off"] + start + size])
         cmask = set()
         for off, *_ in relocs.get(s["shndx"], ()):
-            if start <= off < start + s["size"]:
+            if start <= off < start + size:
                 cmask.update(range(off - start, off - start + 4))
         hits = []
-        for addr, name in by_size.get(len(data), ()):
+        sym_size = s["size"]
+        cands_sz = list(by_size.get(len(data), ()))
+        if len(data) != sym_size:
+            cands_sz += list(by_size.get(sym_size, ()))  # dsd may exclude the literal pool
+        for addr, name in cands_sz:
             orig = obin[addr - obase: addr - obase + len(data)]
             omask = set()
             for i in range(0, len(data), 4):

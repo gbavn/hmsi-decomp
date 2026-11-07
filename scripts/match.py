@@ -59,15 +59,17 @@ def find_module(func):
     raise SystemExit(f"function {func} not found in any symbols.txt")
 
 
-def original_bytes(func, module):
+def original_bytes(func, module, length=None, at=None):
     syms, relocs, binary, base = module_info(module)
     for line in syms.read_text().splitlines():
         m = SYM_RE.match(line)
-        if m and m.group(1) == func:
+        if m and m.group(1) == func and (at is None or int(m.group(4), 16) == at):
             mode, size, addr = m.group(2), int(m.group(3), 16), int(m.group(4), 16)
             break
     else:
         raise SystemExit(f"{func} not in {syms}")
+    if length and length > size:
+        size = length  # include a literal pool that dsd didn't attribute to the function
     data = bytearray(binary.read_bytes()[addr - base: addr - base + size])
     masked = set()
     for line in relocs.read_text().splitlines():
@@ -102,7 +104,7 @@ def read_elf(path):
     syms = []
     for i in range(symtab["size"] // 16):
         name, value, size, info, other, shndx = struct.unpack_from("<IIIBBH", b, symtab["off"] + i * 16)
-        syms.append(dict(name=cstr(strtab, name), value=value, size=size, shndx=shndx))
+        syms.append(dict(name=cstr(strtab, name), value=value, size=size, shndx=shndx, type=info & 0xF))
     relocs = {}
     for s in secs:
         if s["type"] in (9, 4):  # REL, RELA
@@ -125,10 +127,14 @@ def compiled_bytes(obj, func):
     s = cands[0]
     sec = secs[s["shndx"]]
     start = s["value"] & ~1
-    data = bytearray(b[sec["off"] + start: sec["off"] + start + s["size"]])
+    # a function alone in its section owns the trailing literal pool too
+    nxt = min([o["value"] & ~1 for o in syms if o["shndx"] == s["shndx"] and o["type"] == 2
+               and (o["value"] & ~1) > start] + [sec["size"]])
+    size = nxt - start if nxt - start > s["size"] else s["size"]
+    data = bytearray(b[sec["off"] + start: sec["off"] + start + size])
     masked = set()
     for off in relocs.get(s["shndx"], ()):
-        if start <= off < start + s["size"]:
+        if start <= off < start + size:
             masked.update(range(off - start, off - start + 4))
     return data, masked
 
@@ -166,10 +172,12 @@ def main():
     ap.add_argument("--flags", default=None, help="override the per-area flags from flags.py")
     ap.add_argument("--all-compilers", action="store_true")
     ap.add_argument("-q", "--quiet", action="store_true")
+    ap.add_argument("--addr", help="pick this address when several symbols share the name")
     a = ap.parse_args()
 
     module = a.module or find_module(a.function)
-    mode, addr, orig, omask = original_bytes(a.function, module)
+    at = int(a.addr, 16) if a.addr else None
+    mode, addr, orig, omask = original_bytes(a.function, module, at=at)
     compilers = ([f"{fam}/{v.name}" for fam in ("2.0", "1.2", "dsi") for v in sorted((MWROOT / fam).iterdir())]
                  if a.all_compilers else [a.compiler])
     ok_any = False
@@ -179,6 +187,8 @@ def main():
             try:
                 compile_src(ROOT / a.source, comp, a.flags, obj)
                 data, cmask = compiled_bytes(obj, a.function)
+                if len(data) > len(orig):
+                    _, _, orig, omask = original_bytes(a.function, module, len(data), at=at)
             except SystemExit as e:
                 print(f"{comp}: {e}")
                 continue
