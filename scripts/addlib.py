@@ -128,16 +128,55 @@ def main():
     if not cands:
         sys.exit("no functions of this file were found in the module")
 
-    # resolve ambiguous candidates by staying close to the unambiguous ones
+    # Resolve ambiguous candidates (byte-identical functions that only differ in relocations).
+    # The linker keeps the source order, so compiled functions (in section order) must map to
+    # increasing addresses. Anchor on the unambiguous matches near the median.
+    names_at = {}
+    for line in syms_file.read_text().splitlines():
+        m = re.match(r"^(\S+) kind:\S+ addr:0x([0-9a-f]+)", line)
+        if m:
+            names_at.setdefault(int(m.group(2), 16), m.group(1))
+
+    def consistency(idx, addr):
+        """+1 per relocation whose original target already carries the expected name, -1 per conflict."""
+        s = syms[idx]
+        start = s["value"] & ~1
+        score = 0
+        for off, symi, rtype, addend in relocs.get(s["shndx"], ()):
+            if not (start <= off < start + s["size"]):
+                continue
+            want = syms[symi]["name"]
+            o = orelocs.get(addr + off - start)
+            if not want or o is None:
+                continue
+            have = names_at.get(((o[1] - addend) if rtype == 2 else o[1]) & ~1)
+            if have == want:
+                score += 1
+            elif have and not re.match(r"(func|data)_", have):
+                score -= 1
+        return score
+
     unique = [h[0][0] for h in cands.values() if len(h) == 1]
     center = sorted(unique)[len(unique) // 2] if unique else min(h[0][0] for h in cands.values())
+    order = sorted(cands, key=lambda i: syms[i]["shndx"])
     chosen = {}
     used = set()
-    for idx, hits in sorted(cands.items(), key=lambda kv: len(kv[1])):
-        hits = [h for h in hits if h[0] not in used] or hits
-        addr, name = min(hits, key=lambda h: abs(h[0] - center))
+    prev = 0
+    for idx in order:
+        hits = [h for h in cands[idx] if h[0] not in used]
+        if hits:
+            best_score = max(consistency(idx, h[0]) for h in hits)
+            hits = [h for h in hits if consistency(idx, h[0]) == best_score]
+            if best_score < 0:
+                continue
+        if not hits:
+            continue
+        near = [h for h in hits if abs(h[0] - center) < 0x10000] or hits
+        after = [h for h in near if h[0] > prev]
+        addr, name = min(after, key=lambda h: h[0]) if after else min(near, key=lambda h: abs(h[0] - center))
         chosen[idx] = (addr, name)
         used.add(addr)
+        prev = addr
 
     lo = min(addr for addr, _ in chosen.values())
     hi = max(addr + syms[idx]["size"] for idx, (addr, _) in chosen.items())
@@ -165,7 +204,7 @@ def main():
         sys.exit(f"only one tiny function matched ({best[0][2]}@{best[0][0]:#x}); likely a coincidence (use --force)")
     keep = {idx: v for idx, v in chosen.items() if text_start <= v[0] < text_end}
 
-    # ---- 2. data sections ----------------------------------------------------------------------------
+    # ---- 2. data sections (per section index; same-named sections are merged if contiguous) ---------
     bases = defaultdict(set)
     for idx, (addr, _) in keep.items():
         s = syms[idx]
@@ -176,14 +215,12 @@ def main():
             tgt = syms[symi]
             if not (0 < tgt["shndx"] < len(secs)):
                 continue
-            tsec = secs[tgt["shndx"]]["name"]
-            if tsec not in DATA_SECTIONS:
+            if secs[tgt["shndx"]]["name"] not in DATA_SECTIONS:
                 continue
             o = orelocs.get(addr + off - start)
             if o is None:
                 continue
-            in_sec = tgt["value"] + addend
-            bases[tsec].add(o[1] - in_sec)
+            bases[tgt["shndx"]].add(o[1] - (tgt["value"] + addend))
     # fallback: global data symbols whose names are already known in symbols.txt
     name_addr = {}
     for line in syms_file.read_text().splitlines():
@@ -192,19 +229,37 @@ def main():
             name_addr[m.group(1)] = int(m.group(2), 16)
     for s in syms:
         if s["bind"] == 1 and 0 < s["shndx"] < len(secs) and s["name"] in name_addr:
-            sname = secs[s["shndx"]]["name"]
-            if sname in DATA_SECTIONS and not bases[sname]:
-                bases[sname].add(name_addr[s["name"]] - s["value"])
+            if secs[s["shndx"]]["name"] in DATA_SECTIONS and not bases[s["shndx"]]:
+                bases[s["shndx"]].add(name_addr[s["name"]] - s["value"])
     sections = [(".text", text_start, text_end)]
     for name in DATA_SECTIONS:
-        size = sum(s["size"] for s in secs if s["name"] == name and s["type"] in (1, 8))
-        if not size:
+        parts = [(i, sec) for i, sec in enumerate(secs) if sec["name"] == name and sec["type"] in (1, 8) and sec["size"]]
+        if not parts:
             continue
-        if len(bases[name]) != 1:
-            print(f"warning: could not place {name} (size {size:#x}); candidates {sorted(map(hex, bases[name]))}")
+        placed = []
+        unplaced = []
+        for i, sec in parts:
+            if len(bases[i]) == 1:
+                b0 = next(iter(bases[i]))
+                placed.append((b0, b0 + sec["size"]))
+            else:
+                unplaced.append((i, sec))
+        if not placed:
+            print(f"warning: could not place {name} (size {sum(p['size'] for _, p in parts):#x})")
             continue
-        base = bases[name].pop()
-        sections.append((name, base, base + size))
+        placed.sort()
+        # sections nobody references are assumed to directly follow the placed ones (aligned)
+        for i, sec in unplaced:
+            align = max(sec["align"], 1)
+            b0 = (placed[-1][1] + align - 1) // align * align
+            print(f"warning: {name} section {i} (size {sec['size']:#x}) unreferenced; assuming {b0:#x}")
+            placed.append((b0, b0 + sec["size"]))
+        lo, hi = placed[0][0], placed[-1][1]
+        gaps = [(a[1], b[0]) for a, b in zip(placed, placed[1:]) if b[0] - a[1] >= 0x20 or b[0] < a[1]]
+        if gaps:
+            print(f"warning: {name} pieces are not contiguous: {[(hex(a), hex(b)) for a, b in placed]}")
+            continue
+        sections.append((name, lo, hi))
 
     # ---- 3. report / apply ---------------------------------------------------------------------------
     renames, local = [], []
@@ -243,6 +298,22 @@ def main():
                     print(f"warning: {taddr:#x} is named {old}, unit expects {tgt['name']}")
                 else:
                     ext[old] = tgt["name"]
+    # relocations inside the unit's own data (e.g. tables of function pointers)
+    placed = {n: s for n, s, e in sections if n != ".text"}
+    for si, sec in enumerate(secs):
+        if sec["name"] not in placed or sec["type"] != 1:
+            continue
+        for off, symi, rtype, addend in relocs.get(si, ()):
+            tgt = syms[symi]
+            if tgt["shndx"] != 0 or not tgt["name"]:
+                continue
+            o = orelocs.get(placed[sec["name"]] + off)
+            if o is None:
+                continue
+            taddr = ((o[1] - addend) if rtype == 2 else o[1]) & ~1
+            old = known_all.get(taddr)
+            if old and old != tgt["name"] and re.match(r"(func|data)_", old):
+                ext[old] = tgt["name"]
     for old, new in ext.items():
         renames += [old, new]
 
