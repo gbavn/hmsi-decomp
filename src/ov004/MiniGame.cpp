@@ -122,7 +122,7 @@ void MiniGame::SetCountMax(int max)
 
 MiniGameBase::MiniGameBase()
 {
-    gMiniGame = this;
+    gMiniGame = (MiniGame *)this;
 }
 
 #ifdef NONMATCHING

@@ -6,17 +6,30 @@
 #include <nitro.h>
 #include "Task.h"
 
-// A list of objects updated/drawn by a minigame (ARM9 0x02068a40.., vtable 0x020c1048).
+// A group of a minigame's tasks (ARM9).
+class MgGroup {
+public:
+    void Func();     // 0x02068ec4 (empty)
+
+    TaskManager *mManager;
+};
+
+// The task groups of a minigame (ARM9 0x02068a40.., vtable 0x020c1048).
 class MgObjList {
 public:
     MgObjList();
-    ~MgObjList();
+    virtual ~MgObjList();
+    virtual void Func2();
+    virtual void Func3();
+    virtual void Func4v();
+    virtual void Func5();
+    virtual void Func6();
+    virtual MgGroup *GetGroup(int index);
     void Clear();    // 0x02068c1c
     void Update();   // 0x02068cac
     void Draw();     // 0x02068d04
     void Func4();    // 0x02068d5c
 
-    void *vtbl;
     u32 unk4;
     u32 unk8;
 };
@@ -32,6 +45,8 @@ public:
     SpriteRef();
     ~SpriteRef();
     void Setup(const char *a, const char *b, int x, int y, int w, int h, int unk);
+    void Load(const char *ncbr, const char *nclr, int x, int y, int unk);   // 0x021587f0
+    void SetPos(int x, int y);                                              // 0x021589ac
     void Release();
     void Draw();
 
@@ -55,7 +70,6 @@ public:
     virtual ~MiniGameBase();
 };
 
-extern MiniGameBase *gMiniGame;
 
 // A minigame (overlay 4, 0x02155c80).
 class MiniGame : public MiniGameBase {
@@ -86,6 +100,46 @@ public:
     int mTimerMax;
     int mCount;
     int mCountMax;
+};
+
+extern MiniGame *gMiniGame;
+
+// The animal of the petting minigame (overlay 4, 0x02157054..).
+class MgAnimal {
+public:
+    void SetMood(int mood);   // 0x02157054
+
+    u8 unk0[0xBC];
+    int mX;
+    int mY;
+};
+
+// The hand cursor of the petting minigame (overlay 4, 0x02155fdc).
+class PetHand : public Task {
+public:
+    PetHand(MgAnimal *animal);
+    virtual ~PetHand();
+    virtual BOOL Update();
+    virtual void Draw();
+
+    static void *operator new(size_t size);
+    static int GetMaxScore();
+    static int GetRank();
+    void Load();
+    void Release();
+    void UpdateTouch();
+    void Stroke();
+    void Rub(int dist);
+    void Tick();
+    void Func63F0();
+
+    SpriteRef mSprite;
+    MgAnimal *mAnimal;
+    int mPrevX;
+    int mPrevY;
+    int mTimer;
+    u8 mTouching;
+    u8 mOnAnimal;
 };
 
 #endif
