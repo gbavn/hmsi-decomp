@@ -441,3 +441,8 @@ libs/NitroSDK/libraries/mi/src/mi_dma.c:
 libs/NitroSDK/libraries/mi/src/mi_dma_card.c:
     complete
     .text       start:0x02018d74 end:0x02018de8
+
+libs/NitroSDK/libraries/mi/src/mi_dma_gxcommand.c:
+    complete
+    .text       start:0x02018550 end:0x02018838
+    .bss        start:0x020d03a0 end:0x020d03c0
