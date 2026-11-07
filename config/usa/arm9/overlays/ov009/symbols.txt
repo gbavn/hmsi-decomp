@@ -1,5 +1,2 @@
-func_ov009_021dd1e0 kind:function(arm,size=0xc) addr:0x021dd1e0
-data_ov009_021dd200 kind:bss addr:0x021dd200
-data_ov009_022001ee kind:bss addr:0x022001ee
-data_ov009_02210fdc kind:bss addr:0x02210fdc
-data_ov009_0221f024 kind:bss addr:0x0221f024
+_Z13Ov009_GetWorkv kind:function(arm,size=0xc) addr:0x021dd1e0
+sWork kind:bss addr:0x021dd200 local

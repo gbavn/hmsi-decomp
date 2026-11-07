@@ -1,3 +1,8 @@
     .text       start:0x021dd1e0 end:0x021dd1ec kind:code align:32
     .ctor       start:0x021dd1ec end:0x021dd1ec kind:rodata align:4
     .bss        start:0x021dd200 end:0x02229200 kind:bss align:32
+
+src/ov009/ov009_work.cpp:
+    complete
+    .text       start:0x021dd1e0 end:0x021dd1ec
+    .bss        start:0x021dd200 end:0x02229200
