@@ -437,3 +437,7 @@ libs/NitroSystem/libraries/snd/src/sndarc_loader.c:
 libs/NitroSDK/libraries/mi/src/mi_dma.c:
     complete
     .text       start:0x020180b4 end:0x02018550
+
+libs/NitroSDK/libraries/mi/src/mi_dma_card.c:
+    complete
+    .text       start:0x02018d74 end:0x02018de8
