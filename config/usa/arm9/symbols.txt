@@ -1236,7 +1236,7 @@ func_02027c74 kind:function(arm,size=0x30) addr:0x02027c74
 func_02027ca4 kind:function(arm,size=0x48) addr:0x02027ca4
 func_02027cec kind:function(arm,size=0x4c) addr:0x02027cec
 func_02027d38 kind:function(arm,size=0xc) addr:0x02027d38
-func_02027d44 kind:function(arm,size=0x14) addr:0x02027d44
+_ZN5Gfx2DD1Ev kind:function(arm,size=0x14) addr:0x02027d44
 func_02027d58 kind:function(arm,size=0x4) addr:0x02027d58
 func_02027d5c kind:function(arm,size=0x14) addr:0x02027d5c
 func_02027d70 kind:function(arm,size=0x44) addr:0x02027d70
@@ -1299,16 +1299,16 @@ _Znwm kind:function(arm,size=0xc) addr:0x02029168
 _Znam kind:function(arm,size=0xc) addr:0x02029174
 _ZdlPv kind:function(arm,size=0xc) addr:0x02029180
 _ZdaPv kind:function(arm,size=0xc) addr:0x0202918c
-func_02029198 kind:function(arm,size=0xc) addr:0x02029198
-func_020291a4 kind:function(arm,size=0xcc) addr:0x020291a4
-func_02029270 kind:function(arm,size=0x54) addr:0x02029270
-func_020292c4 kind:function(arm,size=0xc) addr:0x020292c4
-func_020292d0 kind:function(arm,size=0x10) addr:0x020292d0
-func_020292e0 kind:function(arm,size=0x28) addr:0x020292e0
-func_02029308 kind:function(arm,size=0x1c) addr:0x02029308
-func_02029324 kind:function(arm,size=0x24) addr:0x02029324
-func_02029348 kind:function(arm,size=0x14) addr:0x02029348
-func_0202935c kind:function(arm,size=0x24) addr:0x0202935c
+_ZN5Gfx2D16RegisterTransferE16NNS_GFD_DST_TYPEmPvm kind:function(arm,size=0xc) addr:0x02029198
+_ZN5Gfx2DC1Ev kind:function(arm,size=0xcc) addr:0x020291a4
+_ZN5Gfx2D12InitCellAnimEP19NNSG2dCellAnimationPK22NNSG2dAnimSequenceDataPK18NNSG2dCellDataBankmmmmPKvS9_m kind:function(arm,size=0x54) addr:0x02029270
+_ZN5Gfx2D20GetNewTransferHandleEv kind:function(arm,size=0xc) addr:0x020292c4
+_ZN5Gfx2D18FreeTransferHandleEm kind:function(arm,size=0x10) addr:0x020292d0
+_ZN5Gfx2D5FlushEv kind:function(arm,size=0x28) addr:0x020292e0
+_ZN9Gfx2DBaseC2Ev kind:function(arm,size=0x1c) addr:0x02029308
+_ZN5Gfx2DD0Ev kind:function(arm,size=0x24) addr:0x02029324
+_ZN9Gfx2DBaseD1Ev kind:function(arm,size=0x14) addr:0x02029348
+_ZN9Gfx2DBaseD0Ev kind:function(arm,size=0x24) addr:0x0202935c
 func_02029380 kind:function(arm,size=0xc) addr:0x02029380
 func_0202938c kind:function(arm,size=0x8) addr:0x0202938c
 func_02029394 kind:function(arm,size=0xc) addr:0x02029394
@@ -6162,9 +6162,8 @@ data_020bc29c kind:data(any) addr:0x020bc29c
 data_020bc2a4 kind:data(any) addr:0x020bc2a4
 data_020bc2bc kind:data(any) addr:0x020bc2bc
 data_020bc2cc kind:data(any) addr:0x020bc2cc
-data_020bc2dc kind:data(any) addr:0x020bc2dc
-data_020bc2e4 kind:data(any) addr:0x020bc2e4
-data_020bc2f4 kind:data(any) addr:0x020bc2f4
+_ZTV5Gfx2D kind:data(any) addr:0x020bc2dc
+_ZTV9Gfx2DBase kind:data(any) addr:0x020bc2ec
 data_020bc2fc kind:data(any) addr:0x020bc2fc
 data_020bc2fd kind:data(any) addr:0x020bc2fd
 data_020bc30d kind:data(any) addr:0x020bc30d
@@ -8282,7 +8281,8 @@ data_020ec7f4 kind:bss addr:0x020ec7f4
 gInput kind:bss addr:0x020ec7f8
 sHeap kind:bss addr:0x020ec850 local
 data_020ec854 kind:bss addr:0x020ec854
-data_020ec858 kind:bss addr:0x020ec858
+gGfx2D kind:bss addr:0x020ec858
+data_020ec85c kind:bss addr:0x020ec85c
 data_020ec860 kind:bss addr:0x020ec860
 data_020ec870 kind:bss addr:0x020ec870
 data_020ec878 kind:bss addr:0x020ec878

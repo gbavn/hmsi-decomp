@@ -4,6 +4,14 @@
     .data       start:0x0215b3e0 end:0x0215bb60 kind:data align:32
     .bss        start:0x0215bb60 end:0x0215bba0 kind:bss align:32
 
+src/ov005/TitleMainManagers.cpp:
+    complete
+    .bss        start:0x0215bb60 end:0x0215bb88
+
+src/ov005/TitleFlowData.cpp:
+    complete
+    .bss        start:0x0215bb88 end:0x0215bba0
+
 src/ov005/TitleLogo.cpp:
     complete
     .text       start:0x02155c80 end:0x021562f4
@@ -71,11 +79,3 @@ src/ov005/TitleChar.cpp:
     complete
     .text       start:0x0215ad30 end:0x0215b1e0
     .data       start:0x0215bac8 end:0x0215bb60
-
-src/ov005/TitleMainManagers.cpp:
-    complete
-    .bss        start:0x0215bb60 end:0x0215bb88
-
-src/ov005/TitleFlowData.cpp:
-    complete
-    .bss        start:0x0215bb88 end:0x0215bba0
