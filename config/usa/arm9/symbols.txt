@@ -884,9 +884,9 @@ SND_AlarmInit kind:function(arm,size=0x30) addr:0x020198e4
 SNDi_IncAlarmId kind:function(arm,size=0x20) addr:0x02019914
 SNDi_SetAlarmHandler kind:function(arm,size=0x30) addr:0x02019934
 SNDi_CallAlarmHandler kind:function(arm,size=0x44) addr:0x02019964
-func_020199a8 kind:function(arm,size=0x2c) addr:0x020199a8
-func_020199d4 kind:function(arm,size=0x28) addr:0x020199d4
-func_020199fc kind:function(arm,size=0x7c) addr:0x020199fc
+SND_GetPlayerStatus kind:function(arm,size=0x2c) addr:0x020199a8
+SNDi_GetFinishedCommandTag kind:function(arm,size=0x28) addr:0x020199d4
+SNDi_InitSharedWork kind:function(arm,size=0x7c) addr:0x020199fc
 SND_CalcChannelVolume kind:function(arm,size=0x70) addr:0x02019a78
 SND_AssignWaveArc kind:function(arm,size=0xcc) addr:0x02019ae8
 SND_DestroyBank kind:function(arm,size=0x98) addr:0x02019bb4
@@ -8224,7 +8224,7 @@ data_020d06c0 kind:bss addr:0x020d06c0
 data_020d13e0 kind:bss addr:0x020d13e0
 data_020d1ea8 kind:bss addr:0x020d1ea8
 data_020d1ec0 kind:bss addr:0x020d1ec0
-data_020d1f20 kind:bss addr:0x020d1f20
+SNDi_SharedWork kind:bss addr:0x020d1f20
 data_020d1f24 kind:bss addr:0x020d1f24
 data_020d1f28 kind:bss addr:0x020d1f28
 data_020d1fa8 kind:bss addr:0x020d1fa8
