@@ -73,3 +73,9 @@ src/nnsys/g2d/g2d_SRTControl.c:
 src/nnsys/g2d/g2d_CellAnimation.c:
     complete
     .text       start:0x02002c48 end:0x02002e8c
+
+src/nnsys/g2d/g2d_CellTransferManager.c:
+    complete
+    .text       start:0x0200445c end:0x02004768
+    .rodata     start:0x020b0d9c end:0x020b0da8
+    .bss        start:0x020c8d0c end:0x020c8d18

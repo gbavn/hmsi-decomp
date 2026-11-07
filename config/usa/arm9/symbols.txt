@@ -138,13 +138,13 @@ func_02004204 kind:function(arm,size=0x120) addr:0x02004204
 func_02004324 kind:function(arm,size=0x8) addr:0x02004324
 func_0200432c kind:function(arm,size=0xc) addr:0x0200432c
 func_02004338 kind:function(arm,size=0x124) addr:0x02004338
-func_0200445c kind:function(arm,size=0x18) addr:0x0200445c
+NNSi_G2dGetCellTransferState kind:function(arm,size=0x18) addr:0x0200445c
 NNSi_G2dInitCellTransferState kind:function(arm,size=0xa4) addr:0x02004474
-func_02004518 kind:function(arm,size=0x64) addr:0x02004518
-func_0200457c kind:function(arm,size=0x124) addr:0x0200457c
+NNS_G2dInitCellTransferStateManager kind:function(arm,size=0x64) addr:0x02004518
+NNS_G2dUpdateCellTransferStateManager kind:function(arm,size=0x124) addr:0x0200457c
 NNS_G2dSetCellTransferStateRequested kind:function(arm,size=0x24) addr:0x020046a0
-func_020046c4 kind:function(arm,size=0x58) addr:0x020046c4
-func_0200471c kind:function(arm,size=0x4c) addr:0x0200471c
+NNS_G2dGetNewCellTransferStateHandle kind:function(arm,size=0x58) addr:0x020046c4
+NNS_G2dFreeCellTransferStateHandle kind:function(arm,size=0x4c) addr:0x0200471c
 func_02004768 kind:function(arm,size=0x268) addr:0x02004768
 func_020049d0 kind:function(arm,size=0x10) addr:0x020049d0
 func_020049e0 kind:function(arm,size=0x14) addr:0x020049e0
@@ -5632,7 +5632,8 @@ data_020b0d54 kind:data(any) addr:0x020b0d54 local
 data_020b0d60 kind:data(any) addr:0x020b0d60 local
 data_020b0d6c kind:data(any) addr:0x020b0d6c
 data_020b0d84 kind:data(any) addr:0x020b0d84
-data_020b0d9c kind:data(any) addr:0x020b0d9c
+cvtTbl kind:data(any) addr:0x020b0d9c local
+data_020b0da8 kind:data(any) addr:0x020b0da8
 data_020b0db0 kind:data(any) addr:0x020b0db0
 data_020b0db8 kind:data(any) addr:0x020b0db8
 data_020b0dd8 kind:data(any) addr:0x020b0dd8
@@ -8106,7 +8107,7 @@ data_020c8638 kind:bss addr:0x020c8638
 data_020c8874 kind:bss addr:0x020c8874
 data_020c8904 kind:bss addr:0x020c8904
 data_020c8908 kind:bss addr:0x020c8908
-data_020c8d0c kind:bss addr:0x020c8d0c
+s_pTaskRegisterFunc kind:bss addr:0x020c8d0c
 data_020c8d18 kind:bss addr:0x020c8d18
 data_020c8d34 kind:bss addr:0x020c8d34
 data_020c8d38 kind:bss addr:0x020c8d38
