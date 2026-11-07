@@ -238,3 +238,7 @@ libs/NitroSDK/libraries/fs/src/fs_archive.c:
     complete
     .text       start:0x020ae360 end:0x020aebf4
     .bss        start:0x02155be0 end:0x02155bf0
+
+libs/NitroSDK/libraries/fs/src/fs_command.c:
+    complete
+    .text       start:0x020ad7d4 end:0x020ad9c0

@@ -5994,7 +5994,7 @@ data_020b7394 kind:data(any) addr:0x020b7394
 data_020b7398 kind:data(any) addr:0x020b7398
 data_020b73bc kind:data(any) addr:0x020b73bc
 data_020bb3bc kind:data(any) addr:0x020bb3bc
-data_020bb4c0 kind:data(any) addr:0x020bb4c0
+fsi_default_command kind:data(any) addr:0x020bb4c0
 data_020bb4e4 kind:data(any) addr:0x020bb4e4
 .p__sinit_020af998 kind:data(word) addr:0x020bb524
 .p__sinit_020afbe0 kind:data(word) addr:0x020bb528
