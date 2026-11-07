@@ -334,3 +334,7 @@ libs/NitroSDK/libraries/os/src/os_mutex.c:
 libs/NitroSDK/libraries/os/src/os_protectionRegion.c:
     complete
     .text       start:0x0201793c end:0x02017960
+
+libs/NitroSDK/libraries/os/src/os_system.c:
+    complete
+    .text       start:0x02017da8 end:0x02017e38
