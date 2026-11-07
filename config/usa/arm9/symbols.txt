@@ -77,14 +77,14 @@ NNS_G2dInitAnimCtrl kind:function(arm,size=0x40) addr:0x020019c0
 NNS_G2dInitAnimCallBackFunctor kind:function(arm,size=0x18) addr:0x02001a00
 NNS_G2dResetAnimCtrlState kind:function(arm,size=0x60) addr:0x02001a18
 NNS_G2dBindAnimCtrl kind:function(arm,size=0x10) addr:0x02001a78
-func_02001a88 kind:function(arm,size=0x14) addr:0x02001a88
-func_02001a9c kind:function(arm,size=0x10) addr:0x02001a9c
-func_02001aac kind:function(arm,size=0xc0) addr:0x02001aac
-func_02001b6c kind:function(arm,size=0xb4) addr:0x02001b6c
-func_02001c20 kind:function(arm,size=0xe4) addr:0x02001c20
-func_02001d04 kind:function(arm,size=0xc4) addr:0x02001d04
-func_02001dc8 kind:function(arm,size=0x204) addr:0x02001dc8
-func_02001fcc kind:function(arm,size=0x128) addr:0x02001fcc
+CpuLoadOAMSub_ kind:function(arm,size=0x14) addr:0x02001a88 local
+CpuLoadOAMMain_ kind:function(arm,size=0x10) addr:0x02001a9c local
+NNS_G2dInitOamManagerModule kind:function(arm,size=0xc0) addr:0x02001aac
+NNS_G2dGetNewManagerInstance kind:function(arm,size=0xb4) addr:0x02001b6c
+NNS_G2dEntryOamManagerOamWithAffineIdx kind:function(arm,size=0xe4) addr:0x02001c20
+NNS_G2dEntryOamManagerAffine kind:function(arm,size=0xc4) addr:0x02001d04
+NNS_G2dApplyOamManagerToHW kind:function(arm,size=0x204) addr:0x02001dc8
+NNS_G2dResetOamManagerBuffer kind:function(arm,size=0x128) addr:0x02001fcc
 func_020020f4 kind:function(arm,size=0xc) addr:0x020020f4
 func_02002100 kind:function(arm,size=0x1c) addr:0x02002100
 func_0200211c kind:function(arm,size=0x8) addr:0x0200211c
@@ -631,8 +631,8 @@ func_02014f34 kind:function(arm,size=0x54) addr:0x02014f34
 func_02014f88 kind:function(arm,size=0x58) addr:0x02014f88
 func_02014fe0 kind:function(arm,size=0x58) addr:0x02014fe0
 func_02015038 kind:function(arm,size=0x58) addr:0x02015038
-func_02015090 kind:function(arm,size=0x54) addr:0x02015090
-func_020150e4 kind:function(arm,size=0x58) addr:0x020150e4
+GX_LoadOAM kind:function(arm,size=0x54) addr:0x02015090
+GXS_LoadOAM kind:function(arm,size=0x58) addr:0x020150e4
 func_0201513c kind:function(arm,size=0x58) addr:0x0201513c
 func_02015194 kind:function(arm,size=0x58) addr:0x02015194
 func_020151ec kind:function(arm,size=0x60) addr:0x020151ec
@@ -754,9 +754,9 @@ func_02017420 kind:function(arm,size=0x24) addr:0x02017420
 func_02017444 kind:function(arm,size=0xc) addr:0x02017444
 func_02017450 kind:function(arm,size=0x2c) addr:0x02017450
 func_0201747c kind:function(arm,size=0x34) addr:0x0201747c
-func_020174b0 kind:function(arm,size=0x1c) addr:0x020174b0
+DC_InvalidateRange kind:function(arm,size=0x1c) addr:0x020174b0
 func_020174cc kind:function(arm,size=0x1c) addr:0x020174cc
-func_020174e8 kind:function(arm,size=0x24) addr:0x020174e8
+DC_FlushRange kind:function(arm,size=0x24) addr:0x020174e8
 func_0201750c kind:function(arm,size=0xc) addr:0x0201750c
 func_02017518 kind:function(arm,size=0xc) addr:0x02017518
 func_02017524 kind:function(arm,size=0x1c) addr:0x02017524
@@ -808,7 +808,7 @@ func_02018000 kind:function(arm,size=0x88) addr:0x02018000
 func_02018088 kind:function(arm,size=0x10) addr:0x02018088
 func_02018098 kind:function(arm,size=0xc) addr:0x02018098
 func_020180a4 kind:function(arm,size=0x10) addr:0x020180a4
-func_020180b4 kind:function(arm,size=0x80) addr:0x020180b4
+MI_DmaFill32 kind:function(arm,size=0x80) addr:0x020180b4
 func_02018134 kind:function(arm,size=0x70) addr:0x02018134
 func_020181a4 kind:function(arm,size=0x6c) addr:0x020181a4
 func_02018210 kind:function(arm,size=0xc4) addr:0x02018210
@@ -823,8 +823,8 @@ func_02018648 kind:function(arm,size=0xac) addr:0x02018648
 func_020186f4 kind:function(arm,size=0x60) addr:0x020186f4
 func_02018754 kind:function(arm,size=0xb8) addr:0x02018754
 func_0201880c kind:function(arm,size=0x2c) addr:0x0201880c
-func_02018838 kind:function(arm,size=0x28) addr:0x02018838
-func_02018860 kind:function(arm,size=0x34) addr:0x02018860
+MIi_CpuClear16 kind:function(arm,size=0x28) addr:0x02018838
+MIi_CpuCopy16 kind:function(arm,size=0x34) addr:0x02018860
 MIi_CpuClear32 kind:function(arm,size=0x1c) addr:0x02018894
 func_020188b0 kind:function(arm,size=0x28) addr:0x020188b0
 func_020188d8 kind:function(arm,size=0x28) addr:0x020188d8
@@ -5628,8 +5628,6 @@ __sinit_020b06c4 kind:function(arm,size=0x38) addr:0x020b06c4
 __sinit_020b06fc kind:function(arm,size=0x2c) addr:0x020b06fc
 __sinit_020b0728 kind:function(arm,size=0x34) addr:0x020b0728
 __sinit_020b075c kind:function(arm,size=0x5e8) addr:0x020b075c
-data_020b0d54 kind:data(any) addr:0x020b0d54
-data_020b0d60 kind:data(any) addr:0x020b0d60
 data_020b0d6c kind:data(any) addr:0x020b0d6c
 data_020b0d84 kind:data(any) addr:0x020b0d84
 data_020b0d9c kind:data(any) addr:0x020b0d9c
@@ -6004,7 +6002,7 @@ data_020bb4e4 kind:data(any) addr:0x020bb4e4
 .p__sinit_020b06fc kind:data(word) addr:0x020bb544
 .p__sinit_020b0728 kind:data(word) addr:0x020bb548
 .p__sinit_020b075c kind:data(word) addr:0x020bb54c
-data_020bb560 kind:data(any) addr:0x020bb560
+funcTbl kind:data(any) addr:0x020bb560 local
 data_020bb574 kind:data(any) addr:0x020bb574
 data_020bb57c kind:data(any) addr:0x020bb57c
 data_020bb594 kind:data(any) addr:0x020bb594
@@ -6047,7 +6045,7 @@ data_020bb818 kind:data(any) addr:0x020bb818
 data_020bb81c kind:data(any) addr:0x020bb81c
 data_020bb820 kind:data(any) addr:0x020bb820
 data_020bb824 kind:data(any) addr:0x020bb824
-data_020bb828 kind:data(any) addr:0x020bb828
+GXi_DmaId kind:data(any) addr:0x020bb828
 data_020bb82c kind:data(any) addr:0x020bb82c
 data_020bb83c kind:data(any) addr:0x020bb83c
 data_020bb840 kind:data(any) addr:0x020bb840
@@ -8090,16 +8088,8 @@ data_020c6d90 kind:data(any) addr:0x020c6d90
 data_020c6d98 kind:data(any) addr:0x020c6d98
 sRootListInitialized kind:bss addr:0x020c6da0
 sRootList kind:bss addr:0x020c6da4 local
-data_020c6db0 kind:bss addr:0x020c6db0
-data_020c6db4 kind:bss addr:0x020c6db4
-data_020c6eb4 kind:bss addr:0x020c6eb4
-data_020c72b4 kind:bss addr:0x020c72b4
-data_020c72f4 kind:bss addr:0x020c72f4
-data_020c73f4 kind:bss addr:0x020c73f4
-data_020c77f4 kind:bss addr:0x020c77f4
-data_020c7834 kind:bss addr:0x020c7834
-data_020c7934 kind:bss addr:0x020c7934
-data_020c7d34 kind:bss addr:0x020c7d34
+numRegisterdInstance_ kind:bss addr:0x020c6db0 local
+oamCache_ kind:bss addr:0x020c6db4 local
 data_020c7d74 kind:bss addr:0x020c7d74
 data_020c7d84 kind:bss addr:0x020c7d84
 data_020c7e04 kind:bss addr:0x020c7e04
