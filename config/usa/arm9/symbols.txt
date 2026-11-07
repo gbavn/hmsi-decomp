@@ -22,8 +22,8 @@ func_02000970 kind:function(arm,size=0xac) addr:0x02000970
 func_02000a1c kind:function(arm,size=0x90) addr:0x02000a1c
 AutoloadCallback kind:function(arm,size=0x4) addr:0x02000aac
 func_02000ab0 kind:function(arm,size=0xe8) addr:0x02000ab0
-func_02000b98 kind:function(arm,size=0x4) addr:0x02000b98
-func_02000b9c kind:function(arm,size=0x4) addr:0x02000b9c
+NitroStartUp kind:function(arm,size=0x4) addr:0x02000b98
+OSi_ReferSymbol kind:function(arm,size=0x4) addr:0x02000b9c
 BuildInfo kind:data(any) addr:0x02000ba0
 main kind:function(arm,size=0x18) addr:0x02000bdc
 NNS_FndInitList kind:function(arm,size=0x18) addr:0x02000bf4
