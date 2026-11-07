@@ -145,3 +145,8 @@ libs/NitroSystem/libraries/g3d/src/cgtool/xsi.c:
     complete
     .text       start:0x0200dbec end:0x0200e254
     .data       start:0x020bb7f4 end:0x020bb814
+
+libs/NitroSystem/libraries/g3d/src/gecom.c:
+    complete
+    .text       start:0x02009774 end:0x0200998c
+    .bss        start:0x020cbca0 end:0x020cbcac
