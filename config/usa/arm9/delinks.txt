@@ -136,3 +136,7 @@ libs/NitroSystem/libraries/g3d/src/cgtool/maya.c:
     complete
     .text       start:0x0200c89c end:0x0200d094
     .data       start:0x020bb7b4 end:0x020bb7d4
+
+libs/NitroSystem/libraries/g3d/src/cgtool/si3d.c:
+    complete
+    .text       start:0x0200d094 end:0x0200d5a8
