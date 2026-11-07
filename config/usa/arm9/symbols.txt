@@ -284,8 +284,8 @@ NNSi_G3dAnmObjInitNsBtp kind:function(arm,size=0xdc) addr:0x0200c4cc
 SetTexParamaters_ kind:function(arm,size=0xd8) addr:0x0200c5a8 local
 SetPlttParamaters_ kind:function(arm,size=0x68) addr:0x0200c680 local
 NNSi_G3dAnmCalcNsBtp kind:function(arm,size=0x74) addr:0x0200c6e8
-func_0200c75c kind:function(arm,size=0x4c) addr:0x0200c75c
-func_0200c7a8 kind:function(arm,size=0x38) addr:0x0200c7a8
+NNSi_G3dAnmObjInitNsBva kind:function(arm,size=0x4c) addr:0x0200c75c
+NNSi_G3dAnmCalcNsBva kind:function(arm,size=0x38) addr:0x0200c7a8
 func_0200c7e0 kind:function(arm,size=0x7c) addr:0x0200c7e0
 func_0200c85c kind:function(arm,size=0x40) addr:0x0200c85c
 func_0200c89c kind:function(arm,size=0xc4) addr:0x0200c89c
@@ -6011,7 +6011,7 @@ data_020bb574 kind:data(any) addr:0x020bb574
 data_020bb57c kind:data(any) addr:0x020bb57c
 data_020bb594 kind:data(any) addr:0x020bb594
 NNS_G3dAnmFmtNum kind:data(any) addr:0x020bb598
-data_020bb59c kind:data(any) addr:0x020bb59c
+NNS_G3dFuncAnmVisNsBvaDefault kind:data(any) addr:0x020bb59c
 data_020bb5a0 kind:data(any) addr:0x020bb5a0
 NNS_G3dFuncAnmMatNsBtaDefault kind:data(any) addr:0x020bb5a4
 NNS_G3dFuncAnmMatNsBtpDefault kind:data(any) addr:0x020bb5a8
