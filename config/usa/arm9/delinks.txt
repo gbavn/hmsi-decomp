@@ -69,3 +69,7 @@ src/nnsys/g2d/g2d_Image.c:
 src/nnsys/g2d/g2d_SRTControl.c:
     complete
     .text       start:0x02002bac end:0x02002c48
+
+src/nnsys/g2d/g2d_CellAnimation.c:
+    complete
+    .text       start:0x02002c48 end:0x02002e8c
