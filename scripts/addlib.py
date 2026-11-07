@@ -332,6 +332,7 @@ def main():
     # Original symbols inside our data that don't start a compiled object (dsd named every address
     # something referenced): references to them become "containing object + offset".
     interior = []  # (old name, old addr, new target name, new target addr)
+    fixed = []  # symbols inside static objects: keep them as absolute linker symbols
     starts = {}
     for s in syms:
         if s["type"] == 1 and s["size"] and s["shndx"] in sec_addr:
@@ -349,7 +350,7 @@ def main():
             a0, v = cont[0]
             interior.append((m.group(1), addr, v[0], a0))
         else:
-            print(f"warning: {m.group(1)} at {addr:#x} is inside no global object of the unit")
+            fixed.append((m.group(1), addr))
 
     # global data symbols
     sec_base = {n: s for n, s, e in sections}
@@ -388,6 +389,20 @@ def main():
             if text != old:
                 relocs_file.write_text(text)
         print(f"rewrote references to {len(interior)} interior symbols")
+    if fixed:
+        referenced = set()
+        for relocs_file in match.CONFIG.rglob("relocs.txt"):
+            for line in relocs_file.read_text().splitlines():
+                mm = re.search(r"to:0x([0-9a-f]+) module:" + a.module + r"$", line)
+                if mm:
+                    referenced.add(int(mm.group(1), 16))
+        consts = syms_file.with_name("sdk_symbols.txt")
+        have = consts.read_text() if consts.exists() else ""
+        new = [f"{n} = {addr:#010x}\n" for n, addr in fixed if addr in referenced and f"{n} =" not in have]
+        if new:
+            with consts.open("a") as f:
+                f.writelines(new)
+            print(f"defined {len(new)} referenced symbols inside static data as absolute linker symbols")
     delinks = syms_file.with_name("delinks.txt")
     entry = f"\n{a.source}:\n    complete\n" + "".join(
         f"    {n:11} start:{s:#010x} end:{e:#010x}\n" for n, s, e in sections)
