@@ -32,6 +32,8 @@ public:
     TaskManager(u32 size, int count);
     void Update();
     void Draw();
+    void Func4();     // calls Func4() of every task
+    void KillAll();   // flags every task to be deleted
 
     u8 unk[0x1c];
 };

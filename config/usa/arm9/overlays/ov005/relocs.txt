@@ -477,7 +477,7 @@ from:0x02158ed0 kind:arm_call to:0x02030764 module:main
 from:0x02158ee4 kind:arm_call to:0x02030514 module:main
 from:0x02158ef4 kind:arm_call to:0x02159478 module:overlay(5)
 from:0x02158f00 kind:arm_call to:0x02159608 module:overlay(5)
-from:0x02158f20 kind:load to:0x0215b8e8 module:overlay(5)
+from:0x02158f20 kind:load to:0x0215b8e0 add:0x8 module:overlay(5)
 from:0x02158f24 kind:load to:0x020f57c0 module:main
 from:0x02158f28 kind:load to:0x020ec698 module:main
 from:0x02158f34 kind:load to:0x0215bb60 module:overlay(5)
@@ -488,14 +488,14 @@ from:0x02158f54 kind:arm_call to:0x0200f0ac module:main
 from:0x02158f58 kind:arm_call to:0x0200eb90 module:main
 from:0x02158f5c kind:arm_call to:0x0200ef24 module:main
 from:0x02158f64 kind:arm_call to:0x0203060c module:main
-from:0x02158f70 kind:load to:0x0215b8e8 module:overlay(5)
+from:0x02158f70 kind:load to:0x0215b8e0 add:0x8 module:overlay(5)
 from:0x02158f84 kind:arm_call to:0x0200ed28 module:main
 from:0x02158f88 kind:arm_call to:0x0200f0ac module:main
 from:0x02158f8c kind:arm_call to:0x0200eb90 module:main
 from:0x02158f90 kind:arm_call to:0x0200ef24 module:main
 from:0x02158f98 kind:arm_call to:0x0203060c module:main
 from:0x02158fa0 kind:arm_call to:0x02030638 module:main
-from:0x02158fac kind:load to:0x0215b8e8 module:overlay(5)
+from:0x02158fac kind:load to:0x0215b8e0 add:0x8 module:overlay(5)
 from:0x02158fb8 kind:arm_call to:0x0215934c module:overlay(5)
 from:0x02158fbc kind:arm_call to:0x02035d88 module:main
 from:0x02158fc8 kind:arm_call to:0x02030668 module:main
@@ -587,7 +587,7 @@ from:0x02159428 kind:arm_call to:0x02014c9c module:main
 from:0x02159460 kind:arm_call to:0x02037284 module:main
 from:0x02159470 kind:arm_call to:0x02037284 module:main
 from:0x02159484 kind:arm_call to:0x02030550 module:main
-from:0x021594b8 kind:load to:0x0215b904 module:overlay(5)
+from:0x021594b8 kind:load to:0x0215b8fc add:0x8 module:overlay(5)
 from:0x021594bc kind:load to:0x0215bb88 module:overlay(5)
 from:0x021594c8 kind:arm_call to:0x0203060c module:main
 from:0x021594dc kind:arm_call to:0x0203060c module:main

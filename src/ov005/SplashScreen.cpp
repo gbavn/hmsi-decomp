@@ -69,7 +69,7 @@ BOOL SplashScreen::Update()
         func_02037284(2, 0, 0);
         return TRUE;
     } else if (mFrame == 240) {
-        func_ov005_02159608(0x42, 1);
+        TitleFlow::ChangeScene(0x42, 1);
         return FALSE;
     }
     return TRUE;

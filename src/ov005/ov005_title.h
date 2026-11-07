@@ -6,6 +6,7 @@
 #include "Button.h"
 #include "Archive.h"
 #include "Task.h"
+#include "ov005_flow.h"
 #include "game_file.h"
 #include "input.h"
 
@@ -27,20 +28,84 @@ void func_02035e8c(int se, int unk);   // play a sound effect
 extern void *data_020ec87c;            // the 2D sprite renderer
 BOOL func_020374f8(int screen);        // a screen fade is running
 void func_02037284(int type, int a, int b);   // start a screen fade
-void func_ov005_02159608(int a, int b);
 void func_02035f30(void);
 void func_02035e44(int bgm);
+void func_02035ed4(int a, int b);
+void func_02037238(void);
+void func_02037410(void);
+void func_02035d88(void);
+void func_020709bc(void *obj);
+void func_02028530(void);
+void func_02029fe8(void *obj);
+void func_0202bbf4(void *obj);
+void func_0202bd70(void *obj);
+void func_0202bdd4(void *obj);
+void func_0202a1a0(void *obj, int a);
+void func_0202abe4(void *obj);
+void func_02034c60(void *obj, int a);
+void func_02034c10(void *obj);
+extern void *data_020ec870;
+extern void *data_020f57c0;
+extern u8 data_020ec698;
+extern u8 data_020f57d0;
 int func_0205ade8(int slot, void *buf, int size);   // read a save slot header
 }
 
 class TitleLogo;
 
-// The title overlay's root task (overlay 5, 0x02159478..).
-class TitleMain {
+// The title overlay's main scene (overlay 5, 0x02158d20): graphics setup, the task managers and the
+// hand-over to the game once a menu entry was chosen.
+class TitleMain : public Task {
 public:
-    void StartGame(int choice);   // 0x02159448
+    TitleMain();
+    virtual ~TitleMain();
+    virtual BOOL Update();
+    virtual void Draw();
+    virtual void Func4();
+
+    void InitGraphics();
+    static void BeginFrame();
+    void SetupLight();
+    void StartGame(int choice);
+
+    u8 mLightR;
+    u8 mLightG;
+    u8 mLightB;
+    u8 mState;
+    u8 mChoice;
 };
 
+// Task managers of the title overlay (0x0215bb60).
+extern TaskManager *sTitleManagers[10];
+
+
+// Switches between the title overlay's screens (overlay 5, 0x02159478).
+class TitleFlow : public Task {
+public:
+    TitleFlow(TitleMain *main);
+    virtual ~TitleFlow();
+    virtual BOOL Update();
+
+    static BOOL ChangeScene(u8 next, u8 fade);
+    static BOOL SetNext(u8 next);
+    void KillCurrent();
+    void CreateScene();
+
+    TitleMain *mMain;
+};
+
+// Screens of the title overlay implemented in ARM9 (names unknown).
+class TitleSubScene4D : public Task {
+public:
+    TitleSubScene4D(TitleMain *main);   // 0x020aa9bc
+    u8 unk14[0x20 - 0x14];
+};
+
+class TitleSubScene4E : public Task {
+public:
+    TitleSubScene4E();                  // 0x020ab4fc
+    u8 unk14[0x38 - 0x14];
+};
 // A 2D sprite drawn by the renderer at data_020ec87c (ARM9 0x0202b...).
 struct Sprite2D {
     u8 unk0[0x10];
