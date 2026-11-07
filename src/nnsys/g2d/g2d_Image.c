@@ -232,3 +232,20 @@ void NNS_G2dLoadPaletteEx(const NNSG2dPaletteData *pSrcData, const NNSG2dPalette
     pPltProxy->bExtendedPlt = pSrcData->bExtendedPlt;
     NNS_G2dSetImagePaletteLocation(pPltProxy, type, addr);
 }
+
+void NNSi_G2dInitializeVRamLocation(NNSG2dVRamLocation *pVramLocation) {
+    InitializeVRamLocation_(pVramLocation);
+}
+
+void NNSi_G2dSetVramLocation(NNSG2dVRamLocation *pVramLocation, NNS_G2D_VRAM_TYPE type, u32 addr) {
+    SetVramLocation_(pVramLocation, type, addr);
+}
+
+u32 NNSi_G2dGetVramLocation(const NNSG2dVRamLocation *pVramLocation, NNS_G2D_VRAM_TYPE type) {
+    return GetVramLocation_(pVramLocation, type);
+}
+
+void NNSi_G2dSetupImageProxyPrams(const NNSG2dCharacterData *pSrcData, u32 baseAddr, NNS_G2D_VRAM_TYPE type,
+                                  NNSG2dImageProxy *pImgProxy) {
+    SetupImageProxyPrams_(pSrcData, baseAddr, type, pImgProxy);
+}

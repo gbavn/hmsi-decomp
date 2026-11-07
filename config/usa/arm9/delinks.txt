@@ -64,4 +64,8 @@ src/nnsys/g2d/g2d_PaletteTable.c:
 
 src/nnsys/g2d/g2d_Image.c:
     complete
-    .text       start:0x02002100 end:0x02002a20
+    .text       start:0x02002100 end:0x02002bac
+
+src/nnsys/g2d/g2d_SRTControl.c:
+    complete
+    .text       start:0x02002bac end:0x02002c48
