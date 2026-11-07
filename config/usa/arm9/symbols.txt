@@ -861,10 +861,10 @@ SND_SetMasterVolume kind:function(arm,size=0x20) addr:0x020190c0
 SND_SetOutputSelector kind:function(arm,size=0x28) addr:0x020190e0
 SNDi_SetPlayerParam kind:function(arm,size=0x28) addr:0x02019108
 PushCommand_impl kind:function(arm,size=0x44) addr:0x02019130 local
-func_02019174 kind:function(arm,size=0x38) addr:0x02019174
+SND_Init kind:function(arm,size=0x38) addr:0x02019174
 SNDi_LockMutex kind:function(arm,size=0x14) addr:0x020191ac
 SNDi_UnlockMutex kind:function(arm,size=0x14) addr:0x020191c0
-func_020191d4 kind:function(arm,size=0xd4) addr:0x020191d4
+SND_CommandInit kind:function(arm,size=0xd4) addr:0x020191d4
 func_020192a8 kind:function(arm,size=0x110) addr:0x020192a8
 SND_AllocCommand kind:function(arm,size=0x88) addr:0x020193b8
 SND_PushCommand kind:function(arm,size=0x38) addr:0x02019440
@@ -8216,6 +8216,7 @@ data_020d038c kind:bss addr:0x020d038c
 data_020d03a0 kind:bss addr:0x020d03a0
 data_020d03c0 kind:bss addr:0x020d03c0
 data_020d03c4 kind:bss addr:0x020d03c4
+data_020d03dc kind:bss addr:0x020d03dc
 data_020d03e0 kind:bss addr:0x020d03e0
 data_020d0404 kind:bss addr:0x020d0404
 data_020d0440 kind:bss addr:0x020d0440
