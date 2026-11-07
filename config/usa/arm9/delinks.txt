@@ -42,3 +42,12 @@ src/nnsys/g2d/load/g2d_NCL_load.c:
 src/nnsys/g2d/load/g2d_Load.c:
     complete
     .text       start:0x02001534 end:0x020015c4
+
+src/nnsys/g2d/g2d_Softsprite.c:
+    complete
+    .text       start:0x020015c4 end:0x0200168c
+    .rodata     start:0x020b0d54 end:0x020b0d6c
+
+src/nnsys/g2d/g2d_Animation.c:
+    complete
+    .text       start:0x0200168c end:0x02001a88
