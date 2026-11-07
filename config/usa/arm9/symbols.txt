@@ -115,28 +115,28 @@ NNS_G2dSetCellAnimationSequence kind:function(arm,size=0x18) addr:0x02002df8
 NNS_G2dSetCellAnimationSequenceNoReset kind:function(arm,size=0x3c) addr:0x02002e10
 NNS_G2dTickCellAnimation kind:function(arm,size=0x20) addr:0x02002e4c
 NNS_G2dRestartCellAnimation kind:function(arm,size=0x20) addr:0x02002e6c
-func_02002e8c kind:function(arm,size=0xa0) addr:0x02002e8c
-func_02002f2c kind:function(arm,size=0x144) addr:0x02002f2c
-func_02003070 kind:function(arm,size=0x114) addr:0x02003070
-func_02003184 kind:function(arm,size=0x84) addr:0x02003184
-func_02003208 kind:function(arm,size=0x1ec) addr:0x02003208
-func_020033f4 kind:function(arm,size=0x94) addr:0x020033f4
-func_02003488 kind:function(arm,size=0x450) addr:0x02003488
-func_020038d8 kind:function(arm,size=0x15c) addr:0x020038d8
-func_02003a34 kind:function(arm,size=0xbc) addr:0x02003a34
-func_02003af0 kind:function(arm,size=0x10) addr:0x02003af0
-func_02003b00 kind:function(arm,size=0x5c) addr:0x02003b00
-func_02003b5c kind:function(arm,size=0xa8) addr:0x02003b5c
-func_02003c04 kind:function(arm,size=0x6c) addr:0x02003c04
-func_02003c70 kind:function(arm,size=0x68) addr:0x02003c70
-func_02003cd8 kind:function(arm,size=0x68) addr:0x02003cd8
-func_02003d40 kind:function(arm,size=0x224) addr:0x02003d40
-func_02003f64 kind:function(arm,size=0x50) addr:0x02003f64
-func_02003fb4 kind:function(arm,size=0xfc) addr:0x02003fb4
-func_020040b0 kind:function(arm,size=0x154) addr:0x020040b0
-func_02004204 kind:function(arm,size=0x120) addr:0x02004204
-func_02004324 kind:function(arm,size=0x8) addr:0x02004324
-func_0200432c kind:function(arm,size=0xc) addr:0x0200432c
+NNSi_G2dIdentity kind:function(arm,size=0xa0) addr:0x02002e8c local
+NNSi_G2dMCMStoreCurrentMtxToMtxCache kind:function(arm,size=0x144) addr:0x02002f2c local
+RndCoreCBFuncBeforeCell_ kind:function(arm,size=0x114) addr:0x02003070 local
+RndCoreCBFuncAfterCell_ kind:function(arm,size=0x84) addr:0x02003184 local
+RndCoreCBFuncBeforeOBJ_ kind:function(arm,size=0x1ec) addr:0x02003208 local
+RndCoreCBFuncAfterOBJ_ kind:function(arm,size=0x94) addr:0x020033f4 local
+DrawCellImpl_ kind:function(arm,size=0x450) addr:0x02003488 local
+DrawCellAnimationImpl_ kind:function(arm,size=0x15c) addr:0x020038d8 local
+NNS_G2dInitRenderer kind:function(arm,size=0xbc) addr:0x02003a34
+NNS_G2dAddRendererTargetSurface kind:function(arm,size=0x10) addr:0x02003af0
+NNS_G2dInitRenderSurface kind:function(arm,size=0x5c) addr:0x02003b00
+NNS_G2dBeginRendering kind:function(arm,size=0xa8) addr:0x02003b5c
+NNS_G2dEndRendering kind:function(arm,size=0x6c) addr:0x02003c04
+NNS_G2dDrawCell kind:function(arm,size=0x68) addr:0x02003c70
+NNS_G2dDrawCellAnimation kind:function(arm,size=0x68) addr:0x02003cd8
+NNS_G2dPushMtx kind:function(arm,size=0x224) addr:0x02003d40
+NNS_G2dPopMtx kind:function(arm,size=0x50) addr:0x02003f64
+NNS_G2dTranslate kind:function(arm,size=0xfc) addr:0x02003fb4
+NNS_G2dScale kind:function(arm,size=0x154) addr:0x020040b0
+NNS_G2dRotZ kind:function(arm,size=0x120) addr:0x02004204
+NNS_G2dGetRendererPaletteTbl kind:function(arm,size=0x8) addr:0x02004324
+NNS_G2dSetRendererImageProxy kind:function(arm,size=0xc) addr:0x0200432c
 NNSi_G2dMtxConcat32 kind:function(arm,size=0x124) addr:0x02004338
 NNSi_G2dGetCellTransferState kind:function(arm,size=0x18) addr:0x0200445c
 NNSi_G2dInitCellTransferState kind:function(arm,size=0xa4) addr:0x02004474
@@ -5993,7 +5993,7 @@ data_020b7350 kind:data(any) addr:0x020b7350
 data_020b738c kind:data(any) addr:0x020b738c
 data_020b7394 kind:data(any) addr:0x020b7394
 data_020b7398 kind:data(any) addr:0x020b7398
-data_020b73bc kind:data(any) addr:0x020b73bc
+FX_SinCosTable_ kind:data(any) addr:0x020b73bc
 data_020bb3bc kind:data(any) addr:0x020bb3bc
 fsi_default_command kind:data(any) addr:0x020bb4c0
 data_020bb4e4 kind:data(any) addr:0x020bb4e4
