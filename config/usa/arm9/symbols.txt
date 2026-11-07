@@ -210,10 +210,10 @@ calcSrtCameraMtx_ kind:function(arm,size=0x58) addr:0x02006a14 local
 NNS_G3dGlbGetWV kind:function(arm,size=0x38) addr:0x02006a6c
 NNS_G3dGlbGetInvWV kind:function(arm,size=0x38) addr:0x02006aa4
 NNS_G3dGlbGetViewPort kind:function(arm,size=0x74) addr:0x02006adc
-func_02006b50 kind:function(arm,size=0x6c) addr:0x02006b50
-func_02006bbc kind:function(arm,size=0x70) addr:0x02006bbc
-func_02006c2c kind:function(arm,size=0x3ec) addr:0x02006c2c
-func_02007018 kind:function(arm,size=0x88) addr:0x02007018
+NNSi_G3dAnmBlendMat kind:function(arm,size=0x6c) addr:0x02006b50
+blendScaleVec_ kind:function(arm,size=0x70) addr:0x02006bbc local
+NNSi_G3dAnmObjInitNsBva kind:function(arm,size=0x3ec) addr:0x02006c2c
+NNSi_G3dAnmBlendVis kind:function(arm,size=0x88) addr:0x02007018
 G3dDrawInternal_Loop_ kind:function(arm,size=0x48) addr:0x020070a0 local
 G3dDrawInternal_ kind:function(arm,size=0x19c) addr:0x020070e8 local
 updateHintVec_ kind:function(arm,size=0x68) addr:0x02007284 local
@@ -6023,7 +6023,6 @@ NNS_G3dFuncBlendVisDefault kind:data(any) addr:0x020bb5b0
 NNS_G3dFuncBlendJntDefault kind:data(any) addr:0x020bb5b4
 NNS_G3dFuncBlendMatDefault kind:data(any) addr:0x020bb5b8
 NNS_G3dAnmObjInitFuncArray kind:data(any) addr:0x020bb5bc
-data_020bb5c0 kind:data(any) addr:0x020bb5c0
 NNS_G3dSendJointSRT_FuncArray kind:data(any) addr:0x020bb60c
 NNS_G3dGetJointScale_FuncArray kind:data(any) addr:0x020bb618
 NNS_G3dSendTexSRT_FuncArray kind:data(any) addr:0x020bb624
