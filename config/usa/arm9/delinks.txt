@@ -654,3 +654,7 @@ libs/NitroSystem/libraries/gfd/src/VramManager/gfd_TexVramMan.c:
     complete
     .text       start:0x0200e25c end:0x0200e264
     .data       start:0x020bb814 end:0x020bb81c
+
+libs/NitroSDK/libraries/gx/src/g2.c:
+    complete
+    .text       start:0x020148e8 end:0x02014904
