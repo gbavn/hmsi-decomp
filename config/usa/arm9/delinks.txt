@@ -326,7 +326,7 @@ libs/NitroSDK/libraries/os/src/os_spinLock.c:
 
 libs/NitroSDK/libraries/os/src/os_context.c:
     complete
-    .text       start:0x02017100 end:0x02017190
+    .text       start:0x0201707c end:0x02017190
 
 libs/NitroSDK/libraries/os/src/os_emulator.c:
     complete
@@ -566,3 +566,8 @@ libs/NitroSDK/libraries/fs/src/fs_rom.c:
 libs/NitroSDK/libraries/os/src/os_interrupt.c:
     complete
     .text       start:0x020161e8 end:0x02016490
+
+libs/NitroSDK/libraries/os/src/os_thread.c:
+    complete
+    .text       start:0x020167fc end:0x0201707c
+    .bss        start:0x020d0020 end:0x020d029c

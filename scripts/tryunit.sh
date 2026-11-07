@@ -8,7 +8,8 @@ python scripts/build.py --quick > /tmp/tryunit.log 2>&1
 if grep -q "^MATCH" /tmp/tryunit.log; then
     echo "  BUILD OK"
 else
-    grep -E "Undefined|ERROR|Linker command|Error:" /tmp/tryunit.log | grep -v "didn't pass\|see logs\|see errors" | head -6 | sed 's/^/  /'
+    grep -E -A1 "Undefined|ERROR|Linker Error|Error:" /tmp/tryunit.log \
+        | grep -Ev "didn't pass|see logs|see errors|^--|Linker Error:|CalledProcessError" | head -8 | sed 's/^/  /'
     if grep -q "didn't pass" /tmp/tryunit.log; then
         python - <<'EOF'
 import re

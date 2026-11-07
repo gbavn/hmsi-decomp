@@ -713,32 +713,32 @@ OSi_AllocateCardBus kind:function(arm,size=0x18) addr:0x0201675c local
 OSi_FreeCardBus kind:function(arm,size=0x18) addr:0x02016774 local
 OS_ReadOwnerOfLockWord kind:function(arm,size=0x8) addr:0x0201678c
 OS_GetLockID kind:function(arm,size=0x68) addr:0x02016794
-func_020167fc kind:function(arm,size=0x18) addr:0x020167fc
-func_02016814 kind:function(arm,size=0x78) addr:0x02016814
-func_0201688c kind:function(arm,size=0x34) addr:0x0201688c
-func_020168c0 kind:function(arm,size=0x54) addr:0x020168c0
+OSi_GetUnusedThreadId kind:function(arm,size=0x18) addr:0x020167fc local
+OSi_InsertLinkToQueue kind:function(arm,size=0x78) addr:0x02016814 local
+OSi_RemoveLinkFromQueue kind:function(arm,size=0x34) addr:0x0201688c local
+OSi_RemoveSpecifiedLinkFromQueue kind:function(arm,size=0x54) addr:0x020168c0 local
 OSi_RemoveMutexLinkFromQueue kind:function(arm,size=0x30) addr:0x02016914
-func_02016944 kind:function(arm,size=0x60) addr:0x02016944
-func_020169a4 kind:function(arm,size=0x48) addr:0x020169a4
-func_020169ec kind:function(arm,size=0xc8) addr:0x020169ec
+OSi_InsertThreadToList kind:function(arm,size=0x60) addr:0x02016944 local
+OSi_RemoveThreadFromList kind:function(arm,size=0x48) addr:0x020169a4 local
+OSi_RescheduleThread kind:function(arm,size=0xc8) addr:0x020169ec local
 OS_InitThread kind:function(arm,size=0x148) addr:0x02016ab4
 OS_CreateThread kind:function(arm,size=0xfc) addr:0x02016bfc
 OS_ExitThread kind:function(arm,size=0x20) addr:0x02016cf8
-func_02016d18 kind:function(arm,size=0x5c) addr:0x02016d18
-func_02016d74 kind:function(arm,size=0x38) addr:0x02016d74
-func_02016dac kind:function(arm,size=0x5c) addr:0x02016dac
+OSi_ExitThread_ArgSpecified kind:function(arm,size=0x5c) addr:0x02016d18 local
+OSi_ExitThread kind:function(arm,size=0x38) addr:0x02016d74 local
+OSi_ExitThread_Destroy kind:function(arm,size=0x5c) addr:0x02016dac local
 OS_SleepThread kind:function(arm,size=0x50) addr:0x02016e08
 OS_WakeupThread kind:function(arm,size=0x68) addr:0x02016e58
 OS_WakeupThreadDirect kind:function(arm,size=0x28) addr:0x02016ec0
-func_02016ee8 kind:function(arm,size=0x28) addr:0x02016ee8
-func_02016f10 kind:function(arm,size=0x1c) addr:0x02016f10
-func_02016f2c kind:function(arm,size=0xa8) addr:0x02016f2c
-func_02016fd4 kind:function(arm,size=0x28) addr:0x02016fd4
-func_02016ffc kind:function(arm,size=0x10) addr:0x02016ffc
-func_0201700c kind:function(arm,size=0x34) addr:0x0201700c
-func_02017040 kind:function(arm,size=0x34) addr:0x02017040
-func_02017074 kind:function(arm,size=0x8) addr:0x02017074
-func_0201707c kind:function(arm,size=0x84) addr:0x0201707c
+OS_SelectThread kind:function(arm,size=0x28) addr:0x02016ee8
+OS_RescheduleThread kind:function(arm,size=0x1c) addr:0x02016f10
+OS_SetThreadPriority kind:function(arm,size=0xa8) addr:0x02016f2c
+OS_SetSwitchThreadCallback kind:function(arm,size=0x28) addr:0x02016fd4
+OSi_IdleThreadProc kind:function(arm,size=0x10) addr:0x02016ffc local
+OS_DisableScheduler kind:function(arm,size=0x34) addr:0x0201700c
+OS_EnableScheduler kind:function(arm,size=0x34) addr:0x02017040
+OS_SetThreadDestructor kind:function(arm,size=0x8) addr:0x02017074
+OS_InitContext kind:function(arm,size=0x84) addr:0x0201707c
 OS_SaveContext kind:function(arm,size=0x4c) addr:0x02017100
 OS_LoadContext kind:function(arm,size=0x44) addr:0x0201714c
 OS_IsRunOnEmulator kind:function(arm,size=0x8) addr:0x02017190
@@ -8168,11 +8168,10 @@ data_020cff80 kind:bss addr:0x020cff80
 data_020cff9c kind:bss addr:0x020cff9c
 OSi_IrqCallbackInfo kind:bss addr:0x020cffbc
 data_020d001c kind:bss addr:0x020d001c
-data_020d0020 kind:bss addr:0x020d0020
+OSi_SystemCallbackInSwitchThread kind:bss addr:0x020d0020
 OSi_ThreadInfo kind:bss addr:0x020d0044
-data_020d0048 kind:bss addr:0x020d0048
-data_020d0054 kind:bss addr:0x020d0054
-data_020d0114 kind:bss addr:0x020d0114
+OSi_IdleThread kind:bss addr:0x020d0054
+OSi_LauncherThread kind:bss addr:0x020d0114
 data_020d029c kind:bss addr:0x020d029c
 data_020d02a4 kind:bss addr:0x020d02a4
 data_020d02a8 kind:bss addr:0x020d02a8
