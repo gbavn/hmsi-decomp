@@ -161,3 +161,7 @@ libs/NitroSystem/libraries/g3d/src/sbc.c:
 libs/NitroSystem/libraries/g3d/src/util.c:
     complete
     .text       start:0x0200998c end:0x02009f48
+
+libs/NitroSystem/libraries/g2d/src/g2d_Entity.c:
+    complete
+    .text       start:0x0207bddc end:0x0207bde4
