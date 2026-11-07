@@ -8,6 +8,8 @@ struct ModelAnim {
     u32 unk0;
     u32 unk4;
     NNSG3dAnmObj *anmObj;
+    u8 unkC;
+    u8 loop;
 };
 
 // A loaded 3D model with its render object and placement (0xB4 bytes).

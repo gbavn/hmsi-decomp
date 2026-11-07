@@ -3,7 +3,7 @@
 mwcc's register allocation depends on declaration order, so a function that differs only in
 register numbers often matches after reordering its locals.
 
-Usage:  python scripts/permdecl.py <source> <function>
+Usage:  python scripts/permdecl.py <source> <function> [name in source, e.g. IslandView::LoadResources]
 The declarations are the consecutive lines right after the function's opening brace that look
 like `type name;` or `type name = value;`. The file is left with the first matching order
 (or restored if none matches).
@@ -20,10 +20,11 @@ DECL = re.compile(r"^\s+[A-Za-z_][\w\s\*]*[\s\*]\**[A-Za-z_]\w*(\s*=\s*[^;]+)?;\
 
 def main():
     src, func = sys.argv[1], sys.argv[2]
+    srcname = sys.argv[3] if len(sys.argv) > 3 else func
     path = ROOT / src
     text = path.read_text()
     lines = text.split("\n")
-    head = re.compile(rf"^\S.*\b{re.escape(func)}\s*\(")
+    head = re.compile(rf"^\S.*\b{re.escape(srcname)}\s*\(")
     start = next(i for i, l in enumerate(lines) if head.match(l))
     brace = next(i for i in range(start, len(lines)) if lines[i].strip() == "{")
     first = brace + 1

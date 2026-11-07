@@ -122,6 +122,34 @@ def gap_data_symbols():
     return names
 
 
+def unreferenced_data_symbols():
+    """Global data symbols of complete units that no relocation points to.
+
+    The original keeps some data nothing uses (e.g. ov003's constant 64); with -dead our linker would
+    drop its section, so force such symbols active. Forcing a symbol that is referenced is harmless.
+    """
+    targets = set()
+    for relocs in CONFIG_DIR.rglob("relocs.txt"):
+        targets.update(int(t, 16) for t in re.findall(r"to:0x([0-9a-f]+)", relocs.read_text()))
+    names = []
+    for delinks in CONFIG_DIR.rglob("delinks.txt"):
+        covered = []
+        _, _, files = delinks.read_text().partition("\n\n")
+        for block in re.split(r"\n\s*\n", files):
+            if re.search(r"^\s+complete\s*$", block, re.M):
+                for m in re.finditer(r"\.(?:rodata|data|bss|sbss|sdata)\s+start:0x([0-9a-f]+) end:0x([0-9a-f]+)",
+                                     block):
+                    covered.append((int(m.group(1), 16), int(m.group(2), 16)))
+        for line in delinks.with_name("symbols.txt").read_text().splitlines():
+            m = re.match(r"^([A-Za-z_][A-Za-z0-9_]*) kind:(data|bss)\S* addr:0x([0-9a-f]+)(.*)$", line)
+            if not m or "local" in m.group(4) or "ambiguous" in m.group(4):
+                continue
+            addr = int(m.group(3), 16)
+            if addr not in targets and any(s <= addr < e for s, e in covered):
+                names.append(m.group(1))
+    return names
+
+
 def multi_overlay_targets():
     """Functions called through relocations that target several overlays at once (module:overlays(a,b,..)).
 
@@ -160,7 +188,7 @@ def main():
     # Data that only exists in assembly gaps must survive: force it active.
     lcf = BUILD / "arm9.lcf"
     text = lcf.read_text()
-    force = "FORCE_ACTIVE {\n    " + ",\n    ".join(gap_data_symbols() + multi_overlay_targets()) + "\n}\n\n"
+    force = "FORCE_ACTIVE {\n    " + ",\n    ".join(gap_data_symbols() + unreferenced_data_symbols() + multi_overlay_targets()) + "\n}\n\n"
     text = text.replace("SECTIONS {", force + "SECTIONS {", 1)
     # Constants that Nintendo's LCF defined for the SDK.
     consts = []

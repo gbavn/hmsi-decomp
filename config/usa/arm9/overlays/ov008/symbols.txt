@@ -29,6 +29,6 @@ _ZTV9SheepWool kind:data(any) addr:0x021569b4
 data_021569d0 kind:data(any) addr:0x021569d0
 sTaskManagers kind:bss addr:0x021569e0
 sCallbackCount kind:bss addr:0x021569ec local
-data_021569f8 kind:bss addr:0x021569f8
 vblank_count_SheepModel kind:bss addr:0x021569f0 local
 vblank_count_SheepWool kind:bss addr:0x021569f4 local
+data_021569f8 kind:bss addr:0x021569f8

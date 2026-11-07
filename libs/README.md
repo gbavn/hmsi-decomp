@@ -19,3 +19,4 @@ Every edit to the vendored sources is listed here.
 - `NitroSDK/include/nitro/version.h`: `SDK_VERSION_RELSTEP` 30009 (this game's SDK is 4.2 relstep 30009; the
   value ends up in `_start_ModuleParams`).
 - `NitroSDK/libraries/snd/src/snd_command.c`: `SND_FlushCommand` retry loop tests `!sReserveList` (codegen only).
+- `stub/string.h`: `extern "C"` guard for C++ game code; added `strncpy`, `strncat` and `strstr` (used by overlay 3).
