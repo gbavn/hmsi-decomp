@@ -66,6 +66,37 @@ typedef struct {
     s16 PD;
 } GXOamAffine;
 
+#define GX_OAM_ATTR01_RSENABLE_MASK 0x00000300
+#define GX_OAM_ATTR01_FLIP_MASK 0x30000000
+#define GX_OAM_ATTR01_SHAPE_MASK 0x0000c000
+#define GX_OAM_ATTR01_SHAPE_SHIFT 14
+#define GX_OAM_ATTR01_SIZE_MASK 0xc0000000
+#define GX_OAM_ATTR01_SIZE_SHIFT 30
+
+typedef enum {
+    GX_OAM_EFFECT_NONE = 0x00000000,
+    GX_OAM_EFFECT_FLIP_H = 0x10000000,
+    GX_OAM_EFFECT_FLIP_V = 0x20000000,
+    GX_OAM_EFFECT_FLIP_HV = 0x30000000,
+    GX_OAM_EFFECT_AFFINE = 0x00000100,
+    GX_OAM_EFFECT_NODISPLAY = 0x00000200,
+    GX_OAM_EFFECT_AFFINE_DOUBLE = 0x00000300
+} GXOamEffect;
+
+typedef int GXOamShape;
+
+static inline GXOamEffect G2_GetOBJEffect(const GXOamAttr *oam) {
+    GXOamEffect effect;
+
+    effect = (GXOamEffect)(oam->attr01 & GX_OAM_ATTR01_RSENABLE_MASK);
+
+    if (effect == GX_OAM_EFFECT_AFFINE || effect == GX_OAM_EFFECT_AFFINE_DOUBLE) {
+        return effect;
+    }
+
+    return (GXOamEffect)(effect | (oam->attr01 & GX_OAM_ATTR01_FLIP_MASK));
+}
+
 static inline void G2_SetOBJAffine(GXOamAffine *oam, const MtxFx22 *mtx) {
     oam->PA = (s16)(mtx->_00 >> 4);
     oam->PB = (s16)(mtx->_01 >> 4);

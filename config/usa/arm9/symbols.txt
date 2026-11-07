@@ -145,14 +145,14 @@ NNS_G2dUpdateCellTransferStateManager kind:function(arm,size=0x124) addr:0x02004
 NNS_G2dSetCellTransferStateRequested kind:function(arm,size=0x24) addr:0x020046a0
 NNS_G2dGetNewCellTransferStateHandle kind:function(arm,size=0x58) addr:0x020046c4
 NNS_G2dFreeCellTransferStateHandle kind:function(arm,size=0x4c) addr:0x0200471c
-func_02004768 kind:function(arm,size=0x268) addr:0x02004768
-func_020049d0 kind:function(arm,size=0x10) addr:0x020049d0
-func_020049e0 kind:function(arm,size=0x14) addr:0x020049e0
-func_020049f4 kind:function(arm,size=0x10) addr:0x020049f4
-func_02004a04 kind:function(arm,size=0x10) addr:0x02004a04
-func_02004a14 kind:function(arm,size=0x250) addr:0x02004a14
-func_02004c64 kind:function(arm,size=0x10) addr:0x02004c64
-func_02004c74 kind:function(arm,size=0x14) addr:0x02004c74
+CalcSpriteParams_ kind:function(arm,size=0x268) addr:0x02004768 local
+NNSi_G2dSetOamSoftEmuAutoZOffsetFlag kind:function(arm,size=0x10) addr:0x020049d0
+NNSi_G2dResetOamSoftEmuAutoZOffset kind:function(arm,size=0x14) addr:0x020049e0
+NNSi_G2dSetOamSoftEmuAutoZOffsetStep kind:function(arm,size=0x10) addr:0x020049f4
+NNSi_G2dGetOamSoftEmuAutoZOffsetStep kind:function(arm,size=0x10) addr:0x02004a04
+NNS_G2dDrawOneOam3DDirectWithPosFast kind:function(arm,size=0x250) addr:0x02004a14
+NNS_G2dSetOamSoftEmuUVFlipCorrectFunc kind:function(arm,size=0x10) addr:0x02004c64
+NNS_G2dResetOamSoftEmuUVFlipCorrectFunc kind:function(arm,size=0x14) addr:0x02004c74
 func_02004c88 kind:function(arm,size=0x2c0) addr:0x02004c88
 func_02004f48 kind:function(arm,size=0x41c) addr:0x02004f48
 func_02005364 kind:function(arm,size=0x244) addr:0x02005364
@@ -5630,14 +5630,15 @@ __sinit_020b0728 kind:function(arm,size=0x34) addr:0x020b0728
 __sinit_020b075c kind:function(arm,size=0x5e8) addr:0x020b075c
 data_020b0d54 kind:data(any) addr:0x020b0d54 local
 data_020b0d60 kind:data(any) addr:0x020b0d60 local
-data_020b0d6c kind:data(any) addr:0x020b0d6c
-data_020b0d84 kind:data(any) addr:0x020b0d84
+NNSi_objSizeHTbl kind:data(any) addr:0x020b0d6c
+NNSi_objSizeWTbl kind:data(any) addr:0x020b0d84
 cvtTbl kind:data(any) addr:0x020b0d9c local
 data_020b0da8 kind:data(any) addr:0x020b0da8
 data_020b0db0 kind:data(any) addr:0x020b0db0
 data_020b0db8 kind:data(any) addr:0x020b0db8
 data_020b0dd8 kind:data(any) addr:0x020b0dd8
 data_020b0e08 kind:data(any) addr:0x020b0e08
+data_020b0e38 kind:data(any) addr:0x020b0e38
 data_020b0e40 kind:data(any) addr:0x020b0e40
 data_020b0e58 kind:data(any) addr:0x020b0e58
 data_020b0e78 kind:data(any) addr:0x020b0e78
