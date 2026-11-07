@@ -1,7 +1,7 @@
 #ifndef MEMORY_MANAGER_H
 #define MEMORY_MANAGER_H
 
-#include "types.h"
+#include <nitro/types.h>
 
 // Every block (used or free) starts with this header; user data follows it.
 typedef struct MMBlock {

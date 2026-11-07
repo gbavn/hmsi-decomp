@@ -5,11 +5,8 @@
 // strictly after the buffer address (1-4 bytes in). Allocations are carved from the end of
 // the remaining space or reused (best fit) from the free list; every block starts with a
 // 0x10-byte header and ends with a 0xFEEBDAED guard word.
+#include <nitro/os.h>
 #include "memory_manager.h"
-
-typedef int OSIntrMode;
-extern OSIntrMode OS_DisableInterrupts(void);
-extern OSIntrMode OS_RestoreInterrupts(OSIntrMode state);
 
 #define MM_HEAP(mem) ((MMHeap *)((u8 *)(mem) + (4 - ((u32)(mem) & 3))))
 #define MM_GUARD 0xFEEBDAED

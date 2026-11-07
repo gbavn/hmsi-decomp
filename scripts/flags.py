@@ -12,8 +12,9 @@ LIB_FLAGS = [
 GAME_FLAGS = [
     "-O4,p", "-enum", "int", "-char", "signed", "-str", "noreuse", "-proc", "arm946e",
     "-gccext,on", "-fp", "soft", "-inline", "noauto", "-Cpp_exceptions", "off", "-RTTI", "off",
-    "-interworking", "-w", "off", "-sym", "on", "-gccinc", "-nolink", "-msgstyle", "gcc",
-    "-i", "include",
+    "-interworking", "-w", "off", "-sym", "on", "-nosyspath", "-gccinc", "-nolink", "-msgstyle", "gcc",
+    "-DSDK_TS", "-DSDK_4M", "-DSDK_ARM9", "-DSDK_CW", "-DSDK_FINALROM", "-DSDK_CODE_ARM", "-DNNS_FINALROM",
+    "-i", "include/game", "-i", "libs/stub", "-i", "libs/NitroSDK/include", "-i", "libs/NitroSystem/include",
 ]
 
 
