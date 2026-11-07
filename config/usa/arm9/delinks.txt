@@ -283,3 +283,7 @@ libs/NitroSDK/libraries/gx/src/gx.c:
     .text       start:0x02013278 end:0x020135c4
     .data       start:0x020bb824 end:0x020bb82c
     .bss        start:0x020cff60 end:0x020cff64
+
+libs/NitroSDK/libraries/gx/src/gx_bgcnt.c:
+    complete
+    .text       start:0x02014478 end:0x020148e8
