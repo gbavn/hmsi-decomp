@@ -423,3 +423,8 @@ libs/NitroSystem/libraries/gfd/src/VramManager/gfd_PlttVramMan.c:
     complete
     .text       start:0x0200e264 end:0x0200e274
     .data       start:0x020bb81c end:0x020bb824
+
+libs/NitroSystem/libraries/snd/src/player.c:
+    complete
+    .text       start:0x0200f328 end:0x0200faf4
+    .bss        start:0x020ce10c end:0x020ce9e4
