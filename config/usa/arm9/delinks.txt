@@ -310,6 +310,11 @@ libs/NitroSDK/libraries/snd/src/snd_alarm.c:
     .text       start:0x020198e4 end:0x020199a8
     .bss        start:0x020d1ec0 end:0x020d1f20
 
+libs/NitroSDK/libraries/snd/src/snd_work.c:
+    complete
+    .text       start:0x020199a8 end:0x02019a78
+    .bss        start:0x020d1f20 end:0x020d1f24
+
 libs/NitroSDK/libraries/snd/src/snd_bank.c:
     complete
     .text       start:0x02019ae8 end:0x02019edc
@@ -322,6 +327,16 @@ libs/NitroSDK/libraries/pxi/src/pxi_fifo.c:
 libs/NitroSDK/libraries/cp/src/cp_context.c:
     complete
     .text       start:0x0201aa78 end:0x0201aaf4
+
+libs/NitroSDK/libraries/spi/src/tp.c:
+    complete
+    .text       start:0x0201aaf4 end:0x0201b3f4
+    .bss        start:0x020d1fa8 end:0x020d1fe4
+
+libs/NitroSDK/libraries/spi/src/mic.c:
+    complete
+    .text       start:0x0201b3f4 end:0x0201b8a0
+    .bss        start:0x020d1fe4 end:0x020d2004
 
 libs/NitroSDK/libraries/rtc/src/internal.c:
     complete
@@ -338,6 +353,16 @@ libs/NitroSDK/libraries/card/src/card_backup.c:
 libs/NitroSDK/libraries/card/src/card_request.c:
     complete
     .text       start:0x0201e1e8 end:0x0201e3c0
+
+libs/NitroSDK/libraries/card/src/card_pullOut.c:
+    complete
+    .text       start:0x0201e3c0 end:0x0201e58c
+    .bss        start:0x020d2940 end:0x020d2948
+
+libs/NitroSDK/libraries/ctrdg/src/ctrdg.c:
+    complete
+    .text       start:0x0201e58c end:0x0201e8a4
+    .bss        start:0x020d2948 end:0x020d2950
 
 libs/NitroSDK/libraries/ctrdg/src/ctrdg_task.c:
     complete
@@ -383,23 +408,3 @@ libs/NitroSDK/libraries/fs/src/fs_rom.c:
     .text       start:0x020af114 end:0x020af36c
     .data       start:0x020c6d8c end:0x020c6d90
     .bss        start:0x02155bf4 end:0x02155c68
-
-libs/NitroSDK/libraries/snd/src/snd_work.c:
-    complete
-    .text       start:0x020199a8 end:0x02019a78
-    .bss        start:0x020d1f20 end:0x020d1f24
-
-libs/NitroSDK/libraries/spi/src/mic.c:
-    complete
-    .text       start:0x0201b3f4 end:0x0201b8a0
-    .bss        start:0x020d1fe4 end:0x020d2004
-
-libs/NitroSDK/libraries/spi/src/tp.c:
-    complete
-    .text       start:0x0201aaf4 end:0x0201b3f4
-    .bss        start:0x020d1fa8 end:0x020d1fe4
-
-libs/NitroSDK/libraries/card/src/card_pullOut.c:
-    complete
-    .text       start:0x0201e3c0 end:0x0201e58c
-    .bss        start:0x020d2940 end:0x020d2948
