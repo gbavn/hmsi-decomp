@@ -374,3 +374,7 @@ libs/NitroSDK/libraries/snd/src/snd_alarm.c:
 libs/NitroSDK/libraries/snd/src/snd_bank.c:
     complete
     .text       start:0x02019ae8 end:0x02019edc
+
+libs/NitroSDK/libraries/snd/src/snd_interface.c:
+    complete
+    .text       start:0x02018e00 end:0x02019174
