@@ -361,3 +361,7 @@ libs/NitroSDK/libraries/pxi/src/pxi_fifo.c:
 libs/NitroSDK/libraries/rtc/src/convert.c:
     complete
     .text       start:0x0201cebc end:0x0201cf78
+
+libs/NitroSDK/libraries/rtc/src/internal.c:
+    complete
+    .text       start:0x0201ce74 end:0x0201cebc
