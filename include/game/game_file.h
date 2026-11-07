@@ -30,4 +30,19 @@ void *GFile_LoadEx(GFile *file, const char *path, u32 *outSize, int unused);
 void *GFile_LoadAsync(GFile *file, const char *path);
 void *GFile_LoadAsyncEx(GFile *file, const char *path, u32 *outSize);
 
+#ifdef __cplusplus
+// In the original GFile is a C++ class with an inline virtual destructor that closes the file
+// (vtable at 0x020bc374, destructors 0x0202aec0/0x0202afe0). Code that keeps a file on the stack
+// uses this class; Key() is never defined, it only keeps mwcc from emitting the vtable here.
+class GFileObject {
+public:
+    GFileObject() { GFile_Init(Get()); }
+    virtual ~GFileObject() { GFile_Close(Get()); }
+    virtual void Key();
+    GFile *Get() { return (GFile *)this; }
+
+    FSFile file;
+};
+#endif
+
 #endif

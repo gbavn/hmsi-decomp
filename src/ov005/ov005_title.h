@@ -4,11 +4,12 @@
 #include <nitro.h>
 #include "Screen2D.h"
 #include "Button.h"
+#include "Archive.h"
+#include "Task.h"
+#include "game_file.h"
 
 // ARM9 2D helpers used by the title screen (names unknown yet).
 extern "C" {
-void *func_02036fdc(void *archive, const char *name);   // file data inside an archive
-u32 func_02037010(void *archive, const char *name);     // file size inside an archive
 void func_02036404(void *anim, void *data);
 void func_0203646c(void *anim, int frame);
 int func_020365f8(void *data, int vram, int offset, int unk);
@@ -23,6 +24,9 @@ int func_02036d48(int vram);
 extern u8 data_0214d920[];
 void func_02035e8c(int se, int unk);   // play a sound effect
 extern void *data_020ec87c;            // the 2D sprite renderer
+BOOL func_020374f8(int screen);        // a screen fade is running
+void func_02037284(int type, int a, int b);   // start a screen fade
+void func_ov005_02159608(int a, int b);
 }
 
 // A 2D sprite drawn by the renderer at data_020ec87c (ARM9 0x0202b...).
@@ -44,14 +48,29 @@ class TitleScene {
 public:
     void OnLogoDone();       // 0x021571c0
     void Select(u8 index);   // 0x021571cc
-    void *GetArchive();      // 0x0215720c
+    Archive *GetArchive();   // 0x0215720c
     BOOL IsLoaded();         // 0x02157288
     u8 HasSaveData();        // 0x02157214
 
     u8 unk0[0x18];
     u8 mState;
     u8 unk19[0x30 - 0x19];
-    void *mArchive;
+    Archive *mArchive;
+};
+
+// The license / publisher logos shown before the title (overlay 5, 0x02156750).
+class SplashScreen : public Task {
+public:
+    SplashScreen(void *owner);
+    virtual ~SplashScreen();
+    virtual BOOL Update();
+    virtual void Draw();
+    virtual void Func4();
+
+    void *mOwner;
+    u8 mFrame;
+    Archive *mArchive;
+    u8 *mArchiveData;
 };
 
 // The top-screen logo: sky, two logo layers and a lens flare sprite, fading in (overlay 5, 0x02155c80).

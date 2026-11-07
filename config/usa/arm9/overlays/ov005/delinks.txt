@@ -13,3 +13,8 @@ src/ov005/TitleButton.cpp:
     complete
     .text       start:0x021562f4 end:0x02156750
     .data       start:0x0215b578 end:0x0215b59c
+
+src/ov005/SplashScreen.cpp:
+    complete
+    .text       start:0x02156750 end:0x02156c3c
+    .data       start:0x0215b59c end:0x0215b77c

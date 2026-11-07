@@ -20,12 +20,12 @@ _ZN11TitleButton10SetTouchedEh kind:function(arm,size=0x8) addr:0x0215670c
 _ZN11TitleButton6DecideEv kind:function(arm,size=0x2c) addr:0x02156714
 _ZN11TitleButton9IsTouchedEv kind:function(arm,size=0x8) addr:0x02156740
 _ZN11TitleButton9IsDecidedEv kind:function(arm,size=0x8) addr:0x02156748
-func_ov005_02156750 kind:function(arm,size=0x180) addr:0x02156750
-func_ov005_021568d0 kind:function(arm,size=0x44) addr:0x021568d0
-func_ov005_02156914 kind:function(arm,size=0x4c) addr:0x02156914
-func_ov005_02156960 kind:function(arm,size=0x2d4) addr:0x02156960
-func_ov005_02156c34 kind:function(arm,size=0x4) addr:0x02156c34
-func_ov005_02156c38 kind:function(arm,size=0x4) addr:0x02156c38
+_ZN12SplashScreenC1EPv kind:function(arm,size=0x180) addr:0x02156750
+_ZN12SplashScreenD1Ev kind:function(arm,size=0x44) addr:0x021568d0
+_ZN12SplashScreenD0Ev kind:function(arm,size=0x4c) addr:0x02156914
+_ZN12SplashScreen6UpdateEv kind:function(arm,size=0x2d4) addr:0x02156960
+_ZN12SplashScreen4DrawEv kind:function(arm,size=0x4) addr:0x02156c34
+_ZN12SplashScreen5Func4Ev kind:function(arm,size=0x4) addr:0x02156c38
 func_ov005_02156c3c kind:function(arm,size=0x11c) addr:0x02156c3c
 func_ov005_02156d58 kind:function(arm,size=0x74) addr:0x02156d58
 func_ov005_02156dcc kind:function(arm,size=0x7c) addr:0x02156dcc
@@ -155,7 +155,7 @@ data_ov005_0215b700 kind:data(any) addr:0x0215b700
 data_ov005_0215b714 kind:data(any) addr:0x0215b714
 data_ov005_0215b728 kind:data(any) addr:0x0215b728
 data_ov005_0215b73c kind:data(any) addr:0x0215b73c
-data_ov005_0215b768 kind:data(any) addr:0x0215b768
+_ZTV12SplashScreen kind:data(any) addr:0x0215b760
 data_ov005_0215b77c kind:data(any) addr:0x0215b77c
 data_ov005_0215b79c kind:data(any) addr:0x0215b79c
 data_ov005_0215b7c0 kind:data(any) addr:0x0215b7c0
@@ -215,3 +215,4 @@ data_ov005_0215bb3c kind:data(any) addr:0x0215bb3c
 data_ov005_0215bb4c kind:data(any) addr:0x0215bb4c
 data_ov005_0215bb60 kind:bss addr:0x0215bb60
 data_ov005_0215bb88 kind:bss addr:0x0215bb88
+gSplashFileVtable kind:data(any) addr:0x0215b750

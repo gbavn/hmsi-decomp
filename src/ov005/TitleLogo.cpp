@@ -5,7 +5,7 @@
 
 TitleLogo::TitleLogo(TitleScene *scene)
 {
-    void *arc;
+    Archive *arc;
 
     mFade = 0;
     unk4C = 0;
@@ -28,13 +28,13 @@ TitleLogo::TitleLogo(TitleScene *scene)
                           GX_BG_CHARBASE_0x10000);
     G2S_SetBG2Priority(0);
     arc = mScene->GetArchive();
-    GXS_LoadBG0Char(func_02036fdc(arc, "title_up_rogo.kncg"), 0, func_02037010(arc, "title_up_rogo.kncg"));
-    GXS_LoadBGPltt(func_02036fdc(arc, "title_up_rogo.kncl"), 0, func_02037010(arc, "title_up_rogo.kncl"));
-    GXS_LoadBG0Scr(func_02036fdc(arc, "title_up_sky.knsc"), 0, func_02037010(arc, "title_up_sky.knsc"));
-    GXS_LoadBG1Scr(func_02036fdc(arc, "title_up_rogo.knsc"), 0, func_02037010(arc, "title_up_rogo.knsc"));
-    GXS_LoadBG2Char(func_02036fdc(arc, "title_up_rogo2.kncg"), 0, func_02037010(arc, "title_up_rogo2.kncg"));
-    GXS_LoadBGPltt(func_02036fdc(arc, "title_up_rogo2.kncl"), 0, func_02037010(arc, "title_up_rogo2.kncl"));
-    GXS_LoadBG2Scr(func_02036fdc(arc, "title_up_rogo2.knsc"), 0, func_02037010(arc, "title_up_rogo2.knsc"));
+    GXS_LoadBG0Char(arc->GetFile("title_up_rogo.kncg"), 0, arc->GetSize("title_up_rogo.kncg"));
+    GXS_LoadBGPltt(arc->GetFile("title_up_rogo.kncl"), 0, arc->GetSize("title_up_rogo.kncl"));
+    GXS_LoadBG0Scr(arc->GetFile("title_up_sky.knsc"), 0, arc->GetSize("title_up_sky.knsc"));
+    GXS_LoadBG1Scr(arc->GetFile("title_up_rogo.knsc"), 0, arc->GetSize("title_up_rogo.knsc"));
+    GXS_LoadBG2Char(arc->GetFile("title_up_rogo2.kncg"), 0, arc->GetSize("title_up_rogo2.kncg"));
+    GXS_LoadBGPltt(arc->GetFile("title_up_rogo2.kncl"), 0, arc->GetSize("title_up_rogo2.kncl"));
+    GXS_LoadBG2Scr(arc->GetFile("title_up_rogo2.knsc"), 0, arc->GetSize("title_up_rogo2.knsc"));
     LoadFlare();
 }
 
@@ -122,19 +122,18 @@ void TitleLogo::Skip()
                       31, 0);
 }
 
-static inline void *GetF(void *a, const char *n) { return func_02036fdc(a, n); }
 void TitleLogo::LoadFlare()
 {
-    void *arc = mScene->GetArchive();
+    Archive *arc = mScene->GetArchive();
     int ofs = 0;
     int size;
 
     func_02036c74(2, ofs);
-    size = func_020365f8(GetF(arc, "title_up_Lens_flare.knch"), 2, func_02036d48(2), 0);
-    func_02036404(mFlareAnim, GetF(arc, "title_up_Lens_flare.knce"));
+    size = func_020365f8(arc->GetFile("title_up_Lens_flare.knch"), 2, func_02036d48(2), 0);
+    func_02036404(mFlareAnim, arc->GetFile("title_up_Lens_flare.knce"));
     mFlareChar = func_02036d48(2);
     ofs += size;
     func_02036c74(2, ofs);
-    GXS_LoadOBJPltt(GetF(arc, "title_up_Lens_flare.kncl"), 0,
-                    func_02037010(arc, "title_up_Lens_flare.kncl"));
+    GXS_LoadOBJPltt(arc->GetFile("title_up_Lens_flare.kncl"), 0,
+                    arc->GetSize("title_up_Lens_flare.kncl"));
 }
