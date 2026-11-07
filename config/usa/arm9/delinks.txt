@@ -604,6 +604,11 @@ src/memory_manager.c:
     .data       start:0x020bc2a4 end:0x020bc2bc
     .bss        start:0x020ec7e8 end:0x020ec7ec
 
+src/game_file.c:
+    complete
+    .text       start:0x02028a24 end:0x02028db4
+    .bss        start:0x020ec7f0 end:0x020ec7f4
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
