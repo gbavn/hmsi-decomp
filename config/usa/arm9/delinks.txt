@@ -169,3 +169,7 @@ libs/NitroSystem/libraries/g2d/src/g2d_Entity.c:
 libs/NitroSystem/libraries/g2d/src/internal/g2di_Mtx32.c:
     complete
     .text       start:0x02004338 end:0x0200445c
+
+libs/NitroSystem/libraries/gfd/src/VramManager/gfd_FrameTexVramMan.c:
+    complete
+    .text       start:0x0200e254 end:0x0200e25c
