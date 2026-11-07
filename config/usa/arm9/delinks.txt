@@ -490,3 +490,9 @@ libs/NitroSDK/libraries/gx/src/gx_vramcnt.c:
 libs/NitroSDK/libraries/gx/src/g3_util.c:
     complete
     .text       start:0x02014e84 end:0x02014f34
+
+libs/NitroSystem/libraries/snd/src/sndarc_stream.c:
+    complete
+    .text       start:0x020119e0 end:0x020131d4
+    .rodata     start:0x020b0f80 end:0x020b1044
+    .bss        start:0x020cf0f0 end:0x020cff60
