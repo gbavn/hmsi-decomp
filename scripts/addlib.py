@@ -85,9 +85,15 @@ def main():
     a = ap.parse_args()
 
     syms_file, ofuncs, orelocs, obin, obase = load_module(a.module)
+    # code already covered by complete units is off limits
+    covered = []
+    _, _, files = syms_file.with_name("delinks.txt").read_text().partition("\n\n")
+    for m in re.finditer(r"\.text\s+start:0x([0-9a-f]+) end:0x([0-9a-f]+)", files):
+        covered.append((int(m.group(1), 16), int(m.group(2), 16)))
     by_size = defaultdict(list)
     for addr, size, name in ofuncs:
-        by_size[size].append((addr, name))
+        if not any(s <= addr < e for s, e in covered):
+            by_size[size].append((addr, name))
 
     with tempfile.TemporaryDirectory() as tmp:
         obj = Path(tmp) / "out.o"
@@ -155,6 +161,8 @@ def main():
             if r is not best:
                 print("  skipped run:", ", ".join(f"{x[2]}@{x[0]:#x}" for x in r))
     text_start, text_end = best[0][0], best[-1][0] + best[-1][1]
+    if text_end - text_start <= 0x20 and len(best) == 1 and "--force" not in sys.argv:
+        sys.exit(f"only one tiny function matched ({best[0][2]}@{best[0][0]:#x}); likely a coincidence (use --force)")
     keep = {idx: v for idx, v in chosen.items() if text_start <= v[0] < text_end}
 
     # ---- 2. data sections ----------------------------------------------------------------------------
@@ -176,6 +184,17 @@ def main():
                 continue
             in_sec = tgt["value"] + addend
             bases[tsec].add(o[1] - in_sec)
+    # fallback: global data symbols whose names are already known in symbols.txt
+    name_addr = {}
+    for line in syms_file.read_text().splitlines():
+        m = re.match(r"^(\S+) kind:(?:data|bss)\S* addr:0x([0-9a-f]+)", line)
+        if m:
+            name_addr[m.group(1)] = int(m.group(2), 16)
+    for s in syms:
+        if s["bind"] == 1 and 0 < s["shndx"] < len(secs) and s["name"] in name_addr:
+            sname = secs[s["shndx"]]["name"]
+            if sname in DATA_SECTIONS and not bases[sname]:
+                bases[sname].add(name_addr[s["name"]] - s["value"])
     sections = [(".text", text_start, text_end)]
     for name in DATA_SECTIONS:
         size = sum(s["size"] for s in secs if s["name"] == name and s["type"] in (1, 8))
