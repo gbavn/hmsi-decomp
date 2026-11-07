@@ -20,9 +20,9 @@ from:0x02155f10 kind:arm_call to:0x02030514 module:main
 from:0x02155f1c kind:arm_call to:0x02156308 module:overlay(8)
 from:0x02155f28 kind:arm_call to:0x02030668 module:main
 from:0x02155f34 kind:arm_call to:0x02030668 module:main
-from:0x02155f48 kind:load to:0x020c8d40 module:main
+from:0x02155f48 kind:load to:0x020c8d38 add:0x8 module:main
 from:0x02155f4c kind:load to:0x020c8d38 module:main
-from:0x02155f50 kind:load to:0x020c8d84 module:main
+from:0x02155f50 kind:load to:0x020c8d38 add:0x4c module:main
 from:0x02155f54 kind:load to:0x020ec7f8 module:main
 from:0x02155f58 kind:load to:0x021569e0 module:overlay(8)
 from:0x02155f64 kind:arm_call to:0x02156028 module:overlay(8)

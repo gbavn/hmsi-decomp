@@ -52,14 +52,14 @@ from:0x01ff8f64 kind:arm_call to:0x02006950 module:main
 from:0x01ff8f68 kind:arm_call to:0x020068a8 module:main
 from:0x01ff8f74 kind:arm_call to:0x020072ec module:main
 from:0x01ff8f8c kind:arm_call to:0x02009774 module:main
-from:0x01ff8f98 kind:load to:0x020c8df4 module:main
+from:0x01ff8f98 kind:load to:0x020c8d38 add:0xbc module:main
 from:0x01ff8f9c kind:load to:0x020c8d38 module:main
 from:0x01ff8fbc kind:arm_call to:0x020ac2a0 module:main
 from:0x01ff8ff4 kind:arm_call to:0x020acf10 module:main
 from:0x01ff9054 kind:arm_call to:0x020aceb4 module:main
 from:0x01ff90d0 kind:arm_call to:0x02006adc module:main
-from:0x01ff9120 kind:load to:0x020c8d40 module:main
-from:0x01ff9124 kind:load to:0x020c8d84 module:main
+from:0x01ff9120 kind:load to:0x020c8d38 add:0x8 module:main
+from:0x01ff9124 kind:load to:0x020c8d38 add:0x4c module:main
 from:0x01ff9144 kind:arm_call to:0x020acfc8 module:main
 from:0x01ff9150 kind:arm_call to:0x020acffc module:main
 from:0x01ff9160 kind:arm_call to:0x020acffc module:main

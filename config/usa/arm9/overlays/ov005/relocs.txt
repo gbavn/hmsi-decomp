@@ -787,12 +787,12 @@ from:0x0215ab14 kind:arm_call to:0x020acc58 module:main
 from:0x0215ab34 kind:arm_call to:0x0215acf4 module:overlay(5)
 from:0x0215ab44 kind:load to:0x0215bab4 module:overlay(5)
 from:0x0215ab4c kind:load to:0x020c8d38 module:main
-from:0x0215ab54 kind:load to:0x020c8d40 module:main
+from:0x0215ab54 kind:load to:0x020c8d38 add:0x8 module:main
 from:0x0215abdc kind:arm_call to:0x020ac340 module:main
 from:0x0215abfc kind:load to:0x020c8d38 module:main
 from:0x0215ac00 kind:load to:0x0215b3ac module:overlay(5)
 from:0x0215ac04 kind:load to:0x0215b3ac module:overlay(5)
-from:0x0215ac08 kind:load to:0x020c8d84 module:main
+from:0x0215ac08 kind:load to:0x020c8d38 add:0x4c module:main
 from:0x0215ac7c kind:arm_call to:0x020ac340 module:main
 from:0x0215acb4 kind:arm_call to:0x02014e84 module:main
 from:0x0215acbc kind:arm_call to:0x0201493c module:main

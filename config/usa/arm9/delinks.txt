@@ -471,3 +471,8 @@ libs/NitroSDK/libraries/os/src/os_irqTable.c:
     .text       start:0x020160e0 end:0x020161e8
     .data       start:0x020bb82c end:0x020bb83c
     .bss        start:0x020cffbc end:0x020d001c
+
+libs/NitroSystem/libraries/g3d/src/glbstate.c:
+    complete
+    .text       start:0x02006754 end:0x02006b50
+    .bss        start:0x020c8d38 end:0x020c8f9c

@@ -199,13 +199,13 @@ NNS_G3dReleaseMdlPltt kind:function(arm,size=0x84) addr:0x0200658c
 NNS_G3dBindMdlSet kind:function(arm,size=0xb0) addr:0x02006610
 NNS_G3dReleaseMdlSet kind:function(arm,size=0x94) addr:0x020066c0
 NNS_G3dGlbInit kind:function(arm,size=0x154) addr:0x02006754
-func_020068a8 kind:function(arm,size=0x78) addr:0x020068a8
-func_02006920 kind:function(arm,size=0x30) addr:0x02006920
-func_02006950 kind:function(arm,size=0x30) addr:0x02006950
-func_02006980 kind:function(arm,size=0x3c) addr:0x02006980
-func_020069bc kind:function(arm,size=0x14) addr:0x020069bc
+NNS_G3dGlbFlushVP kind:function(arm,size=0x78) addr:0x020068a8
+NNS_G3dGlbSetBaseTrans kind:function(arm,size=0x30) addr:0x02006920
+NNS_G3dGlbSetBaseScale kind:function(arm,size=0x30) addr:0x02006950
+NNS_G3dGlbLightVector kind:function(arm,size=0x3c) addr:0x02006980
+NNS_G3dGlbLightColor kind:function(arm,size=0x14) addr:0x020069bc
 NNS_G3dGlbGetInvV kind:function(arm,size=0x44) addr:0x020069d0
-func_02006a14 kind:function(arm,size=0x58) addr:0x02006a14
+calcSrtCameraMtx_ kind:function(arm,size=0x58) addr:0x02006a14 local
 NNS_G3dGlbGetWV kind:function(arm,size=0x38) addr:0x02006a6c
 NNS_G3dGlbGetInvWV kind:function(arm,size=0x38) addr:0x02006aa4
 NNS_G3dGlbGetViewPort kind:function(arm,size=0x74) addr:0x02006adc
@@ -5526,7 +5526,7 @@ MTX_Inverse43 kind:function(arm,size=0x38c) addr:0x020abc40
 MTX_Concat43 kind:function(arm,size=0x2d4) addr:0x020abfcc
 MTX_MultVec43 kind:function(arm,size=0xa0) addr:0x020ac2a0
 MTX_LookAt kind:function(arm,size=0x108) addr:0x020ac340
-func_020ac448 kind:function(arm,size=0x2c) addr:0x020ac448
+MTX_Identity44_ kind:function(arm,size=0x2c) addr:0x020ac448
 MTX_Copy44To43_ kind:function(arm,size=0x34) addr:0x020ac474
 MTX_Concat44 kind:function(arm,size=0x664) addr:0x020ac4a8
 func_020acb0c kind:function(arm,size=0x14c) addr:0x020acb0c
@@ -8114,18 +8114,6 @@ s_pTaskRegisterFunc kind:bss addr:0x020c8d0c
 data_020c8d18 kind:bss addr:0x020c8d18
 pTheInstance_ kind:bss addr:0x020c8d34 local
 NNS_G3dGlb kind:bss addr:0x020c8d38
-data_020c8d3c kind:bss addr:0x020c8d3c
-data_020c8d40 kind:bss addr:0x020c8d40
-data_020c8d84 kind:bss addr:0x020c8d84
-data_020c8db4 kind:bss addr:0x020c8db4
-data_020c8db8 kind:bss addr:0x020c8db8
-data_020c8de0 kind:bss addr:0x020c8de0
-data_020c8df4 kind:bss addr:0x020c8df4
-data_020c8e18 kind:bss addr:0x020c8e18
-data_020c8e24 kind:bss addr:0x020c8e24
-data_020c8e38 kind:bss addr:0x020c8e38
-data_020c8e68 kind:bss addr:0x020c8e68
-data_020c8e98 kind:bss addr:0x020c8e98
 NNS_G3dRS kind:bss addr:0x020c8f9c
 NNS_G3dRSOnGlb kind:bss addr:0x020c8fa0
 data_020c9da0 kind:bss addr:0x020c9da0

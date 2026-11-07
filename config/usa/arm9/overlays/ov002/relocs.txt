@@ -9980,7 +9980,7 @@ from:0x02193900 kind:arm_call to:0x02017c80 module:main
 from:0x02193924 kind:load to:0x020ec6ac module:main
 from:0x0219392c kind:load to:0x020ec870 module:main
 from:0x02193930 kind:load to:0x020ec87c module:main
-from:0x02193934 kind:load to:0x020c8d40 module:main
+from:0x02193934 kind:load to:0x020c8d38 add:0x8 module:main
 from:0x02193938 kind:load to:0x020c8d38 module:main
 from:0x0219393c kind:load to:0x020f577c module:main
 from:0x02193954 kind:arm_call to:0x02030724 module:main

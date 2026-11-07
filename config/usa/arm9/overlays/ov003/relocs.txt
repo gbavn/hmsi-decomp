@@ -127,9 +127,9 @@ from:0x02156404 kind:arm_call to:0x020358d0 module:main
 from:0x02156410 kind:arm_call to:0x02025364 module:main
 from:0x02156458 kind:arm_call to:0x020acb0c module:main
 from:0x021564c4 kind:arm_call to:0x020ac340 module:main
-from:0x021564ec kind:load to:0x020c8d40 module:main
+from:0x021564ec kind:load to:0x020c8d38 add:0x8 module:main
 from:0x021564f0 kind:load to:0x020c8d38 module:main
-from:0x021564f4 kind:load to:0x020c8d84 module:main
+from:0x021564f4 kind:load to:0x020c8d38 add:0x4c module:main
 from:0x02156540 kind:arm_call to:0x020358d0 module:main
 from:0x0215654c kind:arm_call to:0x02025364 module:main
 from:0x02156594 kind:arm_call to:0x02024cb8 module:main
