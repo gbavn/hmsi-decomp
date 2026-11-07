@@ -93,3 +93,8 @@ src/nnsys/g2d/g2d_RendererCore.c:
     .text       start:0x02004c88 end:0x02005a8c
     .rodata     start:0x020b0e40 end:0x020b0e58
     .bss        start:0x020c8d34 end:0x020c8d38
+
+
+libs/NitroSystem/libraries/g3d/src/kernel.c:
+    complete
+    .text       start:0x02005a8c end:0x02006754
