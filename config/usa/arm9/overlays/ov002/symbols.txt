@@ -3210,6 +3210,7 @@ data_ov002_021d532c kind:data(any) addr:0x021d532c
 data_ov002_021d5350 kind:data(any) addr:0x021d5350
 __sinit_ov002_021d5374 kind:function(arm,size=0x50) addr:0x021d5374
 .p__sinit_ov002_021d5374 kind:data(word) addr:0x021d53c4
+data_021d53e0 kind:data(any) addr:0x021d53e0
 data_ov002_021d53e8 kind:data(any) addr:0x021d53e8
 data_ov002_021d5420 kind:data(any) addr:0x021d5420
 data_ov002_021d5428 kind:data(any) addr:0x021d5428

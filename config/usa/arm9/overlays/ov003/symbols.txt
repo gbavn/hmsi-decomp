@@ -31,6 +31,7 @@ func_ov003_021574b8 kind:function(arm,size=0xd8) addr:0x021574b8
 func_ov003_02157590 kind:function(arm,size=0x2a0) addr:0x02157590
 data_ov003_02157830 kind:data(any) addr:0x02157830
 data_ov003_0215783c kind:data(any) addr:0x0215783c
+data_02157860 kind:data(any) addr:0x02157860
 data_ov003_02157868 kind:data(any) addr:0x02157868
 data_ov003_02157888 kind:data(any) addr:0x02157888
 data_ov003_021578b4 kind:data(any) addr:0x021578b4

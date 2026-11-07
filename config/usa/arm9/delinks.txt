@@ -75,6 +75,10 @@ src/nnsys/g2d/g2d_CellAnimation.c:
     complete
     .text       start:0x02002c48 end:0x02002e8c
 
+libs/NitroSystem/libraries/g2d/src/internal/g2di_Mtx32.c:
+    complete
+    .text       start:0x02004338 end:0x0200445c
+
 src/nnsys/g2d/g2d_CellTransferManager.c:
     complete
     .text       start:0x0200445c end:0x02004768
@@ -94,10 +98,33 @@ src/nnsys/g2d/g2d_RendererCore.c:
     .rodata     start:0x020b0e40 end:0x020b0e58
     .bss        start:0x020c8d34 end:0x020c8d38
 
-
 libs/NitroSystem/libraries/g3d/src/kernel.c:
     complete
     .text       start:0x02005a8c end:0x02006754
+
+libs/NitroSystem/libraries/g3d/src/sbc.c:
+    complete
+    .text       start:0x020070a0 end:0x02009774
+    .rodata     start:0x020b0e58 end:0x020b0e9c
+    .data       start:0x020bb634 end:0x020bb7b4
+    .bss        start:0x020c8f9c end:0x020cbca0
+
+libs/NitroSystem/libraries/g3d/src/gecom.c:
+    complete
+    .text       start:0x02009774 end:0x0200998c
+    .bss        start:0x020cbca0 end:0x020cbcac
+
+libs/NitroSystem/libraries/g3d/src/util.c:
+    complete
+    .text       start:0x0200998c end:0x02009f48
+
+libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor.c:
+    complete
+    .text       start:0x0200a164 end:0x0200a4dc
+
+libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor_anm.c:
+    complete
+    .text       start:0x0200a4dc end:0x0200a670
 
 libs/NitroSystem/libraries/g3d/src/anm/nsbma.c:
     complete
@@ -115,19 +142,6 @@ libs/NitroSystem/libraries/g3d/src/anm/nsbva.c:
     complete
     .text       start:0x0200c75c end:0x0200c7e0
 
-libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor.c:
-    complete
-    .text       start:0x0200a164 end:0x0200a4dc
-
-libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor_anm.c:
-    complete
-    .text       start:0x0200a4dc end:0x0200a670
-
-libs/NitroSystem/libraries/g3d/src/cgtool/3dsmax.c:
-    complete
-    .text       start:0x0200d5a8 end:0x0200dbec
-    .data       start:0x020bb7d4 end:0x020bb7f4
-
 libs/NitroSystem/libraries/g3d/src/cgtool/basic.c:
     complete
     .text       start:0x0200c7e0 end:0x0200c89c
@@ -141,45 +155,19 @@ libs/NitroSystem/libraries/g3d/src/cgtool/si3d.c:
     complete
     .text       start:0x0200d094 end:0x0200d5a8
 
+libs/NitroSystem/libraries/g3d/src/cgtool/3dsmax.c:
+    complete
+    .text       start:0x0200d5a8 end:0x0200dbec
+    .data       start:0x020bb7d4 end:0x020bb7f4
+
 libs/NitroSystem/libraries/g3d/src/cgtool/xsi.c:
     complete
     .text       start:0x0200dbec end:0x0200e254
     .data       start:0x020bb7f4 end:0x020bb814
 
-libs/NitroSystem/libraries/g3d/src/gecom.c:
-    complete
-    .text       start:0x02009774 end:0x0200998c
-    .bss        start:0x020cbca0 end:0x020cbcac
-
-libs/NitroSystem/libraries/g3d/src/sbc.c:
-    complete
-    .text       start:0x020070a0 end:0x02009774
-    .rodata     start:0x020b0e58 end:0x020b0e9c
-    .data       start:0x020bb634 end:0x020bb7b4
-    .bss        start:0x020c8f9c end:0x020cbca0
-
-libs/NitroSystem/libraries/g3d/src/util.c:
-    complete
-    .text       start:0x0200998c end:0x02009f48
-
-
-libs/NitroSystem/libraries/g2d/src/internal/g2di_Mtx32.c:
-    complete
-    .text       start:0x02004338 end:0x0200445c
-
 libs/NitroSystem/libraries/gfd/src/VramManager/gfd_FrameTexVramMan.c:
     complete
     .text       start:0x0200e254 end:0x0200e25c
-
-libs/NitroSystem/libraries/gfd/src/VramManager/gfd_LinkedListTexVramMan.c:
-    complete
-    .text       start:0x0200eb90 end:0x0200ef24
-    .rodata     start:0x020b0f50 end:0x020b0f80
-    .bss        start:0x020cbcc0 end:0x020cbcdc
-
-libs/NitroSystem/libraries/gfd/src/VramManager/gfdi_LinkedListVramMan_Common.c:
-    complete
-    .text       start:0x0200e72c end:0x0200eb90
 
 libs/NitroSystem/libraries/gfd/src/VramTransferMan/gfd_VramTransferManager.c:
     complete
@@ -187,38 +175,47 @@ libs/NitroSystem/libraries/gfd/src/VramTransferMan/gfd_VramTransferManager.c:
     .rodata     start:0x020b0ec0 end:0x020b0f50
     .bss        start:0x020cbcac end:0x020cbcc0
 
-libs/NitroSystem/libraries/snd/src/capture.c:
+libs/NitroSystem/libraries/gfd/src/VramManager/gfdi_LinkedListVramMan_Common.c:
     complete
-    .text       start:0x020100c0 end:0x02010334
-    .bss        start:0x020ceab4 end:0x020cf0b0
+    .text       start:0x0200e72c end:0x0200eb90
 
-libs/NitroSystem/libraries/snd/src/fader.c:
+libs/NitroSystem/libraries/gfd/src/VramManager/gfd_LinkedListTexVramMan.c:
     complete
-    .text       start:0x020131d4 end:0x02013278
-
-libs/NitroSystem/libraries/snd/src/heap.c:
-    complete
-    .text       start:0x02010a74 end:0x02010de0
+    .text       start:0x0200eb90 end:0x0200ef24
+    .rodata     start:0x020b0f50 end:0x020b0f80
+    .bss        start:0x020cbcc0 end:0x020cbcdc
 
 libs/NitroSystem/libraries/snd/src/resource_mgr.c:
     complete
     .text       start:0x0200f210 end:0x0200f328
     .bss        start:0x020ce100 end:0x020ce10c
 
+libs/NitroSystem/libraries/snd/src/stream.c:
+    complete
+    .text       start:0x0200faf4 end:0x020100c0
+    .bss        start:0x020ce9e4 end:0x020ceab4
+
+libs/NitroSystem/libraries/snd/src/capture.c:
+    complete
+    .text       start:0x020100c0 end:0x02010334
+    .bss        start:0x020ceab4 end:0x020cf0b0
 
 libs/NitroSystem/libraries/snd/src/sndarc.c:
     complete
     .text       start:0x02010334 end:0x02010a74
     .bss        start:0x020cf0b0 end:0x020cf0b4
 
+libs/NitroSystem/libraries/snd/src/heap.c:
+    complete
+    .text       start:0x02010a74 end:0x02010de0
+
 libs/NitroSystem/libraries/snd/src/sndarc_player.c:
     complete
     .text       start:0x02011800 end:0x020119e0
 
-libs/NitroSystem/libraries/snd/src/stream.c:
+libs/NitroSystem/libraries/snd/src/fader.c:
     complete
-    .text       start:0x0200faf4 end:0x020100c0
-    .bss        start:0x020ce9e4 end:0x020ceab4
+    .text       start:0x020131d4 end:0x02013278
 
 libs/NitroSDK/libraries/card/src/card_backup.c:
     complete

@@ -18,7 +18,9 @@ func_ov008_02156558 kind:function(arm,size=0x70) addr:0x02156558
 func_ov008_021565c8 kind:function(arm,size=0x78) addr:0x021565c8
 func_ov008_02156640 kind:function(arm,size=0xfc) addr:0x02156640
 func_ov008_0215673c kind:function(arm,size=0x3c) addr:0x0215673c
+data_02156778 kind:data(any) addr:0x02156778
 data_ov008_02156788 kind:data(any) addr:0x02156788
+data_02156920 kind:data(any) addr:0x02156920
 data_ov008_02156928 kind:data(any) addr:0x02156928
 data_ov008_0215693c kind:data(any) addr:0x0215693c
 data_ov008_0215695c kind:data(any) addr:0x0215695c

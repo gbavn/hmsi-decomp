@@ -5628,6 +5628,7 @@ __sinit_020b06c4 kind:function(arm,size=0x38) addr:0x020b06c4
 __sinit_020b06fc kind:function(arm,size=0x2c) addr:0x020b06fc
 __sinit_020b0728 kind:function(arm,size=0x34) addr:0x020b0728
 __sinit_020b075c kind:function(arm,size=0x5e8) addr:0x020b075c
+data_020b0d44 kind:data(any) addr:0x020b0d44
 data_020b0d54 kind:data(any) addr:0x020b0d54 local
 data_020b0d60 kind:data(any) addr:0x020b0d60 local
 NNSi_objSizeHTbl kind:data(any) addr:0x020b0d6c
