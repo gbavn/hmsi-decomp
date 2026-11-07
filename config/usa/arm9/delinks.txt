@@ -388,3 +388,8 @@ libs/NitroSDK/libraries/snd/src/snd_work.c:
     complete
     .text       start:0x020199a8 end:0x02019a78
     .bss        start:0x020d1f20 end:0x020d1f24
+
+libs/NitroSDK/libraries/spi/src/mic.c:
+    complete
+    .text       start:0x0201b3f4 end:0x0201b8a0
+    .bss        start:0x020d1fe4 end:0x020d2004
