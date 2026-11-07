@@ -13,7 +13,7 @@
 
 u32 sMMAllocCount;
 
-int MM_InitHeap(void *mem, u32 size, u32 param)
+int MM_InitHeap(void *mem, u32 size, const char *tag)
 {
     u32 pad;
     MMHeap *heap;
@@ -32,7 +32,7 @@ int MM_InitHeap(void *mem, u32 size, u32 param)
     heap->usedList = NULL;
     heap->freeList = NULL;
     heap->usedCount = 0;
-    heap->param = param;
+    heap->tag = tag;
     heap->error = MM_OK;
     return MM_OK;
 }

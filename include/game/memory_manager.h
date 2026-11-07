@@ -3,6 +3,10 @@
 
 #include <nitro/types.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // Every block (used or free) starts with this header; user data follows it.
 typedef struct MMBlock {
     u32 size;             // whole block, header and guard word included
@@ -16,7 +20,7 @@ typedef struct MMHeap {
     MMBlock *usedList;
     MMBlock *freeList;
     u32 usedCount;
-    u32 param;
+    const char *tag;      // tag given to MM_InitHeap
     int error;
 } MMHeap;
 
@@ -29,7 +33,7 @@ enum {
     MM_ERROR_NOT_FOUND = 4
 };
 
-int MM_InitHeap(void *mem, u32 size, u32 param);
+int MM_InitHeap(void *mem, u32 size, const char *tag);
 void *MM_Alloc(void *mem, u32 size, const char *tag);
 int MM_Free(void *mem, void *ptr, const char *tag);
 u32 MM_GetTailSize(void *mem);
@@ -44,5 +48,9 @@ MMBlock *MMi_Coalesce(MMHeap *heap, MMBlock *block);
 int MMi_CountBlocks(MMBlock *block);
 u32 MMi_SumBlockSizes(MMBlock *block);
 int MMi_FreeBlock(MMHeap *heap, void *ptr, const char *tag);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

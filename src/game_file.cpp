@@ -1,12 +1,9 @@
-// game_file.c: thin wrapper around the SDK file system (FSFile) used by the whole game.
+// game_file.cpp: thin wrapper around the SDK file system (FSFile) used by the whole game.
 // File and function names are ours; the original names are unknown.
 #include <nitro/fs.h>
 #include <nitro/mi.h>
 #include <nitro/os.h>
 #include "game_file.h"
-
-extern void *func_02029174(u32 size); // Memory.cpp: allocate
-extern void func_0202918c(void *ptr); // Memory.cpp: free
 
 void *sFSTable;
 
@@ -16,7 +13,7 @@ void GFile_InitFileSystem(u32 dmaNo)
 
     FS_Init(dmaNo);
     size = FS_GetTableSize();
-    sFSTable = func_02029174(size);
+    sFSTable = new u8[size];
     (void)FS_LoadTable(sFSTable, size);
 }
 
@@ -30,10 +27,10 @@ FSFileID GFile_GetFileID(const char *path)
 
 void *GFile_UncompressLZ(void *src)
 {
-    void *dst = func_02029174(*(u32 *)src >> 8);
+    void *dst = new u8[*(u32 *)src >> 8];
 
     MI_UncompressLZ8(src, dst);
-    func_0202918c(src);
+    delete[] (u8 *)src;
     return dst;
 }
 
@@ -142,9 +139,9 @@ void *GFile_LoadEx(GFile *file, const char *path, u32 *outSize, int unused)
     (void)GFile_Seek(file, 0, FS_SEEK_SET);
     if ((header & 0xFF) == 0x11) {
         rawSize = header >> 8;
-        raw = func_02029174(rawSize);
+        raw = new u8[rawSize];
     }
-    buf = func_02029174(len);
+    buf = new u8[len];
     (void)GFile_Read(file, len, buf);
     DC_FlushRange(buf, len);
     if ((header & 0xFF) != 0x11) {
@@ -153,11 +150,14 @@ void *GFile_LoadEx(GFile *file, const char *path, u32 *outSize, int unused)
     }
     MI_UncompressLZ8(buf, raw);
     DC_FlushRange(raw, rawSize);
-    func_0202918c(buf);
+    delete[] (u8 *)buf;
     *outSize = rawSize;
     return raw;
 }
 #else
+// operator new[] / delete[] under their linker names, for the asm below
+extern "C" void *_Znam(unsigned long);
+extern "C" void _ZdaPv(void *);
 // NONMATCHING: kept as assembly until the C version matches.
 asm void *GFile_LoadEx(GFile *file, const char *path, u32 *outSize, int unused) {
     stmdb sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
@@ -181,11 +181,11 @@ asm void *GFile_LoadEx(GFile *file, const char *path, u32 *outSize, int unused) 
     bne _02028cfc
     mov r7, r0, lsr #0x8
     mov r0, r7
-    bl func_02029174
+    bl _Znam
     mov r6, r0
 _02028cfc:
     mov r0, r5
-    bl func_02029174
+    bl _Znam
     mov r4, r0
     mov r0, r9
     mov r1, r5
@@ -206,7 +206,7 @@ _02028cfc:
     mov r1, r7
     bl DC_FlushRange
     mov r0, r4
-    bl func_0202918c
+    bl _ZdaPv
     mov r0, r6
     str r7, [r8, #0x0]
     ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
@@ -227,7 +227,7 @@ void *GFile_LoadAsyncEx(GFile *file, const char *path, u32 *outSize)
 
     (void)GFile_Open(file, path);
     len = GFile_GetLength(file);
-    buf = func_02029174(len);
+    buf = new u8[len];
     (void)GFile_ReadAsync(file, len, buf);
     *outSize = len;
     return buf;
