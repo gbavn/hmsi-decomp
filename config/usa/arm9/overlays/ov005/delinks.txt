@@ -8,3 +8,8 @@ src/ov005/TitleLogo.cpp:
     complete
     .text       start:0x02155c80 end:0x021562f4
     .data       start:0x0215b3e0 end:0x0215b578
+
+src/ov005/TitleButton.cpp:
+    complete
+    .text       start:0x021562f4 end:0x02156750
+    .data       start:0x0215b578 end:0x0215b59c
