@@ -18,3 +18,4 @@ Every edit to the vendored sources is listed here.
 - `NitroSDK/libraries/card/src/card_spi.c`: `CARDi_IdentifyBackupCore` handles 128 KB EEPROM (`case 0x020000`).
 - `NitroSDK/include/nitro/version.h`: `SDK_VERSION_RELSTEP` 30009 (this game's SDK is 4.2 relstep 30009; the
   value ends up in `_start_ModuleParams`).
+- `NitroSDK/libraries/snd/src/snd_command.c`: `SND_FlushCommand` retry loop tests `!sReserveList` (codegen only).

@@ -250,7 +250,7 @@ BOOL SND_FlushCommand (u32 flags)
 
             DC_FlushRange(sCommandArray, sizeof(sCommandArray));
 
-            if (sReserveList == NULL) {
+            if (!sReserveList) {
 
                 (void)OS_RestoreInterrupts(bak_psr);
                 return TRUE;
