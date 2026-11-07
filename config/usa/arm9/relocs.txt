@@ -1910,7 +1910,7 @@ from:0x02016bd8 kind:load to:0x027e0000 module:dtcm
 from:0x02016be8 kind:load to:0x020d0044 module:main
 from:0x02016bf0 kind:load to:0x020d0054 module:main
 from:0x02016bf4 kind:load to:0x02016ffc module:main
-from:0x02016bf8 kind:load to:0x020d029c module:main
+from:0x02016bf8 kind:load to:0x020d0114 add:0x188 module:main
 from:0x02016c10 kind:arm_call to:0x02017dbc module:main
 from:0x02016c18 kind:arm_call to:0x020167fc module:main
 from:0x02016c38 kind:arm_call to:0x02016944 module:main
