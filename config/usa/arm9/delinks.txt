@@ -535,3 +535,12 @@ libs/NitroSDK/libraries/os/src/os_reset.c:
     complete
     .text       start:0x02017e54 end:0x02017fc4
     .bss        start:0x020d0384 end:0x020d0388
+
+libs/NitroSDK/libraries/fx/src/fx_trig.c:
+    complete
+    .text       start:0x020ad30c end:0x020ad5ec
+
+libs/NitroSDK/libraries/os/src/os_spinLock.c:
+    complete
+    .text       start:0x02016490 end:0x020167fc
+    .bss        start:0x020d001c end:0x020d0020
