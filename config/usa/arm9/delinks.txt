@@ -220,3 +220,8 @@ libs/NitroSystem/libraries/snd/src/sndarc.c:
 libs/NitroSystem/libraries/snd/src/sndarc_player.c:
     complete
     .text       start:0x02011800 end:0x020119e0
+
+libs/NitroSystem/libraries/snd/src/stream.c:
+    complete
+    .text       start:0x0200faf4 end:0x020100c0
+    .bss        start:0x020ce9e4 end:0x020ceab4
