@@ -9,6 +9,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from flags import flags_for  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 DSD = ROOT / "tools" / "dsd.exe"
 MW = ROOT / "tools" / "mwccarm" / "2.0" / "sp2p2"
@@ -17,12 +20,6 @@ BUILD = ROOT / "build" / "usa"
 BASE_ROM = ROOT / "roms" / "sunshine_islands_usa.nds"
 OUT_ROM = BUILD / "sunshine_islands_usa.nds"
 
-CC_FLAGS = [
-    "-O4,p", "-enum", "int", "-char", "signed", "-str", "noreuse", "-proc", "arm946e",
-    "-gccext,on", "-fp", "soft", "-inline", "noauto", "-Cpp_exceptions", "off", "-RTTI", "off",
-    "-interworking", "-w", "off", "-sym", "on", "-gccinc", "-nolink", "-msgstyle", "gcc",
-    "-i", "include",
-]
 
 # Header bytes that depend on the ARM7 BIOS (secure area CRC) and the header CRC.
 BIOS_DEPENDENT = {0x6C, 0x6D, 0x15E, 0x15F}
@@ -39,6 +36,11 @@ def main():
     BUILD.mkdir(parents=True, exist_ok=True)
     run(DSD, "delink", "-c", CONFIG)
     run(DSD, "lcf", "-c", CONFIG)
+    # We link with -dead (like the original) so unused library functions are stripped,
+    # but data sections must never be dropped: keep them all.
+    lcf = BUILD / "arm9.lcf"
+    keep = "KEEP_SECTION {\n    .rodata,\n    .data,\n    .bss,\n"
+    lcf.write_text(lcf.read_text().replace("KEEP_SECTION {\n", keep, 1))
     files = json.loads(subprocess.run([str(DSD), "json", "delinks", "-c", str(CONFIG)], cwd=ROOT,
                                       capture_output=True, text=True, check=True).stdout)["files"]
     for f in files:
@@ -47,9 +49,8 @@ def main():
         src = Path(f["name"])
         obj = ROOT / f["object_to_link"]
         obj.parent.mkdir(parents=True, exist_ok=True)
-        lang = "c++" if src.suffix in (".cpp", ".cc") else "c"
-        run(MW / "mwccarm.exe", *CC_FLAGS, f"-lang={lang}", "-c", src, "-o", obj)
-    run(MW / "mwldarm.exe", "-proc", "arm946e", "-nostdlib", "-interworking", "-nodead",
+        run(MW / "mwccarm.exe", *flags_for(src), "-c", src, "-o", obj)
+    run(MW / "mwldarm.exe", "-proc", "arm946e", "-nostdlib", "-interworking", "-dead",
         "-m", "Entry", "-map", "closure,unused", "-o", BUILD / "arm9.o",
         BUILD / "arm9.lcf", "@" + str(BUILD / "objects.txt"))
     run(DSD, "check", "modules", "-c", CONFIG, "--fail")

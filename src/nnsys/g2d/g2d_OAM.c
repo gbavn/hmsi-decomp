@@ -4,16 +4,16 @@
 
 extern u32 GXi_DmaId;
 
-const u16 NNSi_objSizeHTbl[3][4] = {
-    { 8, 16, 32, 64 },
-    { 8, 8, 16, 32 },
-    { 16, 32, 32, 64 },
-};
-
 const u16 NNSi_objSizeWTbl[3][4] = {
     { 8, 16, 32, 64 },
     { 16, 32, 32, 64 },
     { 8, 8, 16, 32 },
+};
+
+const u16 NNSi_objSizeHTbl[3][4] = {
+    { 8, 16, 32, 64 },
+    { 8, 8, 16, 32 },
+    { 16, 32, 32, 64 },
 };
 
 #define OAM_SETTING_INVISIBLE 192

@@ -16,6 +16,9 @@ import sys
 import tempfile
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from flags import flags_for  # noqa: E402
+
 ROOT = Path(__file__).resolve().parents[1]
 CONFIG = ROOT / "config" / "usa" / "arm9"
 EXTRACT = ROOT / "extract" / "usa"
@@ -132,8 +135,8 @@ def compiled_bytes(obj, func):
 
 def compile_src(src, compiler, flags, out):
     env = dict(os.environ, LM_LICENSE_FILE=str(MWROOT / "license.dat"))
-    lang = "-lang=c++" if Path(src).suffix in (".cpp", ".cc") else "-lang=c"
-    cmd = [str(MWROOT / compiler / "mwccarm.exe"), *flags.split(), lang, "-c", str(src), "-o", str(out)]
+    flag_list = flags.split() if flags else flags_for(Path(src).relative_to(ROOT) if Path(src).is_absolute() else src)
+    cmd = [str(MWROOT / compiler / "mwccarm.exe"), *flag_list, "-c", str(src), "-o", str(out)]
     r = subprocess.run(cmd, cwd=ROOT, env=env, capture_output=True, text=True, timeout=120)
     if r.returncode != 0:
         print(r.stdout + r.stderr)
@@ -160,7 +163,7 @@ def main():
     ap.add_argument("function")
     ap.add_argument("--module")
     ap.add_argument("--compiler", default=DEFAULT_COMPILER)
-    ap.add_argument("--flags", default=DEFAULT_FLAGS)
+    ap.add_argument("--flags", default=None, help="override the per-area flags from flags.py")
     ap.add_argument("--all-compilers", action="store_true")
     ap.add_argument("-q", "--quiet", action="store_true")
     a = ap.parse_args()

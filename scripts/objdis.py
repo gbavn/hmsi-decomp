@@ -24,7 +24,7 @@ def main():
     env = dict(os.environ, LM_LICENSE_FILE=str(match.MWROOT / "license.dat"))
     with tempfile.TemporaryDirectory() as tmp:
         obj = Path(tmp) / "out.o"
-        match.compile_src(match.ROOT / a.source, a.compiler, match.DEFAULT_FLAGS, obj)
+        match.compile_src(match.ROOT / a.source, a.compiler, None, obj)
         out = Path(tmp) / "out.txt"
         subprocess.run([str(match.MWROOT / a.compiler / "mwldarm.exe"), "-dis", "-show", "only,code", str(obj),
                         "-o", str(out)], env=env, capture_output=True, text=True, timeout=120)

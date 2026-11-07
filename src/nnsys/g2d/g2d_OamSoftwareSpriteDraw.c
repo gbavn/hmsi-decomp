@@ -13,6 +13,12 @@ typedef void (*NNS_G2dOamSoftEmuUVFlipCorrectFunc)(fx32 *pRetU0, fx32 *pRetV0, f
                                                    BOOL bFlipH, BOOL bFlipV);
 
 
+void NNSi_G2dDrawSpriteFast(s16 px, s16 py, fx32 pz, int sx, int sy, fx32 U0, fx32 V0, fx32 U1, fx32 V1);
+void NNSi_G2dDrawSpriteWithMtxFast(s16 px, s16 py, fx32 pz, int sx, int sy, const MtxFx22 *baseMtx, fx32 U0, fx32 V0,
+                                   fx32 U1, fx32 V1);
+void NNSi_G2dDrawSpriteWithMtxDoubleAffineFast(s16 px, s16 py, fx32 pz, int sx, int sy, const MtxFx22 *baseMtx,
+                                               fx32 U0, fx32 V0, fx32 U1, fx32 V1);
+
 typedef struct SoftwareSpriteParamCache {
     fx32 u0;
     fx32 v0;
@@ -29,25 +35,24 @@ typedef struct SpriteParams {
     int sy;
 } SpriteParams;
 
-// mwcc emits .bss in reverse declaration order
-static SoftwareSpriteParamCache softwareSpreiteParamCache_ = { 0, 0, 0, 0 };
-static BOOL bAutoZOffsetAdd_ = FALSE;
-static NNS_G2dOamSoftEmuUVFlipCorrectFunc s_pUVFlipCorrectFunc = NULL;
-static fx32 zOffset_ = 0;
-static fx32 zOffsetStep_ = -FX32_ONE;
-
-// static consts are emitted in reverse definition order
-static const GXTexSizeT gxTexSizeTTbl[3][4] = {
-    { GX_TEXSIZE_T8, GX_TEXSIZE_T16, GX_TEXSIZE_T32, GX_TEXSIZE_T64 },
-    { GX_TEXSIZE_T8, GX_TEXSIZE_T8, GX_TEXSIZE_T16, GX_TEXSIZE_T32 },
-    { GX_TEXSIZE_T16, GX_TEXSIZE_T32, GX_TEXSIZE_T32, GX_TEXSIZE_T64 },
-};
 
 static const GXTexSizeS gxTexSizeSTbl[3][4] = {
     { GX_TEXSIZE_S8, GX_TEXSIZE_S16, GX_TEXSIZE_S32, GX_TEXSIZE_S64 },
     { GX_TEXSIZE_S16, GX_TEXSIZE_S32, GX_TEXSIZE_S32, GX_TEXSIZE_S64 },
     { GX_TEXSIZE_S8, GX_TEXSIZE_S8, GX_TEXSIZE_S16, GX_TEXSIZE_S32 },
 };
+
+static const GXTexSizeT gxTexSizeTTbl[3][4] = {
+    { GX_TEXSIZE_T8, GX_TEXSIZE_T16, GX_TEXSIZE_T32, GX_TEXSIZE_T64 },
+    { GX_TEXSIZE_T8, GX_TEXSIZE_T8, GX_TEXSIZE_T16, GX_TEXSIZE_T32 },
+    { GX_TEXSIZE_T16, GX_TEXSIZE_T32, GX_TEXSIZE_T32, GX_TEXSIZE_T64 },
+};
+
+static SoftwareSpriteParamCache softwareSpreiteParamCache_ = { 0, 0, 0, 0 };
+static NNS_G2dOamSoftEmuUVFlipCorrectFunc s_pUVFlipCorrectFunc = NULL;
+static BOOL bAutoZOffsetAdd_ = FALSE;
+static fx32 zOffset_ = 0;
+static fx32 zOffsetStep_ = -FX32_ONE;
 
 static inline u32 GetNumTexChar_(GXTexSizeS texSize) {
     static const u32 texSize_[] = { 1, 2, 4, 8, 16, 32, 64, 128 };
@@ -191,6 +196,10 @@ void NNSi_G2dSetOamSoftEmuAutoZOffsetFlag(BOOL flag) {
     bAutoZOffsetAdd_ = flag;
 }
 
+fx32 NNSi_G2dGetOamSoftEmuAutoZOffset(void) {
+    return zOffset_;
+}
+
 void NNSi_G2dResetOamSoftEmuAutoZOffset(void) {
     zOffset_ = 0;
 }
@@ -201,6 +210,20 @@ void NNSi_G2dSetOamSoftEmuAutoZOffsetStep(fx32 step) {
 
 fx32 NNSi_G2dGetOamSoftEmuAutoZOffsetStep(void) {
     return zOffsetStep_;
+}
+
+void NNS_G2dDrawOneOam3DDirectFast(const GXOamAttr *pOam, const NNSG2dImageAttr *pTexImageAttr, u32 texBaseAddr,
+                                   u32 pltBaseAddr) {
+    SpriteParams spriteParams;
+    const s16 posX = NNSi_G2dRepeatXinScreenArea(NNSi_G2dGetOamX(pOam));
+    const s16 posY = NNSi_G2dRepeatYinScreenArea(NNSi_G2dGetOamY(pOam));
+
+    CalcSpriteParams_(pOam, pTexImageAttr, texBaseAddr, pltBaseAddr, &spriteParams);
+
+    NNSi_G2dDrawSpriteFast(posX, posY, GetFx32DepthValue_(-1), spriteParams.sx, spriteParams.sy, spriteParams.u0,
+                           spriteParams.v0, spriteParams.u1, spriteParams.v1);
+
+    IncreaseAutoZOffset_();
 }
 
 void NNS_G2dDrawOneOam3DDirectWithPosFast(s16 posX, s16 posY, s16 posZ, const GXOamAttr *pOam,
@@ -229,6 +252,66 @@ void NNS_G2dDrawOneOam3DDirectWithPosFast(s16 posX, s16 posY, s16 posZ, const GX
 
         G3_End();
     }
+
+    IncreaseAutoZOffset_();
+}
+
+void NNS_G2dDrawOneOam3DDirectWithPosAffineFast(s16 posX, s16 posY, s16 posZ, const GXOamAttr *pOam,
+                                                const NNSG2dImageAttr *pTexImageAttr, u32 texBaseAddr,
+                                                u32 pltBaseAddr, const MtxFx22 *pMtx) {
+    SpriteParams spriteParams;
+
+    CalcSpriteParams_(pOam, pTexImageAttr, texBaseAddr, pltBaseAddr, &spriteParams);
+
+    if (G2_GetOBJEffect(pOam) == GX_OAM_EFFECT_AFFINE) {
+        NNSi_G2dDrawSpriteWithMtxFast(posX, posY, GetFx32DepthValue_(posZ), spriteParams.sx, spriteParams.sy, pMtx,
+                                      spriteParams.u0, spriteParams.v0, spriteParams.u1, spriteParams.v1);
+    } else {
+        NNSi_G2dDrawSpriteWithMtxDoubleAffineFast(posX, posY, GetFx32DepthValue_(posZ), spriteParams.sx,
+                                                  spriteParams.sy, pMtx, spriteParams.u0, spriteParams.v0,
+                                                  spriteParams.u1, spriteParams.v1);
+    }
+
+    IncreaseAutoZOffset_();
+}
+
+void NNS_G2dSetOamSoftEmuSpriteParamCache(const GXOamAttr *pOam, const NNSG2dImageAttr *pTexImageAttr, u32 texBaseAddr,
+                                          u32 pltBaseAddr) {
+    SpriteParams spriteParams;
+
+    CalcSpriteParams_(pOam, pTexImageAttr, texBaseAddr, pltBaseAddr, &spriteParams);
+
+    softwareSpreiteParamCache_.u0 = spriteParams.u0;
+    softwareSpreiteParamCache_.v0 = spriteParams.v0;
+    softwareSpreiteParamCache_.u1 = spriteParams.u1;
+    softwareSpreiteParamCache_.v1 = spriteParams.v1;
+}
+
+void NNS_G2dDrawOneOam3DDirectUsingParamCacheFast(s16 posX, s16 posY, s16 posZ, const GXOamAttr *pOam) {
+    const GXOamShape shapeOam = NNS_G2dGetOAMSize(pOam);
+    const int sx = NNS_G2dGetOamSizeX(&shapeOam);
+    const int sy = NNS_G2dGetOamSizeY(&shapeOam);
+    const fx32 u0 = softwareSpreiteParamCache_.u0, u1 = softwareSpreiteParamCache_.u1,
+               v0 = softwareSpreiteParamCache_.v0, v1 = softwareSpreiteParamCache_.v1;
+
+    SetQuadTranslation_(pOam, posX, posY, posZ);
+    G3_Scale(sx << FX32_SHIFT, sy << FX32_SHIFT, FX32_ONE);
+
+    G3_Begin(GX_BEGIN_QUADS);
+
+    G3_TexCoord(u0, v1);
+    G3_Vtx10(0, FX32_ONE, 0);
+
+    G3_TexCoord(u1, v1);
+    G3_Vtx10(FX32_ONE, FX32_ONE, 0);
+
+    G3_TexCoord(u1, v0);
+    G3_Vtx10(FX32_ONE, 0, 0);
+
+    G3_TexCoord(u0, v0);
+    G3_Vtx10(0, 0, 0);
+
+    G3_End();
 
     IncreaseAutoZOffset_();
 }
