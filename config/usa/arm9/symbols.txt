@@ -542,8 +542,8 @@ func_02013160 kind:function(arm,size=0x4) addr:0x02013160
 func_02013164 kind:function(arm,size=0x1c) addr:0x02013164
 func_02013180 kind:function(arm,size=0x4) addr:0x02013180
 func_02013184 kind:function(arm,size=0x50) addr:0x02013184
-func_020131d4 kind:function(arm,size=0x18) addr:0x020131d4
-func_020131ec kind:function(arm,size=0x28) addr:0x020131ec
+NNSi_SndFaderInit kind:function(arm,size=0x18) addr:0x020131d4
+NNSi_SndFaderSet kind:function(arm,size=0x28) addr:0x020131ec
 NNSi_SndFaderGet kind:function(arm,size=0x34) addr:0x02013214
 NNSi_SndFaderUpdate kind:function(arm,size=0x18) addr:0x02013248
 NNSi_SndFaderIsFinished kind:function(arm,size=0x18) addr:0x02013260
@@ -1174,7 +1174,7 @@ func_0202592c kind:function(arm,size=0x1c0) addr:0x0202592c
 .L_0202593c kind:label(arm) addr:0x0202593c
 func_02025aec kind:function(arm,size=0x48) addr:0x02025aec
 .L_02025af8 kind:label(arm) addr:0x02025af8
-func_02025b34 kind:function(arm,size=0x20c) addr:0x02025b34
+_s32_div_f kind:function(arm,size=0x20c) addr:0x02025b34
 _u32_div_f kind:function(arm,size=0x1e4) addr:0x02025d40
 .L_02025d48 kind:label(arm) addr:0x02025d48
 func_02025f24 kind:function(arm,size=0x4) addr:0x02025f24

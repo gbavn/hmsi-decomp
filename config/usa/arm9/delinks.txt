@@ -194,3 +194,7 @@ libs/NitroSystem/libraries/snd/src/capture.c:
     complete
     .text       start:0x020100c0 end:0x02010334
     .bss        start:0x020ceab4 end:0x020cf0b0
+
+libs/NitroSystem/libraries/snd/src/fader.c:
+    complete
+    .text       start:0x020131d4 end:0x02013278
