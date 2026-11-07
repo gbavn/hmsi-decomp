@@ -151,12 +151,24 @@ def main():
         s = syms[idx]
         start = s["value"] & ~1
         score = 0
+        here = names_at.get(addr)
+        if here == re.sub(r"\$.*", "", s["name"]):
+            score += 3  # an earlier unit already named this address the same way
+        elif here and not re.match(r"(func|data)_", here):
+            score -= 3
         for off, symi, rtype, addend in relocs.get(s["shndx"], ()):
             if not (start <= off < start + s["size"]):
                 continue
             want = syms[symi]["name"]
             o = orelocs.get(addr + off - start)
-            if not want or o is None or syms[symi]["shndx"] != 0:
+            if o is None:
+                continue
+            # calls into this file's own functions: check against their unique match, if any
+            if symi in cands and len(cands[symi]) == 1:
+                target = ((o[1] - addend) if rtype == 2 else o[1]) & ~1
+                score += 2 if cands[symi][0][0] == target else -2
+                continue
+            if not want or syms[symi]["shndx"] != 0:
                 continue  # only external symbols say anything about the pairing
             have = names_at.get(((o[1] - addend) if rtype == 2 else o[1]) & ~1)
             if have == want:
