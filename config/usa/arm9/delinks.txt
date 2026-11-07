@@ -150,3 +150,10 @@ libs/NitroSystem/libraries/g3d/src/gecom.c:
     complete
     .text       start:0x02009774 end:0x0200998c
     .bss        start:0x020cbca0 end:0x020cbcac
+
+libs/NitroSystem/libraries/g3d/src/sbc.c:
+    complete
+    .text       start:0x020070a0 end:0x02009774
+    .rodata     start:0x020b0e58 end:0x020b0e9c
+    .data       start:0x020bb634 end:0x020bb7b4
+    .bss        start:0x020c8f9c end:0x020cbca0
