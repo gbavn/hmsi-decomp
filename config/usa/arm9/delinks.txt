@@ -347,3 +347,8 @@ libs/NitroSDK/libraries/os/src/os_tick.c:
     complete
     .text       start:0x02017b90 end:0x02017d20
     .bss        start:0x020d0354 end:0x020d0364
+
+libs/NitroSDK/libraries/os/src/os_valarm.c:
+    complete
+    .text       start:0x02017d60 end:0x02017da8
+    .bss        start:0x020d0370 end:0x020d0384
