@@ -198,3 +198,7 @@ libs/NitroSystem/libraries/snd/src/capture.c:
 libs/NitroSystem/libraries/snd/src/fader.c:
     complete
     .text       start:0x020131d4 end:0x02013278
+
+libs/NitroSystem/libraries/snd/src/heap.c:
+    complete
+    .text       start:0x02010a74 end:0x02010de0
