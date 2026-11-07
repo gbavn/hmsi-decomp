@@ -3,7 +3,9 @@
 Used for functions whose C doesn't match yet (e.g. register allocation): the file
 stays a complete C unit and the function is clearly marked as non-matching.
 
-Usage:  python scripts/asm2c.py <function> ["C prototype"]
+Usage:  python scripts/asm2c.py <function> ["C prototype"] [--literal-pool]
+With --literal-pool the literal pool is written out with `dcd` in the original order and loads use
+`ldr rX, [pc, #n]` (the assembler would otherwise merge duplicate literals).
 Names are resolved through the current symbols.txt files, so run it after renaming.
 """
 import re
@@ -34,7 +36,7 @@ def resolve(sym, names):
     return sym
 
 
-def convert(func, names):
+def convert(func, names, explicit_pool=False):
     text = find(func)
     if text.startswith(";"):
         # maybe the asm still uses the old auto name
@@ -49,6 +51,11 @@ def convert(func, names):
         if m:
             pool[m.group(1)] = m.group(2)
     out = []
+    pc = None
+    for line in lines:
+        m = re.match(r"^\S+: ; 0x([0-9a-f]+)", line)
+        if m and pc is None:
+            pc = int(m.group(1), 16)
     for line in lines:
         s = line.split(";")[0].rstrip()
         if not s.strip() or "_func_start" in s or "_func_end" in s:
@@ -63,6 +70,10 @@ def convert(func, names):
             continue
         s = s.strip()
         m = re.match(r"^(ldr\w*)\s+(r\d+|ip|lr|sp), \.L_([0-9a-f]+)$", s)
+        if m and m.group(3) in pool and explicit_pool:
+            out.append(f"    {m.group(1)} {m.group(2)}, [pc, #{int(m.group(3), 16) - (pc + 8):#x}]")
+            pc += 4
+            continue
         if m and m.group(3) in pool:
             val = pool[m.group(3)]
             if not val.startswith("0x"):
@@ -72,13 +83,21 @@ def convert(func, names):
         s = re.sub(r"\.L_([0-9a-f]+)", r"_\1", s)
         s = re.sub(r"\b((?:func|data)_(?:ov\d+_)?[0-9a-f]{8})\b", lambda mm: resolve(mm.group(1), names), s)
         out.append("    " + s)
+        if pc is not None:
+            pc += 4
+    if explicit_pool:
+        for val in pool.values():
+            if not val.startswith("0x"):
+                val = resolve(val, names)
+            out.append(f"    dcd {val}")
     return out
 
 
 def main():
-    func = sys.argv[1]
-    proto = sys.argv[2] if len(sys.argv) > 2 else f"void {func}(void)"
-    body = convert(func, load_names())
+    args = [a for a in sys.argv[1:] if a != "--literal-pool"]
+    func = args[0]
+    proto = args[1] if len(args) > 1 else f"void {func}(void)"
+    body = convert(func, load_names(), "--literal-pool" in sys.argv)
     print("// NONMATCHING: kept as assembly until the C version matches.")
     print(f"asm {proto} {{")
     print("\n".join(body))

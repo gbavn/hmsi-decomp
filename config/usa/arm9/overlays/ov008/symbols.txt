@@ -18,14 +18,17 @@ _ZN9SheepWoolD1Ev kind:function(arm,size=0x70) addr:0x02156558
 _ZN9SheepWoolD0Ev kind:function(arm,size=0x78) addr:0x021565c8
 _ZN9SheepWool6UpdateEv kind:function(arm,size=0xfc) addr:0x02156640
 _ZN9SheepWool4DrawEv kind:function(arm,size=0x3c) addr:0x0215673c
-data_02156778 kind:data(any) addr:0x02156778
-data_ov008_02156788 kind:data(any) addr:0x02156788
-data_02156920 kind:data(any) addr:0x02156920
-data_ov008_02156928 kind:data(any) addr:0x02156928
+sNodeNames kind:data(any) addr:0x02156778 local
+data_02156908 kind:data(any) addr:0x02156908
+_ZTV10SheepScene kind:data(any) addr:0x02156920
 data_ov008_0215693c kind:data(any) addr:0x0215693c
 data_ov008_0215695c kind:data(any) addr:0x0215695c
-data_ov008_02156984 kind:data(any) addr:0x02156984
+_ZTV10SheepModel kind:data(any) addr:0x0215697c
 data_ov008_02156998 kind:data(any) addr:0x02156998
-data_ov008_021569bc kind:data(any) addr:0x021569bc
-data_ov008_021569e0 kind:bss addr:0x021569e0
-data_ov008_021569ec kind:bss addr:0x021569ec
+_ZTV9SheepWool kind:data(any) addr:0x021569b4
+data_021569d0 kind:data(any) addr:0x021569d0
+sTaskManagers kind:bss addr:0x021569e0
+sCallbackCount kind:bss addr:0x021569ec local
+data_021569f8 kind:bss addr:0x021569f8
+vblank_count_SheepModel kind:bss addr:0x021569f0 local
+vblank_count_SheepWool kind:bss addr:0x021569f4 local

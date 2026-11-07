@@ -122,6 +122,30 @@ def gap_data_symbols():
     return names
 
 
+def multi_overlay_targets():
+    """Functions called through relocations that target several overlays at once (module:overlays(a,b,..)).
+
+    Overlays share addresses: e.g. every scene overlay starts with its scene constructor and the ARM9
+    code calls whichever overlay is loaded. The linker cannot see those calls for every overlay, so
+    with -dead it would drop the code; force those entry points active instead.
+    """
+    targets = {}
+    for relocs in CONFIG_DIR.rglob("relocs.txt"):
+        for m in re.finditer(r"to:0x([0-9a-f]+) module:overlays\(([\d,]+)\)", relocs.read_text()):
+            for ov in m.group(2).split(","):
+                targets.setdefault(int(ov), set()).add(int(m.group(1), 16))
+    names = []
+    for ov, addrs in targets.items():
+        syms = CONFIG_DIR / "overlays" / f"ov{ov:03d}" / "symbols.txt"
+        if not syms.exists():
+            continue
+        for line in syms.read_text().splitlines():
+            m = re.match(r"^(\S+) kind:function\S* addr:0x([0-9a-f]+)", line)
+            if m and int(m.group(2), 16) in addrs and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", m.group(1)):
+                names.append(m.group(1))
+    return sorted(set(names))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--quick", action="store_true")
@@ -136,7 +160,7 @@ def main():
     # Data that only exists in assembly gaps must survive: force it active.
     lcf = BUILD / "arm9.lcf"
     text = lcf.read_text()
-    force = "FORCE_ACTIVE {\n    " + ",\n    ".join(gap_data_symbols()) + "\n}\n\n"
+    force = "FORCE_ACTIVE {\n    " + ",\n    ".join(gap_data_symbols() + multi_overlay_targets()) + "\n}\n\n"
     text = text.replace("SECTIONS {", force + "SECTIONS {", 1)
     # Constants that Nintendo's LCF defined for the SDK.
     consts = []

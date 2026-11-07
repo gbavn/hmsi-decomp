@@ -4,7 +4,8 @@
 #include "ov008_sheep.h"
 #include "input.h"
 
-static TaskManager *sTaskManagers[2];
+// Defined in SheepSceneManagers.cpp (layout workaround, see there).
+extern TaskManager *sTaskManagers[3];
 
 
 void Gfx_Dummy0(void);       // 0x0202837c
@@ -13,6 +14,9 @@ void Gfx_Dummy1(void);       // 0x02028380
 void Gfx_InitSub(void);      // 0x02028424
 
 
+#ifdef NONMATCHING
+// Matches except that the original addressed the (then file-static) manager array through two
+// literal-pool entries; see SheepSceneManagers.cpp.
 SheepScene::SheepScene()
 {
     int i;
@@ -52,6 +56,121 @@ SheepScene::SheepScene()
     mCamUp.y = FX32_ONE;
     mCamUp.z = 0;
 }
+#else
+// Linker names of the functions/data the asm below refers to.
+extern "C" {
+void _ZN10SheepModelC1Ev(void);
+void _ZN10SheepScene12InitGraphicsEv(void);
+void _ZN11TaskManagerC1Emi(void);
+void _ZN4TaskC2Ev(void);
+void _ZN4TasknwEmP11TaskManager(void);
+void _Znwm(void);
+extern char _ZTV10SheepScene[];
+}
+// NONMATCHING: kept as assembly until the C version matches.
+asm SheepScene::SheepScene() {
+    stmdb sp!, {r4, lr}
+    mov r4, r0
+    bl _ZN4TaskC2Ev
+    ldr r1, [pc, #0x150]
+    mov r0, r4
+    str r1, [r4, #0x0]
+    bl _ZN10SheepScene12InitGraphicsEv
+    mov r2, #0x0
+    ldr r0, [pc, #0x140]
+    mov r1, r2
+_02155ca8:
+    str r1, [r0, r2, lsl #0x2]
+    add r2, r2, #0x1
+    cmp r2, #0x2
+    blt _02155ca8
+    mov r0, #0x1c
+    bl _Znwm
+    movs r1, r0
+    beq _02155cd8
+    mov r1, #0x18
+    mov r2, #0x1
+    bl _ZN11TaskManagerC1Emi
+    mov r1, r0
+_02155cd8:
+    ldr r2, [pc, #0x10c]
+    mov r0, #0x18
+    str r1, [r2, #0x0]
+    bl _ZN4TasknwEmP11TaskManager
+    cmp r0, #0x0
+    beq _02155cf4
+    bl _ZN10SheepModelC1Ev
+_02155cf4:
+    mov r0, #0x1c
+    bl _Znwm
+    cmp r0, #0x0
+    beq _02155d10
+    ldr r1, [pc, #0xe4]
+    mov r2, #0x10
+    bl _ZN11TaskManagerC1Emi
+_02155d10:
+    ldr r1, [pc, #0xd4]
+    ldr r2, [pc, #0xd8]
+    str r0, [r1, #0x4]
+    str r2, [r4, #0x68]
+    add r1, r2, #0x990
+    ldr r0, [pc, #0xcc]
+    str r1, [r4, #0x6c]
+    str r0, [r4, #0x70]
+    mov r2, #0x1000
+    str r2, [r4, #0x74]
+    mov r0, #0x190000
+    str r0, [r4, #0x78]
+    mov r0, #0x30000
+    str r0, [r4, #0x94]
+    mov r1, #0x0
+    str r1, [r4, #0x20]
+    mov r0, #0x1800
+    str r0, [r4, #0x24]
+    str r1, [r4, #0x28]
+    strh r1, [r4, #0x98]
+    strh r1, [r4, #0x9a]
+    strh r1, [r4, #0x9c]
+    ldrh r0, [r4, #0x98]
+    ldr r3, [r4, #0x94]
+    ldr lr, [pc, #0x84]
+    mov r0, r0, asr #0x4
+    mov ip, r0, lsl #0x1
+    add r0, ip, #0x1
+    mov r0, r0, lsl #0x1
+    ldrsh r0, [lr, r0]
+    mov r3, r3, asr #0xc
+    mov ip, ip, lsl #0x1
+    mul r3, r0, r3
+    str r3, [r4, #0x14]
+    ldr r3, [r4, #0x94]
+    ldrsh lr, [lr, ip]
+    mov r3, r3, asr #0xc
+    mov ip, #0x6000
+    mul r3, lr, r3
+    str r3, [r4, #0x18]
+    ldr lr, [r4, #0x94]
+    mov r3, #0xc000
+    mov lr, lr, asr #0xc
+    mul lr, r0, lr
+    str lr, [r4, #0x1c]
+    str r1, [r4, #0x14]
+    str ip, [r4, #0x18]
+    str r3, [r4, #0x1c]
+    str r1, [r4, #0x2c]
+    str r2, [r4, #0x30]
+    mov r0, r4
+    str r1, [r4, #0x34]
+    ldmia sp!, {r4, pc}
+    dcd _ZTV10SheepScene+8
+    dcd sTaskManagers
+    dcd sTaskManagers
+    dcd 0x444
+    dcd 0x579
+    dcd 0x1555
+    dcd FX_SinCosTable_
+}
+#endif
 
 SheepScene::~SheepScene()
 {

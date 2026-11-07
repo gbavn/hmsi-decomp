@@ -5,18 +5,20 @@
 
 SheepWool::SheepWool()
 {
-    int i;
-
     mBase = Model3D_Load("rom/mdls/HITUJI_wool.nsbmd");
-    for (i = 0; i < WOOL_COUNT; i++) {
+    for (int i = 0; i < WOOL_COUNT; i++) {
         mParts[i] = new Model3D;
         *mParts[i] = *mBase;
-        mParts[i]->trans.x = 0;
-        mParts[i]->trans.y = 0x800;
-        mParts[i]->trans.z = 0;
+        {
+            Model3D *part = mParts[i];
+
+            part->trans.x = 0;
+            part->trans.y = 0x800;
+            part->trans.z = 0;
+        }
         mAlpha[i] = 0x1F000;
     }
-    for (i = 0; i < WOOL_COUNT; i++) {
+    for (int i = 0; i < WOOL_COUNT; i++) {
         int angle = RandRange(0, 0xFFFF);
         int speed = RandRange(2, 6);
 

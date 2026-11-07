@@ -3,3 +3,25 @@
     .ctor       start:0x0215690c end:0x0215690c kind:rodata align:4
     .data       start:0x02156920 end:0x021569e0 kind:data align:32
     .bss        start:0x021569e0 end:0x02156a00 kind:bss align:32
+
+src/ov008/SheepSceneManagers.cpp:
+    complete
+    .bss        start:0x021569e0 end:0x021569ec
+
+src/ov008/SheepScene.cpp:
+    complete
+    .text       start:0x02155c80 end:0x021560e8
+    .data       start:0x02156920 end:0x0215693c
+
+src/ov008/SheepModel.cpp:
+    complete
+    .text       start:0x021560e8 end:0x02156308
+    .rodata     start:0x02156778 end:0x02156908
+    .data       start:0x0215693c end:0x02156998
+    .bss        start:0x021569ec end:0x021569f4
+
+src/ov008/SheepWool.cpp:
+    complete
+    .text       start:0x02156308 end:0x02156778
+    .data       start:0x02156998 end:0x021569d0
+    .bss        start:0x021569f4 end:0x021569f8
