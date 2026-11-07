@@ -398,3 +398,8 @@ libs/NitroSDK/libraries/spi/src/tp.c:
     complete
     .text       start:0x0201aaf4 end:0x0201b3f4
     .bss        start:0x020d1fa8 end:0x020d1fe4
+
+libs/NitroSDK/libraries/card/src/card_pullOut.c:
+    complete
+    .text       start:0x0201e3c0 end:0x0201e58c
+    .bss        start:0x020d2940 end:0x020d2948
