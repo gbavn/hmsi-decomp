@@ -5551,7 +5551,7 @@ func_020ad30c kind:function(arm,size=0xe8) addr:0x020ad30c
 func_020ad3f4 kind:function(arm,size=0xcc) addr:0x020ad3f4
 func_020ad4c0 kind:function(arm,size=0x98) addr:0x020ad4c0
 func_020ad558 kind:function(arm,size=0x94) addr:0x020ad558
-func_020ad5ec kind:function(arm,size=0x1a8) addr:0x020ad5ec
+FX_Atan2Idx kind:function(arm,size=0x1a8) addr:0x020ad5ec
 func_020ad794 kind:function(arm,size=0x4) addr:0x020ad794
 func_020ad798 kind:function(arm,size=0x3c) addr:0x020ad798
 FSi_ReleaseCommand kind:function(arm,size=0x5c) addr:0x020ad7d4
@@ -5994,7 +5994,7 @@ data_020b738c kind:data(any) addr:0x020b738c
 data_020b7394 kind:data(any) addr:0x020b7394
 data_020b7398 kind:data(any) addr:0x020b7398
 FX_SinCosTable_ kind:data(any) addr:0x020b73bc
-data_020bb3bc kind:data(any) addr:0x020bb3bc
+FX_AtanIdxTable_ kind:data(any) addr:0x020bb3bc
 fsi_default_command kind:data(any) addr:0x020bb4c0
 data_020bb4e4 kind:data(any) addr:0x020bb4e4
 .p__sinit_020af998 kind:data(word) addr:0x020bb524

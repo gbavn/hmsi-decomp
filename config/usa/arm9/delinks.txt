@@ -502,3 +502,8 @@ libs/NitroSDK/libraries/fs/src/fs_command_default.c:
     .text       start:0x020ad9c0 end:0x020ae360
     .rodata     start:0x020bb4c0 end:0x020bb4e4
     .data       start:0x020c6d88 end:0x020c6d8c
+
+libs/NitroSDK/libraries/fx/src/fx_atanidx.c:
+    complete
+    .text       start:0x020ad5ec end:0x020ad794
+    .rodata     start:0x020bb3bc end:0x020bb4c0
