@@ -114,3 +114,7 @@ libs/NitroSystem/libraries/g3d/src/anm/nsbtp.c:
 libs/NitroSystem/libraries/g3d/src/anm/nsbva.c:
     complete
     .text       start:0x0200c75c end:0x0200c7e0
+
+libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor.c:
+    complete
+    .text       start:0x0200a164 end:0x0200a4dc
