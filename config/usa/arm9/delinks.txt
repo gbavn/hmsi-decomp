@@ -562,3 +562,7 @@ libs/NitroSDK/libraries/fs/src/fs_rom.c:
     .text       start:0x020af114 end:0x020af36c
     .data       start:0x020c6d8c end:0x020c6d90
     .bss        start:0x02155bf4 end:0x02155c68
+
+libs/NitroSDK/libraries/os/src/os_interrupt.c:
+    complete
+    .text       start:0x020161e8 end:0x02016490
