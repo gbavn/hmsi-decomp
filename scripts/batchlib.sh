@@ -19,7 +19,7 @@ for src in "$@"; do
         continue
     fi
     nfun=$(echo "$out" | grep -o "functions: [0-9]*")
-    if python scripts/build.py >/tmp/batchlib_build.log 2>&1 && grep -q "^MATCH" /tmp/batchlib_build.log; then
+    if python scripts/build.py --quick >/tmp/batchlib_build.log 2>&1 && grep -q "^MATCH" /tmp/batchlib_build.log; then
         git add -A config/ >/dev/null
         git commit -q -m "Add library unit $src ($nfun)
 
