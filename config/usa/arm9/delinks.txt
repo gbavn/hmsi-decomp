@@ -365,3 +365,8 @@ libs/NitroSDK/libraries/rtc/src/convert.c:
 libs/NitroSDK/libraries/rtc/src/internal.c:
     complete
     .text       start:0x0201ce74 end:0x0201cebc
+
+libs/NitroSDK/libraries/snd/src/snd_alarm.c:
+    complete
+    .text       start:0x020198e4 end:0x020199a8
+    .bss        start:0x020d1ec0 end:0x020d1f20
