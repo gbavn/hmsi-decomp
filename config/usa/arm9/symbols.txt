@@ -712,7 +712,7 @@ func_02016740 kind:function(arm,size=0x1c) addr:0x02016740
 func_0201675c kind:function(arm,size=0x18) addr:0x0201675c
 func_02016774 kind:function(arm,size=0x18) addr:0x02016774
 func_0201678c kind:function(arm,size=0x8) addr:0x0201678c
-func_02016794 kind:function(arm,size=0x68) addr:0x02016794
+OS_GetLockID kind:function(arm,size=0x68) addr:0x02016794
 func_020167fc kind:function(arm,size=0x18) addr:0x020167fc
 func_02016814 kind:function(arm,size=0x78) addr:0x02016814
 func_0201688c kind:function(arm,size=0x34) addr:0x0201688c
@@ -987,8 +987,8 @@ func_0201d1fc kind:function(arm,size=0x10) addr:0x0201d1fc
 func_0201d20c kind:function(arm,size=0x4c) addr:0x0201d20c
 func_0201d258 kind:function(arm,size=0x1c) addr:0x0201d258
 func_0201d274 kind:function(arm,size=0x14) addr:0x0201d274
-func_0201d288 kind:function(arm,size=0x1c) addr:0x0201d288
-func_0201d2a4 kind:function(arm,size=0x1c) addr:0x0201d2a4
+CARD_LockRom kind:function(arm,size=0x1c) addr:0x0201d288
+CARD_UnlockRom kind:function(arm,size=0x1c) addr:0x0201d2a4
 func_0201d2c0 kind:function(arm,size=0x10) addr:0x0201d2c0
 func_0201d2d0 kind:function(arm,size=0x28) addr:0x0201d2d0
 func_0201d2f8 kind:function(arm,size=0x384) addr:0x0201d2f8
@@ -1009,8 +1009,8 @@ func_0201dd04 kind:function(arm,size=0x18c) addr:0x0201dd04
 func_0201de90 kind:function(arm,size=0xf0) addr:0x0201de90
 func_0201df80 kind:function(arm,size=0x5c) addr:0x0201df80
 func_0201dfdc kind:function(arm,size=0x98) addr:0x0201dfdc
-func_0201e074 kind:function(arm,size=0xf8) addr:0x0201e074
-func_0201e16c kind:function(arm,size=0x64) addr:0x0201e16c
+CARDi_ReadRom kind:function(arm,size=0xf8) addr:0x0201e074
+CARD_Init kind:function(arm,size=0x64) addr:0x0201e16c
 func_0201e1d0 kind:function(arm,size=0xc) addr:0x0201e1d0
 func_0201e1dc kind:function(arm,size=0xc) addr:0x0201e1dc
 CARDi_OnFifoRecv kind:function(arm,size=0x34) addr:0x0201e1e8
@@ -1018,7 +1018,7 @@ CARDi_TaskThread kind:function(arm,size=0x50) addr:0x0201e21c
 CARDi_Request kind:function(arm,size=0x154) addr:0x0201e26c
 func_0201e3c0 kind:function(arm,size=0x2c) addr:0x0201e3c0
 func_0201e3ec kind:function(arm,size=0x54) addr:0x0201e3ec
-func_0201e440 kind:function(arm,size=0x10) addr:0x0201e440
+CARD_IsPulledOut kind:function(arm,size=0x10) addr:0x0201e440
 func_0201e450 kind:function(arm,size=0x8c) addr:0x0201e450
 func_0201e4dc kind:function(arm,size=0x60) addr:0x0201e4dc
 func_0201e53c kind:function(arm,size=0x50) addr:0x0201e53c
@@ -5597,14 +5597,14 @@ FS_CancelFile kind:function(arm,size=0x48) addr:0x020af040
 FS_ReadFileAsync kind:function(arm,size=0x10) addr:0x020af088
 FS_ReadFile kind:function(arm,size=0x10) addr:0x020af098
 FS_SeekFile kind:function(arm,size=0x6c) addr:0x020af0a8
-func_020af114 kind:function(arm,size=0x24) addr:0x020af114
-func_020af138 kind:function(arm,size=0x48) addr:0x020af138
-func_020af180 kind:function(arm,size=0x8) addr:0x020af180
-func_020af188 kind:function(arm,size=0x6c) addr:0x020af188
-func_020af1f4 kind:function(arm,size=0x8) addr:0x020af1f4
-func_020af1fc kind:function(arm,size=0x8) addr:0x020af1fc
+FSi_OnRomReadDone kind:function(arm,size=0x24) addr:0x020af114 local
+FSi_ReadRomCallback kind:function(arm,size=0x48) addr:0x020af138 local
+FSi_WriteDummyCallback kind:function(arm,size=0x8) addr:0x020af180 local
+FSi_RomArchiveProc kind:function(arm,size=0x6c) addr:0x020af188 local
+FSi_ReadDummyCallback kind:function(arm,size=0x8) addr:0x020af1f4 local
+FSi_EmptyArchiveProc kind:function(arm,size=0x8) addr:0x020af1fc local
 FSi_InitRom kind:function(arm,size=0x148) addr:0x020af204
-func_020af34c kind:function(arm,size=0x20) addr:0x020af34c
+FS_TryLoadTable kind:function(arm,size=0x20) addr:0x020af34c
 func_020af36c kind:function(arm,size=0x1c) addr:0x020af36c
 func_020af388 kind:function(arm,size=0x3c) addr:0x020af388
 func_020af3c4 kind:function(arm,size=0x28) addr:0x020af3c4
@@ -8499,7 +8499,8 @@ data_02155bd0 kind:bss addr:0x02155bd0
 data_02155be0 kind:bss addr:0x02155be0
 current_dir_pos kind:bss addr:0x02155be4
 data_02155bf0 kind:bss addr:0x02155bf0
-data_02155bf4 kind:bss addr:0x02155bf4
-data_02155bfc kind:bss addr:0x02155bfc
-data_02155c04 kind:bss addr:0x02155c04
-data_02155c0c kind:bss addr:0x02155c0c
+fsi_card_lock_id kind:bss addr:0x02155bf4
+fsi_ovt9 kind:bss addr:0x02155bfc
+fsi_ovt7 kind:bss addr:0x02155c04
+fsi_arc_rom kind:bss addr:0x02155c0c
+data_02155c68 kind:bss addr:0x02155c68

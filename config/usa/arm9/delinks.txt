@@ -217,6 +217,10 @@ libs/NitroSystem/libraries/snd/src/fader.c:
     complete
     .text       start:0x020131d4 end:0x02013278
 
+libs/NitroSDK/libraries/cp/src/cp_context.c:
+    complete
+    .text       start:0x0201aa78 end:0x0201aaf4
+
 libs/NitroSDK/libraries/card/src/card_backup.c:
     complete
     .text       start:0x0201d954 end:0x0201d9a4
@@ -225,25 +229,27 @@ libs/NitroSDK/libraries/card/src/card_request.c:
     complete
     .text       start:0x0201e1e8 end:0x0201e3c0
 
-libs/NitroSDK/libraries/cp/src/cp_context.c:
-    complete
-    .text       start:0x0201aa78 end:0x0201aaf4
-
 libs/NitroSDK/libraries/ctrdg/src/ctrdg_task.c:
     complete
     .text       start:0x0201ebfc end:0x0201ed8c
     .bss        start:0x020d2b28 end:0x020d2f50
+
+libs/NitroSDK/libraries/fs/src/fs_command.c:
+    complete
+    .text       start:0x020ad7d4 end:0x020ad9c0
 
 libs/NitroSDK/libraries/fs/src/fs_archive.c:
     complete
     .text       start:0x020ae360 end:0x020aebf4
     .bss        start:0x02155be0 end:0x02155bf0
 
-libs/NitroSDK/libraries/fs/src/fs_command.c:
-    complete
-    .text       start:0x020ad7d4 end:0x020ad9c0
-
 libs/NitroSDK/libraries/fs/src/fs_file.c:
     complete
     .text       start:0x020aebf4 end:0x020af114
     .bss        start:0x02155bf0 end:0x02155bf4
+
+libs/NitroSDK/libraries/fs/src/fs_rom.c:
+    complete
+    .text       start:0x020af114 end:0x020af36c
+    .data       start:0x020c6d8c end:0x020c6d90
+    .bss        start:0x02155bf4 end:0x02155c68
