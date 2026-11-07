@@ -157,3 +157,7 @@ libs/NitroSystem/libraries/g3d/src/sbc.c:
     .rodata     start:0x020b0e58 end:0x020b0e9c
     .data       start:0x020bb634 end:0x020bb7b4
     .bss        start:0x020c8f9c end:0x020cbca0
+
+libs/NitroSystem/libraries/g3d/src/util.c:
+    complete
+    .text       start:0x0200998c end:0x02009f48
