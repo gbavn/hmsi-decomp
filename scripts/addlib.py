@@ -283,6 +283,12 @@ def main():
         if gaps:
             print(f"warning: {name} pieces are not contiguous: {[(hex(a), hex(b)) for a, b in placed]}")
             continue
+        if hi % 4:
+            # swallow alignment padding after the data, otherwise dsd makes it a tiny gap that
+            # the linker re-aligns (shifting everything behind it)
+            pad = -hi % 4
+            if name in (".bss", ".sbss") or not any(obin[hi - obase: hi - obase + pad]):
+                hi += pad
         sections.append((name, lo, hi))
 
     # ---- 3. report / apply ---------------------------------------------------------------------------
@@ -415,6 +421,10 @@ def main():
             with consts.open("a") as f:
                 f.writelines(new)
             print(f"defined {len(new)} referenced symbols inside static data as absolute linker symbols")
+        unused = {n for n, addr in fixed if addr not in referenced}
+        if unused:
+            kept = [l for l in syms_file.read_text().splitlines() if l.split(" ", 1)[0] not in unused]
+            syms_file.write_text("\n".join(kept) + "\n")
     delinks = syms_file.with_name("delinks.txt")
     entry = f"\n{a.source}:\n    complete\n" + "".join(
         f"    {n:11} start:{s:#010x} end:{e:#010x}\n" for n, s, e in sections)
