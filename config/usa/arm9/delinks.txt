@@ -122,3 +122,8 @@ libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor.c:
 libs/NitroSystem/libraries/g3d/src/binres/res_struct_accessor_anm.c:
     complete
     .text       start:0x0200a4dc end:0x0200a670
+
+libs/NitroSystem/libraries/g3d/src/cgtool/3dsmax.c:
+    complete
+    .text       start:0x0200d5a8 end:0x0200dbec
+    .data       start:0x020bb7d4 end:0x020bb7f4
