@@ -249,7 +249,7 @@ func_0200a040 kind:function(arm,size=0x78) addr:0x0200a040
 func_0200a0b8 kind:function(arm,size=0x6c) addr:0x0200a0b8
 func_0200a124 kind:function(arm,size=0x40) addr:0x0200a124
 NNS_G3dGetResDataByName kind:function(arm,size=0x1c0) addr:0x0200a164
-func_0200a324 kind:function(arm,size=0x168) addr:0x0200a324
+NNS_G3dGetResDictIdxByName kind:function(arm,size=0x168) addr:0x0200a324
 func_0200a48c kind:function(arm,size=0x10) addr:0x0200a48c
 func_0200a49c kind:function(arm,size=0x40) addr:0x0200a49c
 func_0200a4dc kind:function(arm,size=0x5c) addr:0x0200a4dc
@@ -271,10 +271,10 @@ func_0200b234 kind:function(arm,size=0x194) addr:0x0200b234
 func_0200b3c8 kind:function(arm,size=0x418) addr:0x0200b3c8
 func_0200b7e0 kind:function(arm,size=0x344) addr:0x0200b7e0
 func_0200bb24 kind:function(arm,size=0x16c) addr:0x0200bb24
-func_0200bc90 kind:function(arm,size=0x168) addr:0x0200bc90
-func_0200bdf8 kind:function(arm,size=0xec) addr:0x0200bdf8
-func_0200bee4 kind:function(arm,size=0xd4) addr:0x0200bee4
-func_0200bfb8 kind:function(arm,size=0xf0) addr:0x0200bfb8
+GetMatColAnmValue_ kind:function(arm,size=0x168) addr:0x0200bc90 local
+GetMatColAnmuAlphaValue_ kind:function(arm,size=0xec) addr:0x0200bdf8 local
+NNSi_G3dAnmObjInitNsBma kind:function(arm,size=0xd4) addr:0x0200bee4
+NNSi_G3dAnmCalcNsBma kind:function(arm,size=0xf0) addr:0x0200bfb8
 func_0200c0a8 kind:function(arm,size=0x100) addr:0x0200c0a8
 func_0200c1a8 kind:function(arm,size=0x10c) addr:0x0200c1a8
 func_0200c2b4 kind:function(arm,size=0x100) addr:0x0200c2b4
@@ -6015,7 +6015,7 @@ data_020bb59c kind:data(any) addr:0x020bb59c
 data_020bb5a0 kind:data(any) addr:0x020bb5a0
 data_020bb5a4 kind:data(any) addr:0x020bb5a4
 data_020bb5a8 kind:data(any) addr:0x020bb5a8
-data_020bb5ac kind:data(any) addr:0x020bb5ac
+NNS_G3dFuncAnmMatNsBmaDefault kind:data(any) addr:0x020bb5ac
 NNS_G3dFuncBlendVisDefault kind:data(any) addr:0x020bb5b0
 NNS_G3dFuncBlendJntDefault kind:data(any) addr:0x020bb5b4
 NNS_G3dFuncBlendMatDefault kind:data(any) addr:0x020bb5b8
