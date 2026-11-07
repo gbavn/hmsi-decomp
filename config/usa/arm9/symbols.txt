@@ -728,7 +728,7 @@ func_02016d18 kind:function(arm,size=0x5c) addr:0x02016d18
 func_02016d74 kind:function(arm,size=0x38) addr:0x02016d74
 func_02016dac kind:function(arm,size=0x5c) addr:0x02016dac
 OS_SleepThread kind:function(arm,size=0x50) addr:0x02016e08
-func_02016e58 kind:function(arm,size=0x68) addr:0x02016e58
+OS_WakeupThread kind:function(arm,size=0x68) addr:0x02016e58
 OS_WakeupThreadDirect kind:function(arm,size=0x28) addr:0x02016ec0
 func_02016ee8 kind:function(arm,size=0x28) addr:0x02016ee8
 func_02016f10 kind:function(arm,size=0x1c) addr:0x02016f10
@@ -834,7 +834,7 @@ func_020189b4 kind:function(arm,size=0x1c) addr:0x020189b4
 func_020189d0 kind:function(arm,size=0x24) addr:0x020189d0
 func_020189f4 kind:function(arm,size=0x2c) addr:0x020189f4
 MI_CpuFill8 kind:function(arm,size=0xbc) addr:0x02018a20
-func_02018adc kind:function(arm,size=0x180) addr:0x02018adc
+MI_CpuCopy8 kind:function(arm,size=0x180) addr:0x02018adc
 MI_Zero36B kind:function(thumb,size=0xe) addr:0x02018c5c
 func_02018c6c kind:function(arm,size=0x8) addr:0x02018c6c
 func_02018c74 kind:function(arm,size=0x100) addr:0x02018c74
@@ -5554,8 +5554,8 @@ func_020ad558 kind:function(arm,size=0x94) addr:0x020ad558
 func_020ad5ec kind:function(arm,size=0x1a8) addr:0x020ad5ec
 func_020ad794 kind:function(arm,size=0x4) addr:0x020ad794
 func_020ad798 kind:function(arm,size=0x3c) addr:0x020ad798
-func_020ad7d4 kind:function(arm,size=0x5c) addr:0x020ad7d4
-func_020ad830 kind:function(arm,size=0x190) addr:0x020ad830
+FSi_ReleaseCommand kind:function(arm,size=0x5c) addr:0x020ad7d4
+FSi_TranslateCommand kind:function(arm,size=0x190) addr:0x020ad830
 func_020ad9c0 kind:function(arm,size=0x50) addr:0x020ad9c0
 func_020ada10 kind:function(arm,size=0xc0) addr:0x020ada10
 func_020adad0 kind:function(arm,size=0x34) addr:0x020adad0
@@ -5568,30 +5568,30 @@ func_020adf04 kind:function(arm,size=0x3ac) addr:0x020adf04
 func_020ae2b0 kind:function(arm,size=0x80) addr:0x020ae2b0
 func_020ae330 kind:function(arm,size=0x28) addr:0x020ae330
 func_020ae358 kind:function(arm,size=0x8) addr:0x020ae358
-func_020ae360 kind:function(arm,size=0x58) addr:0x020ae360
-func_020ae3b8 kind:function(arm,size=0x1c) addr:0x020ae3b8
-func_020ae3d4 kind:function(arm,size=0x20) addr:0x020ae3d4
-func_020ae3f4 kind:function(arm,size=0x18) addr:0x020ae3f4
-func_020ae40c kind:function(arm,size=0x214) addr:0x020ae40c
-func_020ae620 kind:function(arm,size=0x94) addr:0x020ae620
-func_020ae6b4 kind:function(arm,size=0x44) addr:0x020ae6b4
-func_020ae6f8 kind:function(arm,size=0x1a4) addr:0x020ae6f8
-func_020ae89c kind:function(arm,size=0x2c) addr:0x020ae89c
-func_020ae8c8 kind:function(arm,size=0x40) addr:0x020ae8c8
-func_020ae908 kind:function(arm,size=0xb4) addr:0x020ae908
-func_020ae9bc kind:function(arm,size=0x70) addr:0x020ae9bc
-func_020aea2c kind:function(arm,size=0x124) addr:0x020aea2c
-func_020aeb50 kind:function(arm,size=0x20) addr:0x020aeb50
-func_020aeb70 kind:function(arm,size=0x84) addr:0x020aeb70
+FSi_GetPackedName kind:function(arm,size=0x58) addr:0x020ae360 local
+FSi_ReadMemCallback kind:function(arm,size=0x1c) addr:0x020ae3b8 local
+FSi_WriteMemCallback kind:function(arm,size=0x20) addr:0x020ae3d4 local
+FSi_ReadMemoryCore kind:function(arm,size=0x18) addr:0x020ae3f4 local
+FSi_NextCommand kind:function(arm,size=0x214) addr:0x020ae40c
+FSi_ExecuteAsyncCommand kind:function(arm,size=0x94) addr:0x020ae620
+FSi_ExecuteSyncCommand kind:function(arm,size=0x44) addr:0x020ae6b4
+FSi_SendCommand kind:function(arm,size=0x1a4) addr:0x020ae6f8
+FS_InitArchive kind:function(arm,size=0x2c) addr:0x020ae89c
+FS_FindArchive kind:function(arm,size=0x40) addr:0x020ae8c8
+FS_RegisterArchiveName kind:function(arm,size=0xb4) addr:0x020ae908
+FS_LoadArchive kind:function(arm,size=0x70) addr:0x020ae9bc
+FS_LoadArchiveTables kind:function(arm,size=0x124) addr:0x020aea2c
+FS_SetArchiveProc kind:function(arm,size=0x20) addr:0x020aeb50
+FS_NotifyArchiveAsyncEnd kind:function(arm,size=0x84) addr:0x020aeb70
 func_020aebf4 kind:function(arm,size=0x28) addr:0x020aebf4
 FS_InitFile kind:function(arm,size=0x28) addr:0x020aec1c
 func_020aec44 kind:function(arm,size=0x144) addr:0x020aec44
 func_020aed88 kind:function(arm,size=0x7c) addr:0x020aed88
 FS_ConvertPathToFileID kind:function(arm,size=0x40) addr:0x020aee04
-func_020aee44 kind:function(arm,size=0x48) addr:0x020aee44
+FS_OpenFileDirect kind:function(arm,size=0x48) addr:0x020aee44
 FS_OpenFileFast kind:function(arm,size=0x70) addr:0x020aee8c
 func_020aeefc kind:function(arm,size=0x48) addr:0x020aeefc
-func_020aef44 kind:function(arm,size=0x3c) addr:0x020aef44
+FS_CloseFile kind:function(arm,size=0x3c) addr:0x020aef44
 func_020aef80 kind:function(arm,size=0xc0) addr:0x020aef80
 func_020af040 kind:function(arm,size=0x48) addr:0x020af040
 func_020af088 kind:function(arm,size=0x10) addr:0x020af088
@@ -8497,7 +8497,7 @@ data_02155bb4 kind:bss addr:0x02155bb4
 data_02155bb8 kind:bss addr:0x02155bb8
 data_02155bd0 kind:bss addr:0x02155bd0
 data_02155be0 kind:bss addr:0x02155be0
-data_02155be4 kind:bss addr:0x02155be4
+current_dir_pos kind:bss addr:0x02155be4
 data_02155bf0 kind:bss addr:0x02155bf0
 data_02155bf4 kind:bss addr:0x02155bf4
 data_02155bfc kind:bss addr:0x02155bfc
