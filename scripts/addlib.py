@@ -156,8 +156,8 @@ def main():
                 continue
             want = syms[symi]["name"]
             o = orelocs.get(addr + off - start)
-            if not want or o is None:
-                continue
+            if not want or o is None or syms[symi]["shndx"] != 0:
+                continue  # only external symbols say anything about the pairing
             have = names_at.get(((o[1] - addend) if rtype == 2 else o[1]) & ~1)
             if have == want:
                 score += 1
@@ -380,11 +380,13 @@ def main():
         drop = {n for n, *_ in interior}
         lines = [l for l in syms_file.read_text().splitlines() if l.split(" ", 1)[0] not in drop]
         syms_file.write_text("\n".join(lines) + "\n")
-        relocs_file = syms_file.with_name("relocs.txt")
-        text = relocs_file.read_text()
-        for n, addr, tn, a0 in interior:
-            text = text.replace(f"to:{addr:#010x} module", f"to:{a0:#010x} add:{addr - a0:#x} module")
-        relocs_file.write_text(text)
+        for relocs_file in match.CONFIG.rglob("relocs.txt"):  # overlays may point into main's data too
+            text = old = relocs_file.read_text()
+            for n, addr, tn, a0 in interior:
+                text = text.replace(f"to:{addr:#010x} module:{a.module}",
+                                    f"to:{a0:#010x} add:{addr - a0:#x} module:{a.module}")
+            if text != old:
+                relocs_file.write_text(text)
         print(f"rewrote references to {len(interior)} interior symbols")
     delinks = syms_file.with_name("delinks.txt")
     entry = f"\n{a.source}:\n    complete\n" + "".join(
