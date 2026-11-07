@@ -3,6 +3,7 @@
 Usage:  python scripts/build.py
 """
 import hashlib
+import json
 import os
 import subprocess
 import sys
@@ -15,6 +16,13 @@ CONFIG = ROOT / "config" / "usa" / "arm9" / "config.yaml"
 BUILD = ROOT / "build" / "usa"
 BASE_ROM = ROOT / "roms" / "sunshine_islands_usa.nds"
 OUT_ROM = BUILD / "sunshine_islands_usa.nds"
+
+CC_FLAGS = [
+    "-O4,p", "-enum", "int", "-char", "signed", "-str", "noreuse", "-proc", "arm946e",
+    "-gccext,on", "-fp", "soft", "-inline", "noauto", "-Cpp_exceptions", "off", "-RTTI", "off",
+    "-interworking", "-w", "off", "-sym", "on", "-gccinc", "-nolink", "-msgstyle", "gcc",
+    "-i", "include",
+]
 
 # Header bytes that depend on the ARM7 BIOS (secure area CRC) and the header CRC.
 BIOS_DEPENDENT = {0x6C, 0x6D, 0x15E, 0x15F}
@@ -31,6 +39,16 @@ def main():
     BUILD.mkdir(parents=True, exist_ok=True)
     run(DSD, "delink", "-c", CONFIG)
     run(DSD, "lcf", "-c", CONFIG)
+    files = json.loads(subprocess.run([str(DSD), "json", "delinks", "-c", str(CONFIG)], cwd=ROOT,
+                                      capture_output=True, text=True, check=True).stdout)["files"]
+    for f in files:
+        if f["object_to_link"] == f["delink_file"]:
+            continue  # still assembly
+        src = Path(f["name"])
+        obj = ROOT / f["object_to_link"]
+        obj.parent.mkdir(parents=True, exist_ok=True)
+        lang = "c++" if src.suffix in (".cpp", ".cc") else "c"
+        run(MW / "mwccarm.exe", *CC_FLAGS, f"-lang={lang}", "-c", src, "-o", obj)
     run(MW / "mwldarm.exe", "-proc", "arm946e", "-nostdlib", "-interworking", "-nodead",
         "-m", "Entry", "-map", "closure,unused", "-o", BUILD / "arm9.o",
         BUILD / "arm9.lcf", "@" + str(BUILD / "objects.txt"))

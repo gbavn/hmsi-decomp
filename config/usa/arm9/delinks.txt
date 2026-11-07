@@ -5,3 +5,7 @@
     .ctor       start:0x020bb524 end:0x020bb550 kind:rodata align:4
     .data       start:0x020bb560 end:0x020c6da0 kind:data align:32
     .bss        start:0x020c6da0 end:0x02155c80 kind:bss align:32
+
+src/main.c:
+    complete
+    .text       start:0x02000bdc end:0x02000bf4
