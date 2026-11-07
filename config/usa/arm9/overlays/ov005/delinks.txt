@@ -56,3 +56,8 @@ src/ov005/TitleChar.cpp:
     complete
     .text       start:0x0215ad30 end:0x0215b1e0
     .data       start:0x0215bac8 end:0x0215bb60
+
+src/ov005/TitleStage.cpp:
+    complete
+    .text       start:0x021597ac end:0x0215aab4
+    .data       start:0x0215b918 end:0x0215baac

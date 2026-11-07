@@ -6,6 +6,7 @@
 #include <nnsys/g2d/load/g2d_NAN_load.h>
 #include "Screen2D.h"
 #include "XbbSprite.h"
+#include "Model3D.h"
 #include "Button.h"
 #include "Archive.h"
 #include "Task.h"
@@ -95,6 +96,90 @@ public:
     void CreateScene();
 
     TitleMain *mMain;
+};
+
+// A pack of files read by index (ARM9 0x0202eb5c..; names are ours).
+class PackFile {
+public:
+    PackFile(const char *path);
+    virtual ~PackFile();
+    virtual void Func2();
+    virtual u32 GetCount();
+    virtual u32 GetSize(u32 index);
+    virtual void Read(u32 index, u32 size, void *dst);
+
+    u8 unk4[0x10 - 4];
+};
+
+extern "C" {
+void *func_0202feb0(const char *path);                       // load a file
+void *func_0202ff68(const char *path);                       // load a texture file
+Model3D *func_020300b8(void *mdl, void *tex, int index);
+void func_02030298(Model3D *model, void *anm, int type);
+void func_0203048c(void *tex);
+Model3D *func_020301f4(void *mdl, void *tex, int index);
+Model3D *func_02030154(void *mdl, int index);
+void func_02030374(Model3D *model, void *anm, int type, int loop);
+}
+
+// A placement in the .lot file (0x28 bytes).
+struct LotEntry {
+    char name[0x10];
+    VecFx32 pos;
+    u8 unk1C[0xC];
+};
+
+// Header of the .lot file.
+struct LotHeader {
+    u8 unk0[0x18C];
+    u32 entryOfs;
+    u32 numEntries;
+    u8 unk194[0x10];
+};
+
+// The title screen's 3D stage: the rom/maps/title model, its objects and the ship
+// (overlay 5, 0x021597ac).
+class TitleStage : public Task {
+public:
+    TitleStage();
+    virtual ~TitleStage();
+    virtual BOOL Update();
+    virtual void Draw();
+
+    BOOL LoadLot(const char *lot);
+    BOOL LoadModels(const char *mdl, const char *ta, const char *ca, const char *ma, const char *tex);
+    BOOL LoadObjects(const char *idx, const char *bin, const char *ltr, const char *wna, const char *txa,
+                     const char *mta, const char *cha, const char *tex);
+    BOOL CopyPrefix(char *dst, const char *src);
+    int CountLot(const char *prefix);
+    BOOL PlaceModel(Model3D *model, const char *prefix, BOOL first);
+    void MoveShip(const VecFx32 *delta);
+    void SetShipPos(const VecFx32 *pos);
+    void SetShipPos(fx32 x, fx32 y, fx32 z);
+    Model3D *GetShip() { return mShip == -1 ? mObjects[0] : mObjects[mShip]; }
+
+    NNSG3dResFileHeader *mMdlRes;
+    void *mTexRes;
+    NNSGfdTexKey mTexKey;
+    NNSGfdPlttKey mPlttKey;
+    void *mAnmRes;
+    void *unk28;
+    void *unk2C;
+    Model3D *mModels[10];   // only 8 are used
+    Model3D *mObjects[32];
+    u8 *mObjTex[32];
+    NNSGfdTexKey mObjTexKey[32];
+    NNSGfdPlttKey mObjPlttKey[32];
+    int mShip;
+    PackFile *mBin;
+    PackFile *unk260;
+    PackFile *unk264;
+    PackFile *mTxa;
+    PackFile *unk26C;
+    PackFile *unk270;
+    PackFile *mTexPack;
+    LotHeader mLot;
+    LotEntry *mEntries;
 };
 
 // The title screen's 3D camera (overlay 5, 0x0215aab4): orthographic projection, looking at the
