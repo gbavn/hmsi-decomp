@@ -12,3 +12,5 @@
 Every edit to the vendored sources is listed here.
 
 - `NitroSDK/libraries/mi/src/mi_dma.c`: added `MI_StopAllDma` (missing from the reference revision).
+- `NitroSDK/libraries/os/src/os_exception.c`: defined `SP1P3_BUG_FOR_CONDITIONAL_ASM_INSTRUCTIONS` (this game's
+  `OSi_ExceptionHandler` uses the branch-around variant instead of `movne`/`bxne`).

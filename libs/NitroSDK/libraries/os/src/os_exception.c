@@ -1,3 +1,4 @@
+#define SP1P3_BUG_FOR_CONDITIONAL_ASM_INSTRUCTIONS // this game's SDK version
 #include <nitro/hw/common/armArch.h>
 #include <nitro/memorymap.h>
 #include <nitro/os.h>
