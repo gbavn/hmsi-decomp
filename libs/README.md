@@ -15,3 +15,4 @@ Every edit to the vendored sources is listed here.
 - `scripts/flags.py` defines `SP1P3_BUG_FOR_CONDITIONAL_ASM_INSTRUCTIONS` for all vendored sources: this game's SDK
   was built with the branch-around variant of conditional asm instructions (os_exception, os_reset, ...).
 - `NitroSDK/libraries/os/src/os_reset.c`: `OS_ResetSystem` masks IRQs (`~OS_IE_FIFO_RECV`) before stopping DMA.
+- `NitroSDK/libraries/card/src/card_spi.c`: `CARDi_IdentifyBackupCore` handles 128 KB EEPROM (`case 0x020000`).

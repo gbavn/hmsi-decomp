@@ -247,6 +247,12 @@ void CARDi_IdentifyBackupCore (CARDBackupType type)
 					p->spec.program_page = 10;
 					p->spec.initial_status = 0x00;
 					break;
+				case 0x020000:
+					p->spec.page_size = 0x0100;
+					p->spec.addr_width = 3;
+					p->spec.program_page = 5;
+					p->spec.initial_status = 0x00;
+					break;
 
 				}
 				p->spec.sect_size = p->spec.page_size;
