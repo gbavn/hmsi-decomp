@@ -288,17 +288,17 @@ NNSi_G3dAnmObjInitNsBva kind:function(arm,size=0x4c) addr:0x0200c75c
 NNSi_G3dAnmCalcNsBva kind:function(arm,size=0x38) addr:0x0200c7a8
 NNSi_G3dSendJointSRTBasic kind:function(arm,size=0x7c) addr:0x0200c7e0
 NNSi_G3dGetJointScaleBasic kind:function(arm,size=0x40) addr:0x0200c85c
-func_0200c89c kind:function(arm,size=0xc4) addr:0x0200c89c
-func_0200c960 kind:function(arm,size=0x150) addr:0x0200c960
-func_0200cab0 kind:function(arm,size=0x108) addr:0x0200cab0
-func_0200cbb8 kind:function(arm,size=0xd0) addr:0x0200cbb8
-func_0200cc88 kind:function(arm,size=0x7c) addr:0x0200cc88
-func_0200cd04 kind:function(arm,size=0x48) addr:0x0200cd04
-func_0200cd4c kind:function(arm,size=0xe0) addr:0x0200cd4c
-func_0200ce2c kind:function(arm,size=0xb8) addr:0x0200ce2c
-func_0200cee4 kind:function(arm,size=0x44) addr:0x0200cee4
-func_0200cf28 kind:function(arm,size=0x24) addr:0x0200cf28
-func_0200cf4c kind:function(arm,size=0x148) addr:0x0200cf4c
+NNSi_G3dSendJointSRTMaya kind:function(arm,size=0xc4) addr:0x0200c89c
+NNSi_G3dGetJointScaleMaya kind:function(arm,size=0x150) addr:0x0200c960
+texmtxCalc_flag_ kind:function(arm,size=0x108) addr:0x0200cab0 local
+texmtxCalc_flagS_ kind:function(arm,size=0xd0) addr:0x0200cbb8 local
+texmtxCalc_flagR_ kind:function(arm,size=0x7c) addr:0x0200cc88 local
+texmtxCalc_flagRS_ kind:function(arm,size=0x48) addr:0x0200cd04 local
+texmtxCalc_flagT_ kind:function(arm,size=0xe0) addr:0x0200cd4c local
+texmtxCalc_flagTS_ kind:function(arm,size=0xb8) addr:0x0200ce2c local
+texmtxCalc_flagTR_ kind:function(arm,size=0x44) addr:0x0200cee4 local
+texmtxCalc_flagTRS_ kind:function(arm,size=0x24) addr:0x0200cf28 local
+NNSi_G3dSendTexSRTMaya kind:function(arm,size=0x148) addr:0x0200cf4c
 func_0200d094 kind:function(arm,size=0x12c) addr:0x0200d094
 func_0200d1c0 kind:function(arm,size=0x21c) addr:0x0200d1c0
 func_0200d3dc kind:function(arm,size=0x1cc) addr:0x0200d3dc
@@ -8124,8 +8124,8 @@ data_020c8e24 kind:bss addr:0x020c8e24
 data_020c8e38 kind:bss addr:0x020c8e38
 data_020c8e68 kind:bss addr:0x020c8e68
 data_020c8e98 kind:bss addr:0x020c8e98
-data_020c8f9c kind:bss addr:0x020c8f9c
-data_020c8fa0 kind:bss addr:0x020c8fa0
+NNS_G3dRS kind:bss addr:0x020c8f9c
+NNS_G3dRSOnGlb kind:bss addr:0x020c8fa0
 data_020c9da0 kind:bss addr:0x020c9da0
 data_020c9da4 kind:bss addr:0x020c9da4
 data_020c9da8 kind:bss addr:0x020c9da8
