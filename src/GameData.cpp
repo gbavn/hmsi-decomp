@@ -62,7 +62,27 @@ void func_020348cc(void *self);
 void func_0203506c(void *self);
 void func_02034bc8(void *self);
 
+void func_02031394(void *self, int value);
+void func_020313a4(void *self, int value);
+void func_020313d0(void *self, int value);
+void func_020313e0(void *self, int value);
+void func_0203140c(void *self, int value);
+void func_0203142c(void *self, int value);
+void func_0203144c(void *self, const char *name);
+void func_0203149c(void *self, const char *name);
+void func_0203508c(void *self, int value);
+void func_02031484(void *self, s32 money);
+void func_02031578(void *self, BOOL on);
+void func_02031590(void *self, BOOL on);
+void func_02035524(void *date);
+const void *func_020351b0(void);
+u32 func_02021d48(const char *s);
+int func_0203366c(void *self, int id);
+void func_02034c94(void *self, void *out, int a, int b, int c, int d, int e, int f);
+
 extern void *data_020bc8bc[];
+extern const char data_020b2718[];
+extern const char data_020b2720[];
 extern const u8 data_020b1df0[];        // start time (2 bytes), then the start date (8 bytes)
 extern u8 data_020f57d0;
 }
@@ -92,6 +112,38 @@ typedef struct GameData {
     u32 weather[7];         // forecast: [0] = today
     u32 weatherYesterday;
 } GameData;
+
+// A position-like triple, zeroed by its constructor.
+struct ZeroVec {
+    ZeroVec() : x(0), y(0), z(0) {}
+
+    u32 x;
+    u32 y;
+    u32 z;
+};
+
+// The current date as returned by func_02035524.
+struct GameDay {
+    u32 year;
+    s8 season;
+    s8 day;
+    s8 weekday;
+};
+
+// A time of day zeroed by its constructor.
+struct ZeroTime {
+    ZeroTime() : hour(0), minute(0) {}
+
+    s8 hour;
+    s8 minute;
+};
+
+struct PlayerSlot {
+    s16 a;
+    u8 unk2[4];
+    s16 b;
+    u8 unk8[4];
+};
 
 struct ZeroDate {
     ZeroDate() : a(0), b(0) {}
@@ -268,6 +320,274 @@ void func_020311cc(GameData *self, int day, u32 weather)
         self->weatherYesterday = weather;
     } else {
         self->weather[day] = weather;
+    }
+}
+// Starts the player's state (stats, names, money, flags, date/time markers).
+#ifdef NONMATCHING
+void func_020311e4(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    func_02031394(self, 100);
+    func_0203140c(self, 0);
+    func_020313a4(self, 100);
+    func_020313d0(self, 100);
+    func_0203142c(self, 0);
+    func_020313e0(self, 100);
+    func_0203144c(self, data_020b2718);
+    func_0203149c(self, data_020b2720);
+    func_0203508c(self, 500);
+    AT(u8, 0x106b8) = 0;
+    func_02031484(self, 0);
+    AT(u32, 0x90) = 0;
+    func_02031578(self, TRUE);
+    func_02031590(self, FALSE);
+    {
+        ZeroVec pos;
+
+        AT(ZeroVec, 0x38) = pos;
+    }
+    AT(s32, 0x44) = -1;
+    AT(u32, 0x98) = 0x3f800000;
+    AT(u32, 0x9c) = 0x3f800000;
+    AT(u32, 0xa4) = 0;
+    for (i = 0; i < 2; i++) {
+        (&AT(PlayerSlot, 0xae))[i].a = -1;
+        (&AT(PlayerSlot, 0xae))[i].b = 0;
+    }
+    AT(u8, 0xa8) = 0;
+    AT(u8, 0x106b8) = 0;
+    AT(u8, 0x106b9) = 0;
+    {
+        GameDay today;
+        ZeroTime time;
+
+        func_02035524(&today);
+        AT(GameDay, 0xd4) = today;
+        AT(u32, 0xc4) = 0x3f000000;
+        AT(ZeroTime, 0xc8) = time;
+        AT(u32, 0xcc) = 0x3f000000;
+        time = *(const ZeroTime *)func_020351b0();
+        time.hour += 2;
+        AT(ZeroTime, 0xd0) = time;
+    }
+    AT(u8, 0xd2) = 0;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_020311e4(void *obj) {
+    stmdb sp!, {r4, lr}
+    sub sp, sp, #0x18
+    mov r4, r0
+    mov r1, #0x64
+    bl func_02031394
+    mov r0, r4
+    mov r1, #0x0
+    bl func_0203140c
+    mov r0, r4
+    mov r1, #0x64
+    bl func_020313a4
+    mov r0, r4
+    mov r1, #0x64
+    bl func_020313d0
+    mov r0, r4
+    mov r1, #0x0
+    bl func_0203142c
+    mov r0, r4
+    mov r1, #0x64
+    bl func_020313e0
+    ldr r1, [pc, #0x150]
+    mov r0, r4
+    bl func_0203144c
+    ldr r1, [pc, #0x148]
+    mov r0, r4
+    bl func_0203149c
+    mov r0, r4
+    mov r1, #0x1f4
+    bl func_0203508c
+    mov r1, #0x0
+    add r0, r4, #0x10000
+    strb r1, [r0, #0x6b8]
+    mov r0, r4
+    bl func_02031484
+    mov r0, #0x0
+    str r0, [r4, #0x90]
+    mov r0, r4
+    mov r1, #0x1
+    bl func_02031578
+    mov r0, r4
+    mov r1, #0x0
+    bl func_02031590
+    mov r3, #0x0
+    add r0, sp, #0xc
+    str r3, [r0, #0x0]
+    str r3, [r0, #0x4]
+    str r3, [r0, #0x8]
+    str r3, [r4, #0x38]
+    ldr r0, [sp, #0x10]
+    sub r1, r3, #0x1
+    str r0, [r4, #0x3c]
+    ldr r2, [sp, #0x14]
+    mov r0, #0x3f800000
+    str r2, [r4, #0x40]
+    str r1, [r4, #0x44]
+    str r0, [r4, #0x98]
+    str r0, [r4, #0x9c]
+    str r3, [r4, #0xa4]
+    mov r0, r4
+    mov r2, r3
+_020312d4:
+    strh r1, [r0, #0xae]
+    add r3, r3, #0x1
+    strh r2, [r0, #0xb4]
+    cmp r3, #0x2
+    add r0, r0, #0xc
+    blt _020312d4
+    strb r2, [r4, #0xa8]
+    add r1, r4, #0x10000
+    strb r2, [r1, #0x6b8]
+    add r0, sp, #0x4
+    strb r2, [r1, #0x6b9]
+    bl func_02035524
+    ldr r0, [sp, #0x4]
+    mov r3, #0x3f000000
+    str r0, [r4, #0xd4]
+    ldrsb r0, [sp, #0x8]
+    add r2, sp, #0x0
+    mov r1, #0x0
+    strb r0, [r4, #0xd8]
+    ldrsb r0, [sp, #0x9]
+    strb r0, [r4, #0xd9]
+    ldrsb r0, [sp, #0xa]
+    strb r0, [r4, #0xda]
+    str r3, [r4, #0xc4]
+    strb r1, [r2, #0x0]
+    ldrsb r0, [sp, #0x0]
+    strb r1, [r2, #0x1]
+    strb r0, [r4, #0xc8]
+    ldrsb r0, [sp, #0x1]
+    strb r0, [r4, #0xc9]
+    str r3, [r4, #0xcc]
+    bl func_020351b0
+    ldrsb r3, [r0, #0x0]
+    mov r1, #0x0
+    strb r3, [sp, #0x0]
+    ldrsb r2, [r0, #0x1]
+    add r0, r3, #0x2
+    strb r0, [sp, #0x0]
+    ldrsb r0, [sp, #0x0]
+    strb r2, [sp, #0x1]
+    strb r0, [r4, #0xd0]
+    ldrsb r0, [sp, #0x1]
+    strb r0, [r4, #0xd1]
+    strb r1, [r4, #0xd2]
+    add sp, sp, #0x18
+    ldmia sp!, {r4, pc}
+    dcd data_020b2718
+    dcd data_020b2720
+}
+#endif
+
+void func_02031394(void *self, int value)
+{
+    if (value > 250) {
+        value = 250;
+    }
+    AT(s16, 0x56) = value;
+}
+
+void func_020313a4(void *self, int value)
+{
+    if (value < 0) {
+        value = 0;
+    } else if (AT(s16, 0x56) + AT(s16, 0x5e) < value) {
+        value = (s16)(AT(s16, 0x56) + AT(s16, 0x5e));
+    }
+    AT(s16, 0x58) = value;
+}
+
+void func_020313d0(void *self, int value)
+{
+    if (value > 250) {
+        value = 250;
+    }
+    AT(s16, 0x5a) = value;
+}
+
+void func_020313e0(void *self, int value)
+{
+    if (value < 0) {
+        value = 0;
+    } else if (AT(s16, 0x5a) + AT(s16, 0x60) < value) {
+        value = (s16)(AT(s16, 0x5a) + AT(s16, 0x60));
+    }
+    AT(s16, 0x5c) = value;
+}
+
+void func_0203140c(void *self, int value)
+{
+    if (value + AT(s16, 0x56) > 250) {
+        value = (s16)(250 - AT(s16, 0x56));
+    }
+    AT(s16, 0x5e) = value;
+}
+
+void func_0203142c(void *self, int value)
+{
+    if (value + AT(s16, 0x5a) > 250) {
+        value = (s16)(250 - AT(s16, 0x5a));
+    }
+    AT(s16, 0x60) = value;
+}
+
+void func_0203144c(void *self, const char *name)
+{
+    MI_CpuFill8(&AT(u8, 0x48), 0, 13);
+    MI_CpuCopy8(name, &AT(u8, 0x48), func_02021d48(name));
+}
+
+void func_02031484(void *self, s32 money)
+{
+    if (money > 1000000000) {
+        money = 1000000000;
+    }
+    AT(s32, 0x68) = money;
+}
+
+void func_0203149c(void *self, const char *name)
+{
+    MI_CpuFill8(&AT(u8, 0x6c), 0, 13);
+    MI_CpuCopy8(name, &AT(u8, 0x6c), func_02021d48(name));
+}
+
+void func_020314d4(void *self)
+{
+    int a = func_0203366c(self, 0x331);
+    int b = func_0203366c(self, 0x332);
+    int c = func_0203366c(self, 0x333);
+    int d = func_0203366c(self, 0x334);
+    int e = func_0203366c(self, 0x335);
+    int f = func_0203366c(self, 0x336);
+
+    func_02034c94(self, &AT(u8, 0x79), a, b, c, d, e, f);
+}
+
+void func_02031578(void *self, BOOL on)
+{
+    if (on) {
+        AT(s8, 0x94) |= 1;
+    } else {
+        AT(s8, 0x94) &= ~1;
+    }
+}
+
+void func_02031590(void *self, BOOL on)
+{
+    if (on) {
+        AT(s8, 0x94) |= 2;
+    } else {
+        AT(s8, 0x94) &= ~2;
     }
 }
 }

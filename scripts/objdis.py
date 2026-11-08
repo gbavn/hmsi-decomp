@@ -33,7 +33,9 @@ def main():
     lines = text.splitlines()
     on = False
     for line in lines:
-        if re.search(rf"\b{re.escape(a.function)}\b", line) and ("func" in line.lower() or line.rstrip().endswith(":")):
+        is_insn = re.match(r"\s+(bl|b|blx|dcd)\s", line) is not None
+        if not on and not is_insn and re.search(rf"\b{re.escape(a.function)}\b", line) \
+                and ("func" in line.lower() or line.rstrip().endswith(":")):
             on = True
         elif on and re.match(r"^\S.*:\s*$", line) and a.function not in line:
             break
