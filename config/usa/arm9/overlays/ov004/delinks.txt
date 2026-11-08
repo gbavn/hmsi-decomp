@@ -5,6 +5,10 @@
     .data       start:0x0215c060 end:0x0215d620 kind:data align:32
     .bss        start:0x0215d620 end:0x0215d6c0 kind:bss align:32
 
+src/ov004/MiniGameData.cpp:
+    complete
+    .bss        start:0x0215d620 end:0x0215d624
+
 src/ov004/MiniGame.cpp:
     complete
     .text       start:0x02155c80 end:0x02155fdc
@@ -19,7 +23,3 @@ src/ov004/PetHand.cpp:
     .text       start:0x02155fdc end:0x021563f4
     .rodata     start:0x0215b774 end:0x0215b790
     .data       start:0x0215c08c end:0x0215c0c0
-
-src/ov004/MiniGameData.cpp:
-    complete
-    .bss        start:0x0215d620 end:0x0215d624

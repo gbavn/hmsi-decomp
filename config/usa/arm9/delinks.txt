@@ -649,6 +649,11 @@ src/PackFile.cpp:
     .text       start:0x0202e810 end:0x0202f140
     .data       start:0x020bc414 end:0x020bc5ac
 
+src/Font.cpp:
+    complete
+    .text       start:0x0202f140 end:0x0202fa88
+    .data       start:0x020bc5ac end:0x020bc7b0
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
@@ -711,6 +716,14 @@ src/ResCacheData.cpp:
 src/ResCacheData2.cpp:
     complete
     .bss        start:0x020ee4c8 end:0x020f56d4
+
+src/FontData.cpp:
+    complete
+    .bss        start:0x020f56d8 end:0x020f56ec
+
+src/FontData2.cpp:
+    complete
+    .bss        start:0x020f56ec end:0x020f5778
 
 libs/NitroSDK/libraries/fs/src/fs_archive.c:
     complete
