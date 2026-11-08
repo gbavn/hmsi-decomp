@@ -13,3 +13,7 @@ tools/mwccarm/
 
 # Personal working notes (Portuguese), kept only locally
 docs/
+
+# Downloaded tools
+tools/objdiff/
+objdiff.json

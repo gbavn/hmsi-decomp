@@ -51,7 +51,12 @@ tools/dsd.exe rom extract --rom roms/sunshine_islands_usa.nds --output-path extr
 python scripts/build.py          # full build + ROM comparison
 python scripts/build.py --quick  # only checks the code/data modules (faster)
 python scripts/progress.py       # progress per module
+
+# 3. objdiff progress report (needs objdiff-cli in tools/objdiff/, see .github/workflows/build.yml)
+python scripts/report.py         # writes objdiff.json and build/usa/report.json
 ```
+
+The GitHub Actions workflow builds every push to `main` and uploads the objdiff report.
 
 ## Layout
 

@@ -1,0 +1,77 @@
+name: Build
+
+# Builds the decompilation, checks it against the original ROM and uploads the objdiff progress
+# report (artifact "usa_report", read by decomp.fun).
+#
+# The ROM and the Metrowerks compilers are not in this repository. They are read from a private
+# repository with the PRIVATE_ASSETS_TOKEN secret (read-only access); nothing from it is uploaded.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        version: [usa]
+    env:
+      OBJDIFF_VERSION: v3.8.3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Get the ROM and the compilers (private)
+        uses: actions/checkout@v4
+        with:
+          repository: gbavn/sunshine-islands-decomp
+          ref: afaf7db2dd3d2861a30e637034ad9637373453fa
+          token: ${{ secrets.PRIVATE_ASSETS_TOKEN }}
+          path: private
+          sparse-checkout: |
+            roms
+            tools/mwccarm
+
+      - name: Set up the private files
+        shell: bash
+        run: |
+          mkdir -p roms
+          mv private/roms/sunshine_islands_usa.nds roms/
+          mv private/tools/mwccarm tools/mwccarm
+          rm -rf private
+          echo "bbb18e8a4aa9fd845223d679c0e9207dc9374477 *roms/sunshine_islands_usa.nds" | sha1sum -c -
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Extract the ROM
+        shell: bash
+        run: tools/dsd.exe rom extract --rom roms/sunshine_islands_usa.nds --output-path extract/${{ matrix.version }}
+
+      - name: Build and compare
+        shell: bash
+        run: python scripts/build.py
+
+      - name: Download objdiff-cli
+        shell: bash
+        run: |
+          mkdir -p tools/objdiff
+          curl -sSfL -o tools/objdiff/objdiff-cli.exe \
+            "https://github.com/encounter/objdiff/releases/download/${OBJDIFF_VERSION}/objdiff-cli-windows-x86_64.exe"
+
+      - name: Progress report
+        shell: bash
+        run: python scripts/report.py
+
+      - name: Upload the report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.version }}_report
+          path: build/${{ matrix.version }}/report.json
