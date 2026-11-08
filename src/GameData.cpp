@@ -2,7 +2,7 @@
 // calendar, the weather forecast, the flags and everything else that is saved. Names are ours.
 //
 // The original is a single C++ file with ~190 functions; it is decompiled in pieces (this unit covers
-// 0x02030cfc..0x02034920). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
+// 0x02030cfc..0x020350d4). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
 #include <nitro.h>
 #include <string.h>
 
@@ -61,7 +61,7 @@ void func_020342ac(void *self);
 void func_020343dc(void *self);
 void func_02070968(void *self);
 void func_020348cc(void *self);
-void func_0203506c(void *self);
+void func_0203506c(void *self, int v);
 void func_02034bc8(void *self);
 
 void func_02031394(void *self, int value);
@@ -346,8 +346,15 @@ typedef struct GameData {
     u8 unk106b8[0x1c];
     u32 unk106d4;
     u32 unk106d8;
-    Pair8 pairs30[30];
-    Pair8 pairs4[4];
+    Pair8 pairs30[30];      // per day of the season
+    Pair8 pairs4[4];        // per season
+    Pair8 hist[4];          // last seasons, [0] = newest
+    u8 unk1080c[0x24];      // 6 objects of 6 bytes
+    u8 unk10830;
+    s8 unk10831;
+    u8 unk10832;
+    u8 unk10833;
+    u32 unk10834;
 } GameData;
 
 #define RECORDS(self) (((GameData *)(self))->records)
@@ -444,7 +451,7 @@ void func_02030fd4(GameData *self)
     func_02070968(self);
     func_020348cc(self);
     AT(u8, 0x10830) = 0;
-    func_0203506c(self);
+    func_0203506c(self, 0);
     AT(u32, 0x10838) = 0;
     AT(u8, 0x1083c) = 0;
     func_02034bc8(self);
@@ -4094,5 +4101,543 @@ void func_020348cc(void *obj)
         self->pairs4[i].a = 0;
         self->pairs4[i].b = 0;
     }
+}
+
+int func_02035444(const void *time);
+int func_02035544(void);
+extern const u8 data_020b1f0e[];
+extern const u8 data_020b1f12[];
+}
+
+static inline BOOL IsBefore(const void *a, const void *b)
+{
+    return (BOOL)(func_02035444(a) > func_02035444(b));
+}
+
+extern "C" {
+
+// Adds to today's totals (before the time at data_020b1f0e it still counts as yesterday).
+void func_02034920(void *obj, u32 a, u32 b)
+{
+    GameData *self = (GameData *)obj;
+    GameDay today;
+    int day;
+
+    func_02035524(&today);
+    day = today.day;
+    if (IsBefore(data_020b1f0e, func_020351b0()) == TRUE) {
+        day--;
+    }
+    if (day == -1) {
+        day = 29;
+    }
+    self->pairs30[day].a += a;
+    self->pairs30[day].b += b;
+    if (self->pairs30[day].a > 1000000000) {
+        self->pairs30[day].a = 1000000000;
+    }
+    if (self->pairs30[day].b > 1000000000) {
+        self->pairs30[day].b = 1000000000;
+    }
+}
+
+Pair8 *func_020349e4(void *obj, int i)
+{
+    return &((GameData *)obj)->pairs30[i];
+}
+
+Pair8 *func_020349f4(void *obj, int i)
+{
+    return &((GameData *)obj)->pairs4[i];
+}
+
+void func_02034a04(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    for (i = 0; i < 30; i++) {
+        self->pairs30[i].a = 0;
+        self->pairs30[i].b = 0;
+    }
+}
+
+void func_02034a2c(void *obj)
+{
+    GameData *self = (GameData *)obj;
+
+    self->pairs4[func_02035544()].a = 0;
+    self->pairs4[func_02035544()].b = 0;
+}
+
+// Adds today's totals to the season's.
+void func_02034a60(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    GameDay today;
+    int day;
+    BOOL early;
+    int season;
+
+    func_02035524(&today);
+    day = today.day;
+    early = IsBefore(data_020b1f12, func_020351b0());
+    season = func_02035544();
+    if (early == TRUE) {
+        day--;
+    }
+    if (early && day == -1) {
+        day = 29;
+        if (season == 0) {
+            season = 3;
+        } else {
+            season = func_02035544() - 1;
+        }
+    }
+    self->pairs4[season].a += self->pairs30[day].a;
+    self->pairs4[season].b += self->pairs30[day].b;
+    if (self->pairs4[season].a > 1000000000) {
+        self->pairs4[season].a = 1000000000;
+    }
+    if (self->pairs4[season].b > 1000000000) {
+        self->pairs4[season].b = 1000000000;
+    }
+    self->hist[0].a = self->pairs4[season].a;
+    self->hist[0].b = self->pairs4[season].b;
+}
+
+void func_02034b6c(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    GameDay today;
+
+    func_02035524(&today);
+    self->hist[3].a = self->hist[2].a;
+    self->hist[3].b = self->hist[2].b;
+    self->hist[2].a = self->hist[1].a;
+    self->hist[2].b = self->hist[1].b;
+    self->hist[1].a = self->hist[0].a;
+    self->hist[1].b = self->hist[0].b;
+    self->hist[0].a = 0;
+    self->hist[0].b = 0;
+}
+
+void func_02034bc8(void *obj)
+{
+    GameData *self = (GameData *)obj;
+
+    self->unk10831 = -1;
+    self->unk10832 = 0;
+    self->unk4 = 1;
+    self->unk10833 = 0x15;
+}
+
+typedef struct RankEntry {
+    s32 min;
+    s32 step;
+    u8 unk8[0x18];
+} RankEntry;
+int func_02034d78(void *self, char *out, s32 points, int kind);
+void func_02054b80(void *obj, int file, int id, char *out, int max);
+extern const u32 data_020b26b4[];
+extern const s32 data_020bc8a8;
+extern const s32 data_020bc8b0;
+extern const RankEntry data_020b1f14[];
+extern const char *const data_020bc890[];
+extern const char data_020bc930[];
+extern const char data_020bc934[];
+extern const char data_020bc93c[];
+extern const char data_020bc944[];
+extern void *data_020bc8cc[];
+extern const s32 data_020b1f18[];
+void _s32_div_f(void);
+
+BOOL func_02034bf0(void *obj)
+{
+    GameData *self = (GameData *)obj;
+
+    return self->unk4 == 1 && self->unk10833 == 0x15;
+}
+
+void func_02034c10(void *obj)
+{
+    ((GameData *)obj)->unk10831 = -1;
+}
+
+void func_02034c20(void *obj, s8 v)
+{
+    ((GameData *)obj)->unk10831 = v;
+}
+
+s8 func_02034c2c(void *obj)
+{
+    return ((GameData *)obj)->unk10831;
+}
+
+BOOL func_02034c38(void *obj)
+{
+    return ((GameData *)obj)->unk10832 == 0;
+}
+
+void func_02034c50(void *obj)
+{
+    ((GameData *)obj)->unk10832 = 1;
+}
+
+void func_02034c60(void *obj, u8 v)
+{
+    ((GameData *)obj)->unk10832 = v;
+}
+
+// Size of the saved part of the object (it starts after the vtable pointer).
+#ifdef NONMATCHING
+u32 func_02034c6c(void *obj)
+{
+    return ((u32)&((GameData *)0)->unk10834 - 4 + 3) & ~3;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm u32 func_02034c6c(void *obj) {
+    ldr r0, [pc, #0xc]
+    sub r0, r0, #0x4
+    add r0, r0, #0x3
+    bic r0, r0, #0x3
+    bx lr
+    dcd 0x10834
+}
+#endif
+
+void *func_02034c84(void *obj)
+{
+    return (u8 *)obj + 4;
+}
+
+void *func_02034c8c(void *obj)
+{
+    return (u8 *)obj + 4;
+}
+
+// Builds the player's title in `out` from the six point variables (the biggest one names it).
+void func_02034c94(void *self, void *out, int a, int b, int c, int d, int e, int f)
+{
+    VarValue list[6];
+    s32 sum;
+    u32 i;
+
+    *(VarValueTable *)list = *(const VarValueTable *)data_020b26b4;
+    list[0].value = a;
+    list[1].value = b;
+    list[2].value = c;
+    list[3].value = d;
+    list[4].value = e;
+    list[5].value = f;
+    func_02021a30(list, 6, 8, (void *)func_02033950);
+    sum = 0;
+    for (i = 0; i < 6; i++) {
+        sum += list[i].value;
+        sum = *func_02031a74(&sum, &data_020bc8a8);
+    }
+    func_02034d78(self, (char *)out, sum, list[0].id);
+}
+
+static void PutLevel(char *p, int level)
+{
+    if (level > 99) {
+        level = 99;
+    }
+    p[0] = level < 10 ? ' ' : '0' + level / 10;
+    p[1] = '0' + level % 10;
+}
+
+// Writes the title text for `points` (rank = first threshold above it) of kind `kind`; returns the rank.
+#ifdef NONMATCHING
+int func_02034d78(void *self, char *out, s32 points, int kind)
+{
+    int rank;
+    u32 pos = 0;
+    BOOL found = FALSE;
+    u32 i;
+    char *p;
+
+    points = *func_02031a74(&points, &data_020bc8b0);
+    for (rank = 1; rank < 0x3d; rank++) {
+        if (points < data_020b1f14[rank].min) {
+            break;
+        }
+    }
+    func_02054b80(data_020f57b8, 0xaa, rank - 1, out, 0x2d);
+    for (i = 0; i < func_02021d48(out) - 2; i++) {
+        if (out[i] == '#' && out[i + 1] == '#' && out[i + 2] == '#') {
+            pos = i;
+            found = TRUE;
+            break;
+        }
+    }
+    if (found) {
+        u32 n = func_02021d48(out) - (pos + 3);
+        char *tail = new char[n + 1];
+
+        strncpy(tail, out + pos + 3, n + 1);
+        strncpy(out + pos, data_020bc890[kind], func_02021d48(data_020bc890[kind]));
+        strncpy(out + pos + func_02021d48(data_020bc890[kind]), tail, n + 1);
+        delete[] tail;
+        p = strstr(out, data_020bc930);
+        if (p) {
+            PutLevel(p, (points - data_020b1f14[rank - 1].min) / data_020b1f14[rank - 1].step + 1);
+        }
+    }
+    p = strstr(out, data_020bc934);
+    if (p) {
+        strncpy(p, data_020bc890[kind], func_02021d48(data_020bc93c));
+        p = strstr(out, data_020bc944);
+        if (p) {
+            PutLevel(p, (points - data_020b1f14[rank - 1].min) / data_020b1f14[rank - 1].step + 1);
+        }
+    }
+    return rank - 1;
+}
+#else
+// Linker names used by the asm below.
+extern "C" {
+void _ZdaPv(void);
+void _Znam(void);
+}
+// NONMATCHING: kept as assembly until the C version matches.
+asm int func_02034d78(void *self, char *out, s32 points, int kind) {
+    stmdb sp!, {r0, r1, r2, r3}
+    stmdb sp!, {r3, r4, r5, r6, r7, r8, r9, r10, lr}
+    sub sp, sp, #0x4
+    mov r5, r1
+    ldr r1, [pc, #0x27c]
+    add r0, sp, #0x30
+    mov r4, r3
+    bl func_02031a74
+    ldr r2, [r0, #0x0]
+    ldr r1, [pc, #0x26c]
+    mov r8, #0x1
+    str r2, [sp, #0x30]
+_02034da8:
+    ldr r0, [r1, r8, lsl #0x5]
+    cmp r2, r0
+    blt _02034dc0
+    add r8, r8, #0x1
+    cmp r8, #0x3d
+    blo _02034da8
+_02034dc0:
+    mov r1, #0x2d
+    ldr r0, [pc, #0x248]
+    str r1, [sp, #0x0]
+    ldr r0, [r0, #0x0]
+    mov r3, r5
+    sub r2, r8, #0x1
+    mov r1, #0xaa
+    bl func_02054b80
+    mov r9, #0x0
+    mov r0, r5
+    mov r6, r9
+    mov r7, r9
+    bl func_02021d48
+    subs r0, r0, #0x2
+    beq _02034e3c
+_02034dfc:
+    ldrsb r0, [r5, r7]
+    add r1, r5, r7
+    cmp r0, #0x23
+    ldreqsb r0, [r1, #0x1]
+    cmpeq r0, #0x23
+    ldreqsb r0, [r1, #0x2]
+    cmpeq r0, #0x23
+    moveq r9, r7
+    moveq r6, #0x1
+    beq _02034e3c
+    mov r0, r5
+    add r7, r7, #0x1
+    bl func_02021d48
+    sub r0, r0, #0x2
+    cmp r7, r0
+    blo _02034dfc
+_02034e3c:
+    cmp r6, #0x0
+    beq _02034f40
+    mov r0, r5
+    bl func_02021d48
+    add r1, r9, #0x3
+    sub r7, r0, r1
+    add r0, r7, #0x1
+    bl _Znam
+    add r1, r9, #0x3
+    add r1, r5, r1
+    add r2, r7, #0x1
+    mov r6, r0
+    bl strncpy
+    ldr r0, [pc, #0x1a0]
+    ldr r10, [r0, r4, lsl #0x2]
+    mov r0, r10
+    bl func_02021d48
+    mov r2, r0
+    mov r1, r10
+    add r0, r5, r9
+    bl strncpy
+    ldr r0, [pc, #0x180]
+    ldr r0, [r0, r4, lsl #0x2]
+    bl func_02021d48
+    add r0, r9, r0
+    add r0, r5, r0
+    add r2, r7, #0x1
+    mov r1, r6
+    bl strncpy
+    mov r0, r6
+    bl _ZdaPv
+    ldr r1, [pc, #0x15c]
+    mov r0, r5
+    bl strstr
+    movs r6, r0
+    beq _02034f40
+    ldr r1, [pc, #0x13c]
+    sub r3, r8, #0x1
+    ldr r0, [pc, #0x144]
+    ldr r2, [r1, r3, lsl #0x5]
+    ldr r7, [sp, #0x30]
+    ldr r1, [r0, r3, lsl #0x5]
+    sub r0, r7, r2
+    bl _s32_div_f
+    add r0, r0, #0x1
+    cmp r0, #0x63
+    movgt r0, #0x63
+    cmp r0, #0xa
+    movlt r1, #0x20
+    blt _02034f18
+    ldr r3, [pc, #0x118]
+    mov r1, r0, lsr #0x1f
+    smull r2, r7, r3, r0
+    add r7, r1, r7, asr #0x2
+    add r1, r7, #0x30
+_02034f18:
+    ldr r3, [pc, #0x104]
+    strb r1, [r6, #0x0]
+    smull r2, r7, r3, r0
+    mov r1, r0, lsr #0x1f
+    add r7, r1, r7, asr #0x2
+    mov r3, #0xa
+    smull r1, r2, r3, r7
+    sub r7, r0, r1
+    add r0, r7, #0x30
+    strb r0, [r6, #0x1]
+_02034f40:
+    ldr r1, [pc, #0xe0]
+    mov r0, r5
+    bl strstr
+    movs r6, r0
+    beq _02034ff8
+    ldr r0, [pc, #0xd0]
+    bl func_02021d48
+    ldr r1, [pc, #0xb4]
+    mov r2, r0
+    ldr r1, [r1, r4, lsl #0x2]
+    mov r0, r6
+    bl strncpy
+    ldr r1, [pc, #0xb8]
+    mov r0, r5
+    bl strstr
+    movs r4, r0
+    beq _02034ff8
+    ldr r1, [pc, #0x84]
+    sub r3, r8, #0x1
+    ldr r0, [pc, #0x8c]
+    ldr r2, [r1, r3, lsl #0x5]
+    ldr r5, [sp, #0x30]
+    ldr r1, [r0, r3, lsl #0x5]
+    sub r0, r5, r2
+    bl _s32_div_f
+    add r0, r0, #0x1
+    cmp r0, #0x63
+    movgt r0, #0x63
+    cmp r0, #0xa
+    movlt r1, #0x20
+    blt _02034fd0
+    ldr r3, [pc, #0x60]
+    mov r1, r0, lsr #0x1f
+    smull r2, r5, r3, r0
+    add r5, r1, r5, asr #0x2
+    add r1, r5, #0x30
+_02034fd0:
+    ldr r3, [pc, #0x4c]
+    strb r1, [r4, #0x0]
+    smull r2, r5, r3, r0
+    mov r1, r0, lsr #0x1f
+    add r5, r1, r5, asr #0x2
+    mov r3, #0xa
+    smull r1, r2, r3, r5
+    sub r5, r0, r1
+    add r0, r5, #0x30
+    strb r0, [r4, #0x1]
+_02034ff8:
+    sub r0, r8, #0x1
+    add sp, sp, #0x4
+    ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, r10, lr}
+    add sp, sp, #0x10
+    bx lr
+    dcd data_020bc8b0
+    dcd data_020b1f14
+    dcd data_020f57b8
+    dcd data_020bc890
+    dcd data_020bc930
+    dcd data_020b1f18
+    dcd 0x66666667
+    dcd data_020bc934
+    dcd data_020bc93c
+    dcd data_020bc944
+}
+#endif
+
+u32 func_02035034(void *obj)
+{
+    return ((GameData *)obj)->unk10834;
+}
+
+void func_02035040(void *obj)
+{
+    GameData *self = (GameData *)obj;
+
+    if (AT(s32, 0x44) < 0x3c || AT(s32, 0x44) > 0x40) {
+        return;
+    }
+    if ((s32)self->unk10834 > 0) {
+        self->unk10834--;
+    }
+}
+
+void func_0203506c(void *obj, int v)
+{
+    ((GameData *)obj)->unk10834 = v;
+}
+
+void func_02035078(void *obj)
+{
+    func_0203506c(obj, 0x107ac0);
+}
+
+void func_0203508c(void *self, int value)
+{
+    u32 money = value;
+
+    if (money > 1000000000) {
+        money = 1000000000;
+    }
+    AT(u32, 0x64) = money;
+}
+
+// Base class constructor/destructor: registers the object as the global save (data_020f57c0).
+void *func_020350a4(void *self)
+{
+    *(void **)self = data_020bc8cc;
+    data_020f57c0 = (GameData *)self;
+    return self;
+}
+
+void *func_020350c0(void *self)
+{
+    data_020f57c0 = NULL;
+    return self;
 }
 }
