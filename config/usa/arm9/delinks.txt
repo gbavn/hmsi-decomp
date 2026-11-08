@@ -678,6 +678,10 @@ src/GameClock.cpp:
     complete
     .text       start:0x020350d4 end:0x02035d54
 
+src/Sound.cpp:
+    complete
+    .text       start:0x02035d54 end:0x02036404
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
