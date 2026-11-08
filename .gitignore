@@ -10,3 +10,6 @@ roms/
 extract/
 extracted/
 tools/mwccarm/
+
+# Personal working notes (Portuguese), kept only locally
+docs/
