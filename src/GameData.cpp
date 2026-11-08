@@ -2,7 +2,7 @@
 // calendar, the weather forecast, the flags and everything else that is saved. Names are ours.
 //
 // The original is a single C++ file with ~190 functions; it is decompiled in pieces (this unit covers
-// 0x02030cfc..0x020311e4). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
+// 0x02030cfc..0x02033ca4). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
 #include <nitro.h>
 #include <string.h>
 
