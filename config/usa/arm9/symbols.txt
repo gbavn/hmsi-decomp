@@ -6180,11 +6180,7 @@ _ZTV9SpriteRes kind:data(any) addr:0x020bc384
 _ZTV10Renderer2D kind:data(any) addr:0x020bc394
 _ZTV14Renderer2DBase kind:data(any) addr:0x020bc3a4
 gResCacheVtables kind:data(any) addr:0x020bc3b4
-data_020bc414 kind:data(any) addr:0x020bc414
-data_020bc41c kind:data(any) addr:0x020bc41c
-data_020bc46c kind:data(any) addr:0x020bc46c
-data_020bc4cc kind:data(any) addr:0x020bc4cc
-data_020bc51c kind:data(any) addr:0x020bc51c
+gPackVtables kind:data(any) addr:0x020bc414
 data_020bc5ac kind:data(any) addr:0x020bc5ac
 data_020bc5b4 kind:data(any) addr:0x020bc5b4
 data_020bc5f0 kind:data(any) addr:0x020bc5f0
