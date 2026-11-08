@@ -6,6 +6,8 @@
 #include <nitro.h>
 #include <string.h>
 
+u32 RandRange(u32 min, u32 max);    // 0x020358ec
+
 extern "C" {
 void func_02027698(void *array, u32 count, u32 size, void *ctor, void *dtor);   // __construct_array
 void func_020277d8(void *array, u32 count, u32 size, void *dtor);               // __destroy_arr
@@ -20,8 +22,8 @@ void func_020a01ec(void *obj);
 void func_02033290(void *obj);
 void func_0205e898(void);
 void func_0205e90c(void);
-void func_020330c8(void);
-void func_020330dc(void);
+void *func_020330c8(void *self);
+void func_020330dc(void *self);
 void func_02077880(void);
 void func_020778a4(void);
 void func_0207005c(void);
@@ -233,6 +235,34 @@ typedef struct Obj16 {
     u8 unk6[10];
 } Obj16;
 
+// The 0xfe animals (0x4c bytes; ctor func_0205e898). Slots 0..0x1b are the farm animals.
+typedef struct Animal {
+    u8 id;
+    u8 unk1[0xd];
+    u8 kind;
+    u8 unkf[0x43 - 0xf];
+    u8 b43;
+    u8 unk44[8];
+} Animal;
+
+// Four animal slot numbers (-1 = empty).
+typedef struct AnimalSlots {
+    s32 slot[4];
+} AnimalSlots;
+
+typedef struct Obj20 {
+    u8 unk0[6];
+    s8 b6;
+    u8 unk7[0xd];
+} Obj20;
+
+typedef struct Obj10 {
+    u32 a;
+    u32 b;
+    u8 c;
+    u8 d;
+} Obj10;
+
 typedef struct GameData {
     void **vt;
     u8 unk4;
@@ -251,6 +281,14 @@ typedef struct GameData {
     Entry8 unk9398[4];
     Entry8 unk93b8[5];
     Item12 items[40];
+    Animal animals[0xfe];
+    AnimalSlots unke128[4];
+    Obj20 unke168[6];
+    u8 unke1e0[8];
+    u8 unke1e8[0x98];
+    s32 unke280;
+    Obj10 unke284;
+    Obj16 objs[12];
 } GameData;
 
 #define RECORDS(self) (((GameData *)(self))->records)
@@ -1424,5 +1462,1162 @@ void func_02032470(void *self)
 Item12 *func_020324fc(void *self, int i)
 {
     return &((GameData *)self)->items[i];
+}
+
+void func_0205e910(void *a, const char *name, int kind, int arg);
+void func_0205f91c(void *a, int v);
+void func_0205f998(void *a, int v);
+void func_0205f9e4(void *a, int v);
+void func_0205f930(void *a, int v);
+void func_0205f938(void *a, int v);
+void func_0205fcf0(void *a, int v);
+BOOL func_0205ec34(void *a);
+void func_02060798(void *a);
+void func_0205eab0(void *a);
+void func_0205ff98(void);
+void func_02083ab4(void *obj);
+void func_02083be0(void *obj);
+BOOL func_020837e4(void *obj);
+void func_02082820(void *obj);
+void func_02082984(void *obj);
+void func_02082ad8(void *obj);
+int func_02044180(int a, int b);
+char *func_02054bac(void *obj, int file, int id);
+void func_020778a8(void *obj, int i);
+void func_020a01f0(void *obj);
+int func_02032fd8(void *obj, int kind);
+int func_02032e20(void *obj, int kind);
+int func_020330b8(void *self, int i);
+void func_02033130(AnimalSlots *self);
+void func_020331d0(AnimalSlots *self, int i, int slot);
+void func_020331d8(AnimalSlots *self, int i);
+BOOL func_020331e4(AnimalSlots *self, int i);
+extern void *data_020f57b8;
+extern GameData *data_020f57c0;
+extern const s32 data_020b1e64[];
+extern const char data_020bc8d4[];
+extern const char data_020bc8dc[];
+extern const char data_020bc8e4[];
+extern const char data_020bc8ec[];
+extern const char data_020bc8f4[];
+extern const char data_020bc8fc[];
+
+// Resets the animals of slots 0x1c..0xd5 (six groups of kinds 0x14..0x19).
+#ifdef NONMATCHING
+void func_02032510(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    u32 i;
+
+    for (i = 0x1c; i < 0x3b; i++) {
+        func_0205e910(&self->animals[i], data_020bc8d4, 0x14, 0);
+        func_0205f91c(&self->animals[i], -1);
+        func_0205f998(&self->animals[i], 0);
+        func_0205f9e4(&self->animals[i], 0);
+        self->animals[i].b43 = 0;
+        func_0205f930(&self->animals[i], 0);
+        func_0205f938(&self->animals[i], 0);
+        func_0205fcf0(&self->animals[i], 10);
+    }
+    for (i = 0x3b; i < 0x5a; i++) {
+        func_0205e910(&self->animals[i], data_020bc8dc, 0x15, 0);
+        func_0205f91c(&self->animals[i], -1);
+        func_0205f998(&self->animals[i], 0);
+        func_0205f9e4(&self->animals[i], 0);
+        self->animals[i].b43 = 0;
+        func_0205f930(&self->animals[i], 0);
+        func_0205f938(&self->animals[i], 0);
+        func_0205fcf0(&self->animals[i], 10);
+    }
+    for (i = 0x5a; i < 0x79; i++) {
+        func_0205e910(&self->animals[i], data_020bc8e4, 0x16, 0);
+        func_0205f91c(&self->animals[i], -1);
+        func_0205f998(&self->animals[i], 0);
+        func_0205f9e4(&self->animals[i], 0);
+        self->animals[i].b43 = 0;
+        func_0205f930(&self->animals[i], 0);
+        func_0205f938(&self->animals[i], 0);
+        func_0205fcf0(&self->animals[i], 10);
+    }
+    for (i = 0x79; i < 0x98; i++) {
+        func_0205e910(&self->animals[i], data_020bc8ec, 0x17, 0);
+        func_0205f91c(&self->animals[i], -1);
+        func_0205f998(&self->animals[i], 0);
+        func_0205f9e4(&self->animals[i], 0);
+        self->animals[i].b43 = 0;
+        func_0205f930(&self->animals[i], 0);
+        func_0205f938(&self->animals[i], 0);
+        func_0205fcf0(&self->animals[i], 10);
+    }
+    for (i = 0x98; i < 0xb7; i++) {
+        func_0205e910(&self->animals[i], data_020bc8f4, 0x18, 0);
+        func_0205f91c(&self->animals[i], -1);
+        func_0205f998(&self->animals[i], 0);
+        func_0205f9e4(&self->animals[i], 0);
+        self->animals[i].b43 = 0;
+        func_0205f930(&self->animals[i], 0);
+        func_0205f938(&self->animals[i], 0);
+        func_0205fcf0(&self->animals[i], 10);
+    }
+    for (i = 0xb7; i < 0xd6; i++) {
+        func_0205e910(&self->animals[i], data_020bc8fc, 0x19, 0);
+        func_0205f91c(&self->animals[i], -1);
+        func_0205f998(&self->animals[i], 0);
+        func_0205f9e4(&self->animals[i], 0);
+        self->animals[i].b43 = 0;
+        func_0205f930(&self->animals[i], 0);
+        func_0205f938(&self->animals[i], 0);
+        func_0205fcf0(&self->animals[i], 10);
+    }
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02032510(void *obj) {
+    stmdb sp!, {r3, r4, r5, r6, r7, r8, r9, r10, r11, lr}
+    mov r6, #0x0
+    str r0, [sp, #0x0]
+    add r0, r0, #0xe10
+    ldr r8, [pc, #0x398]
+    add r10, r0, #0x9000
+    mov r9, #0x1c
+    mov r7, #0x14
+    mvn r5, #0x0
+    mov r4, r6
+    mov r11, r6
+_0203253c:
+    mov r0, r10
+    mov r1, r8
+    mov r2, r7
+    mov r3, r6
+    bl func_0205e910
+    mov r0, r10
+    mov r1, r5
+    bl func_0205f91c
+    mov r0, r10
+    mov r1, r4
+    bl func_0205f998
+    mov r0, r10
+    mov r1, r11
+    bl func_0205f9e4
+    mov r0, #0x0
+    strb r0, [r10, #0x43]
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f930
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f938
+    mov r0, r10
+    mov r1, #0xa
+    bl func_0205fcf0
+    add r9, r9, #0x1
+    add r10, r10, #0x4c
+    cmp r9, #0x3b
+    blo _0203253c
+    ldr r0, [sp, #0x0]
+    mov r6, #0x0
+    add r0, r0, #0x344
+    ldr r8, [pc, #0x300]
+    add r10, r0, #0xa400
+    mov r9, #0x3b
+    mov r7, #0x15
+    mvn r5, #0x0
+    mov r4, r6
+    mov r11, r6
+_020325d8:
+    mov r0, r10
+    mov r1, r8
+    mov r2, r7
+    mov r3, r6
+    bl func_0205e910
+    mov r0, r10
+    mov r1, r5
+    bl func_0205f91c
+    mov r0, r10
+    mov r1, r4
+    bl func_0205f998
+    mov r0, r10
+    mov r1, r11
+    bl func_0205f9e4
+    mov r0, #0x0
+    strb r0, [r10, #0x43]
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f930
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f938
+    mov r0, r10
+    mov r1, #0xa
+    bl func_0205fcf0
+    add r9, r9, #0x1
+    add r10, r10, #0x4c
+    cmp r9, #0x5a
+    blo _020325d8
+    ldr r0, [sp, #0x0]
+    mov r6, #0x0
+    add r0, r0, #0x78
+    ldr r8, [pc, #0x268]
+    add r10, r0, #0xb000
+    mov r9, #0x5a
+    mov r7, #0x16
+    mvn r5, #0x0
+    mov r4, r6
+    mov r11, r6
+_02032674:
+    mov r0, r10
+    mov r1, r8
+    mov r2, r7
+    mov r3, r6
+    bl func_0205e910
+    mov r0, r10
+    mov r1, r5
+    bl func_0205f91c
+    mov r0, r10
+    mov r1, r4
+    bl func_0205f998
+    mov r0, r10
+    mov r1, r11
+    bl func_0205f9e4
+    mov r0, #0x0
+    strb r0, [r10, #0x43]
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f930
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f938
+    mov r0, r10
+    mov r1, #0xa
+    bl func_0205fcf0
+    add r9, r9, #0x1
+    add r10, r10, #0x4c
+    cmp r9, #0x79
+    blo _02032674
+    ldr r0, [sp, #0x0]
+    mov r6, #0x0
+    add r0, r0, #0x1ac
+    ldr r8, [pc, #0x1d0]
+    add r10, r0, #0xb800
+    mov r9, #0x79
+    mov r7, #0x17
+    mvn r5, #0x0
+    mov r4, r6
+    mov r11, r6
+_02032710:
+    mov r0, r10
+    mov r1, r8
+    mov r2, r7
+    mov r3, r6
+    bl func_0205e910
+    mov r0, r10
+    mov r1, r5
+    bl func_0205f91c
+    mov r0, r10
+    mov r1, r4
+    bl func_0205f998
+    mov r0, r10
+    mov r1, r11
+    bl func_0205f9e4
+    mov r0, #0x0
+    strb r0, [r10, #0x43]
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f930
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f938
+    mov r0, r10
+    mov r1, #0xa
+    bl func_0205fcf0
+    add r9, r9, #0x1
+    add r10, r10, #0x4c
+    cmp r9, #0x98
+    blo _02032710
+    ldr r0, [sp, #0x0]
+    mov r6, #0x0
+    add r0, r0, #0x2e0
+    ldr r8, [pc, #0x138]
+    add r10, r0, #0xc000
+    mov r9, #0x98
+    mov r7, #0x18
+    mvn r5, #0x0
+    mov r4, r6
+    mov r11, r6
+_020327ac:
+    mov r0, r10
+    mov r1, r8
+    mov r2, r7
+    mov r3, r6
+    bl func_0205e910
+    mov r0, r10
+    mov r1, r5
+    bl func_0205f91c
+    mov r0, r10
+    mov r1, r4
+    bl func_0205f998
+    mov r0, r10
+    mov r1, r11
+    bl func_0205f9e4
+    mov r0, #0x0
+    strb r0, [r10, #0x43]
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f930
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f938
+    mov r0, r10
+    mov r1, #0xa
+    bl func_0205fcf0
+    add r9, r9, #0x1
+    add r10, r10, #0x4c
+    cmp r9, #0xb7
+    blo _020327ac
+    ldr r0, [sp, #0x0]
+    mov r6, #0x0
+    add r0, r0, #0x14
+    ldr r8, [pc, #0xa0]
+    add r10, r0, #0xcc00
+    mov r9, #0xb7
+    mov r7, #0x19
+    mvn r5, #0x0
+    mov r4, r6
+    mov r11, r6
+_02032848:
+    mov r0, r10
+    mov r1, r8
+    mov r2, r7
+    mov r3, r6
+    bl func_0205e910
+    mov r0, r10
+    mov r1, r5
+    bl func_0205f91c
+    mov r0, r10
+    mov r1, r4
+    bl func_0205f998
+    mov r0, r10
+    mov r1, r11
+    bl func_0205f9e4
+    mov r0, #0x0
+    strb r0, [r10, #0x43]
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f930
+    mov r0, r10
+    mov r1, #0x0
+    bl func_0205f938
+    mov r0, r10
+    mov r1, #0xa
+    bl func_0205fcf0
+    add r9, r9, #0x1
+    add r10, r10, #0x4c
+    cmp r9, #0xd6
+    blo _02032848
+    ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, r10, r11, pc}
+    dcd data_020bc8d4
+    dcd data_020bc8dc
+    dcd data_020bc8e4
+    dcd data_020bc8ec
+    dcd data_020bc8f4
+    dcd data_020bc8fc
+}
+#endif
+
+// Puts a new animal in the first free slot of 0..0x1b; returns the slot or -1.
+int func_020328d8(void *obj, const char *name, int kind, int arg)
+{
+    GameData *self = (GameData *)obj;
+    u32 i;
+
+    for (i = 0; i < 0x1c; i++) {
+        if (func_0205ec34(&self->animals[i])) {
+            func_0205e910(&self->animals[i], name, kind, arg);
+            return i;
+        }
+    }
+    return -1;
+}
+
+#define RAND_FX32(f) ((fx32)(((f) > 0) ? (f) * 4096.0f + 0.5f : (f) * 4096.0f - 0.5f))
+
+// Fills the slots 0xd6..0xfd with animals of kind `kind` (9 or 0x13) up to the count given by a record.
+#ifdef NONMATCHING
+void func_02032948(void *obj, int kind)
+{
+    GameData *self = (GameData *)obj;
+    int max;
+    int speed;
+    int count;
+    int add;
+    int n;
+    int i;
+    int k;
+    u8 flag;
+
+    if (kind == 9) {
+        if (func_0203366c(self, 0x1a8) == 0) {
+            return;
+        }
+        max = func_02044180(func_02031ab8(self, 0x65), 0xffff);
+        speed = 0x28;
+    } else {
+        if (func_0203366c(self, 0x1a7) == 0) {
+            return;
+        }
+        max = func_02044180(func_02031ab8(self, 0x5e), 0xffff);
+        speed = 0x2a;
+    }
+    flag = self->animals[func_02032fd8(self, kind)].b43 == 0 ? 1 : 0;
+    count = 0;
+    if (max == 0) {
+        max = 1;
+    }
+    for (i = 0xd6; i < 0xfe; i++) {
+        if (kind == self->animals[i].kind) {
+            count++;
+        }
+    }
+    if (count == max) {
+        return;
+    }
+    add = max - count;
+    for (n = 0; n < add; n++) {
+        k = 0;
+        for (i = 0xd6; i < 0xfe; i++) {
+            Animal *a = &self->animals[i];
+
+            if (kind == a->kind) {
+                k++;
+                continue;
+            }
+            if (func_0205ec34(a)) {
+                if (kind == 9) {
+                    char *name = func_02054bac(data_020f57b8, 0xaa, k + 0x65);
+
+                    func_0205e910(a, name, kind, 0);
+                    delete[] name;
+                } else if (kind == 0x13) {
+                    char *name = func_02054bac(data_020f57b8, 0xaa, k + 0x6f);
+
+                    func_0205e910(a, name, kind, 0);
+                    delete[] name;
+                }
+                if (k == 8) {
+                    a->b43 = 2;
+                } else if (k == 9) {
+                    a->b43 = 3;
+                } else {
+                    a->b43 = flag;
+                }
+                func_0205f91c(a, speed);
+                func_0205f930(a, RAND_FX32(RandRange(0, 10) - 2.6f));
+                func_0205f938(a, RAND_FX32(RandRange(0, 27) - 20.0f));
+                func_0205fcf0(a, 10);
+                break;
+            }
+        }
+    }
+}
+#else
+// Linker names used by the asm below.
+extern "C" {
+void _Z9RandRangemm(void);
+void _ZdaPv(void);
+void _fadd(void);
+void _ffix(void);
+void _ffltu(void);
+void _fgr(void);
+void _fmul(void);
+void _fsub(void);
+}
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02032948(void *obj, int kind) {
+    stmdb sp!, {r4, r5, r6, r7, r8, r9, r10, r11, lr}
+    sub sp, sp, #0xc
+    mov r9, r1
+    mov r10, r0
+    cmp r9, #0x9
+    bne _02032998
+    mov r1, #0x1a8
+    bl func_0203366c
+    cmp r0, #0x0
+    addeq sp, sp, #0xc
+    ldmeqia sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+    mov r0, r10
+    mov r1, #0x65
+    bl func_02031ab8
+    ldr r1, [pc, #0x314]
+    bl func_02044180
+    mov r4, r0
+    mov r0, #0x28
+    str r0, [sp, #0x8]
+    b _020329cc
+_02032998:
+    ldr r1, [pc, #0x300]
+    bl func_0203366c
+    cmp r0, #0x0
+    addeq sp, sp, #0xc
+    ldmeqia sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+    mov r0, r10
+    mov r1, #0x5e
+    bl func_02031ab8
+    ldr r1, [pc, #0x2dc]
+    bl func_02044180
+    mov r4, r0
+    mov r0, #0x2a
+    str r0, [sp, #0x8]
+_020329cc:
+    mov r0, r10
+    mov r1, r9
+    bl func_02032fd8
+    mov r1, #0x4c
+    mla r1, r0, r1, r10
+    add r0, r1, #0x9000
+    ldrb r0, [r0, #0x603]
+    mov r2, #0x0
+    mov r3, #0xd6
+    cmp r0, #0x0
+    moveq r0, #0x1
+    streq r0, [sp, #0x0]
+    movne r0, #0x0
+    strne r0, [sp, #0x0]
+    cmp r4, #0x0
+    moveq r4, #0x1
+    mov r0, #0x4c
+_02032a10:
+    mla r1, r3, r0, r10
+    add r1, r1, #0x9000
+    ldrb r1, [r1, #0x5ce]
+    add r3, r3, #0x1
+    cmp r9, r1
+    addeq r2, r2, #0x1
+    cmp r3, #0xfe
+    blt _02032a10
+    cmp r2, r4
+    addeq sp, sp, #0xc
+    ldmeqia sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+    sub r0, r4, r2
+    str r0, [sp, #0x4]
+    cmp r0, #0x0
+    mov r11, #0x0
+    addle sp, sp, #0xc
+    ldmleia sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+_02032a54:
+    add r0, r10, #0x15c0
+    mov r8, #0x0
+    mov r6, #0xd6
+    add r5, r0, #0x8000
+    mov r4, #0x4c
+_02032a68:
+    mla r7, r6, r4, r5
+    ldrb r0, [r7, #0xe]
+    cmp r9, r0
+    addeq r8, r8, #0x1
+    beq _02032c78
+    mov r0, r7
+    bl func_0205ec34
+    cmp r0, #0x0
+    beq _02032c78
+    cmp r9, #0x9
+    bne _02032acc
+    ldr r0, [pc, #0x208]
+    add r2, r8, #0x65
+    ldr r0, [r0, #0x0]
+    mov r1, #0xaa
+    bl func_02054bac
+    mov r4, r0
+    mov r0, r7
+    mov r1, r4
+    mov r2, r9
+    mov r3, #0x0
+    bl func_0205e910
+    mov r0, r4
+    bl _ZdaPv
+    b _02032b08
+_02032acc:
+    cmp r9, #0x13
+    bne _02032b08
+    ldr r0, [pc, #0x1c8]
+    add r2, r8, #0x6f
+    ldr r0, [r0, #0x0]
+    mov r1, #0xaa
+    bl func_02054bac
+    mov r4, r0
+    mov r0, r7
+    mov r1, r4
+    mov r2, r9
+    mov r3, #0x0
+    bl func_0205e910
+    mov r0, r4
+    bl _ZdaPv
+_02032b08:
+    cmp r8, #0x8
+    moveq r0, #0x2
+    streqb r0, [r7, #0x43]
+    beq _02032b2c
+    cmp r8, #0x9
+    moveq r0, #0x3
+    streqb r0, [r7, #0x43]
+    ldrne r0, [sp, #0x0]
+    strneb r0, [r7, #0x43]
+_02032b2c:
+    ldr r1, [sp, #0x8]
+    mov r0, r7
+    bl func_0205f91c
+    mov r0, #0x0
+    mov r1, #0xa
+    bl _Z9RandRangemm
+    bl _ffltu
+    mov r1, r0
+    ldr r0, [pc, #0x154]
+    bl _fsub
+    mov r1, #0x0
+    bl _fgr
+    mov r0, #0x0
+    mov r1, #0xa
+    bls _02032b98
+    bl _Z9RandRangemm
+    bl _ffltu
+    mov r1, r0
+    ldr r0, [pc, #0x12c]
+    bl _fsub
+    mov r1, r0
+    ldr r0, [pc, #0x124]
+    bl _fmul
+    mov r1, r0
+    mov r0, #0x3f000000
+    bl _fadd
+    b _02032bc0
+_02032b98:
+    bl _Z9RandRangemm
+    bl _ffltu
+    mov r1, r0
+    ldr r0, [pc, #0xfc]
+    bl _fsub
+    mov r1, r0
+    ldr r0, [pc, #0xf4]
+    bl _fmul
+    mov r1, #0x3f000000
+    bl _fsub
+_02032bc0:
+    bl _ffix
+    mov r1, r0
+    mov r0, r7
+    bl func_0205f930
+    mov r0, #0x0
+    mov r1, #0x1b
+    bl _Z9RandRangemm
+    bl _ffltu
+    mov r1, r0
+    ldr r0, [pc, #0xc4]
+    bl _fsub
+    mov r1, #0x0
+    bl _fgr
+    mov r0, #0x0
+    mov r1, #0x1b
+    bls _02032c30
+    bl _Z9RandRangemm
+    bl _ffltu
+    mov r1, r0
+    ldr r0, [pc, #0x9c]
+    bl _fsub
+    mov r1, r0
+    ldr r0, [pc, #0x8c]
+    bl _fmul
+    mov r1, r0
+    mov r0, #0x3f000000
+    bl _fadd
+    b _02032c58
+_02032c30:
+    bl _Z9RandRangemm
+    bl _ffltu
+    mov r1, r0
+    ldr r0, [pc, #0x6c]
+    bl _fsub
+    mov r1, r0
+    ldr r0, [pc, #0x5c]
+    bl _fmul
+    mov r1, #0x3f000000
+    bl _fsub
+_02032c58:
+    bl _ffix
+    mov r1, r0
+    mov r0, r7
+    bl func_0205f938
+    mov r0, r7
+    mov r1, #0xa
+    bl func_0205fcf0
+    b _02032c84
+_02032c78:
+    add r6, r6, #0x1
+    cmp r6, #0xfe
+    blt _02032a68
+_02032c84:
+    ldr r0, [sp, #0x4]
+    add r11, r11, #0x1
+    cmp r11, r0
+    blt _02032a54
+    add sp, sp, #0xc
+    ldmia sp!, {r4, r5, r6, r7, r8, r9, r10, r11, pc}
+    dcd 0xffff
+    dcd 0x1a7
+    dcd data_020f57b8
+    dcd 0xc0266666
+    dcd 0x45800000
+    dcd 0x41a00000
+}
+#endif
+
+void func_02032cb4(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    u32 i;
+    Animal *a = self->animals;
+
+    for (i = 0; i < 0xfe; i++, a++) {
+        if (func_0205ec34(a) == 0) {
+            func_02060798(a);
+        }
+    }
+}
+
+#ifdef NONMATCHING
+void func_02032cf0(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    Animal *a;
+    u32 i;
+    Obj16 *o = self->objs;
+
+    for (i = 0; i < 12; i++, o++) {
+        func_02070174(o);
+    }
+    a = self->animals;
+    for (i = 0; i < 0xfe; i++, a++) {
+        if (func_0205ec34(a) == 0) {
+            func_0205eab0(a);
+        }
+    }
+    func_0205ff98();
+    func_02083ab4(data_020f57c4);
+    func_02083be0(data_020f57c4);
+    if (func_020837e4(data_020f57c4)) {
+        func_020322d8(self);
+    }
+    func_02082820(data_020f57c4);
+    func_02082984(data_020f57c4);
+    func_02082ad8(data_020f57c4);
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02032cf0(void *obj) {
+    stmdb sp!, {r4, r5, r6, lr}
+    mov r4, r0
+    add r0, r4, #0x290
+    add r6, r0, #0xe000
+    mov r5, #0x0
+_02032d04:
+    mov r0, r6
+    bl func_02070174
+    add r5, r5, #0x1
+    cmp r5, #0xc
+    add r6, r6, #0x10
+    blo _02032d04
+    add r0, r4, #0x15c0
+    add r6, r0, #0x8000
+    mov r5, #0x0
+_02032d28:
+    mov r0, r6
+    bl func_0205ec34
+    cmp r0, #0x0
+    bne _02032d40
+    mov r0, r6
+    bl func_0205eab0
+_02032d40:
+    add r5, r5, #0x1
+    cmp r5, #0xfe
+    add r6, r6, #0x4c
+    blo _02032d28
+    bl func_0205ff98
+    ldr r0, [pc, #0x54]
+    ldr r0, [r0, #0x0]
+    bl func_02083ab4
+    ldr r0, [pc, #0x48]
+    ldr r0, [r0, #0x0]
+    bl func_02083be0
+    ldr r0, [pc, #0x3c]
+    ldr r0, [r0, #0x0]
+    bl func_020837e4
+    cmp r0, #0x0
+    beq _02032d88
+    mov r0, r4
+    bl func_020322d8
+_02032d88:
+    ldr r0, [pc, #0x20]
+    ldr r0, [r0, #0x0]
+    bl func_02082820
+    ldr r0, [pc, #0x14]
+    ldr r0, [r0, #0x0]
+    bl func_02082984
+    ldr r0, [pc, #0x8]
+    ldr r0, [r0, #0x0]
+    bl func_02082ad8
+    ldmia sp!, {r4, r5, r6, pc}
+    dcd data_020f57c4
+}
+#endif
+
+} // extern "C"
+
+// An animal in use whose kind is `kind`.
+struct AnimalIsKind {
+    AnimalIsKind(int kind) : kind(kind) {}
+    bool operator()(Animal &a) const { return func_0205ec34(&a) == 0 && a.kind == kind; }
+
+    int kind;
+};
+
+template <class It, class Pred> inline It FindIf(It first, It last, Pred pred)
+{
+    while (first != last && !pred(*first)) {
+        ++first;
+    }
+    return first;
+}
+
+template <class It, class Pred> inline int CountIf(It first, It last, Pred pred)
+{
+    int n = 0;
+
+    for (; first != last; ++first) {
+        if (pred(*first)) {
+            n++;
+        }
+    }
+    return n;
+}
+
+extern "C" {
+
+#ifdef NONMATCHING
+BOOL func_02032db4(void *obj, int kind)
+{
+    GameData *self = (GameData *)obj;
+
+    return FindIf(self->animals, self->animals + 0x1c, AnimalIsKind(kind)) != self->animals + 0x1c;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm BOOL func_02032db4(void *obj, int kind) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    sub sp, sp, #0x8
+    mov r7, r0
+    mov r6, r1
+    add r0, r7, #0xe10
+    add r1, r7, #0x15c0
+    str r6, [sp, #0x4]
+    str r6, [sp, #0x0]
+    add r5, r0, #0x9000
+    add r4, r1, #0x8000
+    b _02032de4
+_02032de0:
+    add r4, r4, #0x4c
+_02032de4:
+    cmp r4, r5
+    beq _02032e04
+    mov r0, r4
+    bl func_0205ec34
+    cmp r0, #0x0
+    ldreqb r0, [r4, #0xe]
+    cmpeq r6, r0
+    bne _02032de0
+_02032e04:
+    add r0, r7, #0xe10
+    add r0, r0, #0x9000
+    cmp r4, r0
+    movne r0, #0x1
+    moveq r0, #0x0
+    add sp, sp, #0x8
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+}
+#endif
+
+#ifdef NONMATCHING
+int func_02032e20(void *obj, int kind)
+{
+    GameData *self = (GameData *)obj;
+
+    Animal *last = self->animals + 0x1c;
+
+    return CountIf(self->animals, last, AnimalIsKind(kind));
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm int func_02032e20(void *obj, int kind) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    sub sp, sp, #0x8
+    add r2, r0, #0xe10
+    mov r7, r1
+    add r0, r0, #0x15c0
+    add r5, r2, #0x9000
+    add r4, r0, #0x8000
+    str r7, [sp, #0x4]
+    str r7, [sp, #0x0]
+    cmp r4, r5
+    mov r6, #0x0
+    beq _02032e74
+_02032e50:
+    mov r0, r4
+    bl func_0205ec34
+    cmp r0, #0x0
+    ldreqb r0, [r4, #0xe]
+    add r4, r4, #0x4c
+    cmpeq r7, r0
+    addeq r6, r6, #0x1
+    cmp r4, r5
+    bne _02032e50
+_02032e74:
+    mov r0, r6
+    add sp, sp, #0x8
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+}
+#endif
+
+int func_02032e80(void *self, int kind)
+{
+    int n = 0;
+
+    switch (kind) {
+    case 0:
+    case 1:
+        n = func_02032e20(self, 0);
+        n += func_02032e20(self, 1);
+        break;
+    case 2:
+    case 3:
+    case 4:
+        n = func_02032e20(self, 2);
+        n += func_02032e20(self, 3);
+        n += func_02032e20(self, 4);
+        break;
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+        n = func_02032e20(self, 5);
+        n += func_02032e20(self, 6);
+        n += func_02032e20(self, 7);
+        n += func_02032e20(self, 8);
+        break;
+    case 9:
+    case 10:
+    case 18:
+    case 19:
+        n = func_02032e20(self, kind);
+        break;
+    }
+    return n;
+}
+
+int func_02032f88(void *self)
+{
+    int a = func_02032e20(self, 9);
+    int b = func_02032e20(self, 10);
+    int c = func_02032e20(self, 0x13);
+    int d = func_02032e20(self, 0x12);
+
+    return a + b + c + d;
+}
+
+#ifdef NONMATCHING
+int func_02032fd8(void *obj, int kind)
+{
+    GameData *self = (GameData *)obj;
+    Animal *a = FindIf(self->animals, self->animals + 0x1c, AnimalIsKind(kind));
+
+    return a != self->animals + 0x1c ? a->id : -1;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm int func_02032fd8(void *obj, int kind) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    sub sp, sp, #0x8
+    mov r7, r0
+    mov r6, r1
+    add r0, r7, #0xe10
+    add r1, r7, #0x15c0
+    str r6, [sp, #0x4]
+    str r6, [sp, #0x0]
+    add r5, r0, #0x9000
+    add r4, r1, #0x8000
+    b _02033008
+_02033004:
+    add r4, r4, #0x4c
+_02033008:
+    cmp r4, r5
+    beq _02033028
+    mov r0, r4
+    bl func_0205ec34
+    cmp r0, #0x0
+    ldreqb r0, [r4, #0xe]
+    cmpeq r6, r0
+    bne _02033004
+_02033028:
+    add r0, r7, #0xe10
+    add r0, r0, #0x9000
+    cmp r4, r0
+    ldrneb r0, [r4, #0x0]
+    mvneq r0, #0x0
+    add sp, sp, #0x8
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+}
+#endif
+
+int func_02033044(void *self)
+{
+    int count;
+    int n;
+    int i;
+
+    if (func_0203366c(self, 0xf) == 0) {
+        return 0;
+    }
+    count = 0;
+    n = func_0203366c(self, 0x25a);
+    for (i = 0; i < n; i++) {
+        if (func_0203366c(self, func_020330b8(self, i))) {
+            count++;
+        }
+    }
+    return count;
+}
+
+int func_020330b8(void *self, int i)
+{
+    return data_020b1e64[i];
+}
+
+// Four animal slot numbers (-1 = empty).
+void *func_020330c8(void *self)
+{
+    func_02033130((AnimalSlots *)self);
+    return self;
+}
+
+void func_020330dc(void *self)
+{
+}
+
+BOOL func_020330e0(AnimalSlots *self, int slot)
+{
+    u32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (func_020331e4(self, i) == 0) {
+            func_020331d0(self, i, slot);
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+void func_02033130(AnimalSlots *self)
+{
+    u32 i;
+
+    for (i = 0; i < 4; i++) {
+        func_020331d8(self, i);
+    }
+}
+
+BOOL func_02033158(AnimalSlots *self)
+{
+    u32 i;
+
+    for (i = 0; i < 4; i++) {
+        if (func_020331e4(self, i)) {
+            return TRUE;
+        }
+    }
+    return FALSE;
+}
+
+Animal *func_02033190(AnimalSlots *self, int i)
+{
+    if (func_020331e4(self, i) == 0) {
+        return NULL;
+    }
+    return &data_020f57c0->animals[self->slot[i]];
+}
+
+void func_020331d0(AnimalSlots *self, int i, int slot)
+{
+    self->slot[i] = slot;
+}
+
+void func_020331d8(AnimalSlots *self, int i)
+{
+    self->slot[i] = -1;
+}
+
+BOOL func_020331e4(AnimalSlots *self, int i)
+{
+    return self->slot[i] != -1;
+}
+
+void func_020331fc(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+    Obj20 *o;
+
+    self->unke280 = -1;
+    o = self->unke168;
+    for (i = 0; i < 6; i++, o++) {
+        func_020778a8(o, i);
+    }
+}
+
+void func_02033238(void *obj, s32 value)
+{
+    ((GameData *)obj)->unke280 = value;
+}
+
+s32 func_02033244(void *obj)
+{
+    return ((GameData *)obj)->unke280;
+}
+
+int func_02033250(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int sum = 0;
+    int i;
+    Obj20 *o = self->unke168;
+
+    for (i = 0; i < 6; i++, o++) {
+        sum += o->b6;
+    }
+    return sum;
+}
+
+void func_0203327c(void *obj)
+{
+    func_020a01f0(&((GameData *)obj)->unke1e8);
+}
+
+void func_02033290(void *obj)
+{
+    Obj10 *o = (Obj10 *)obj;
+
+    o->a = 0;
+    o->b = 0;
+    o->c = 0;
+    o->d = 0;
+}
+
+void func_020332a8(void *self)
+{
 }
 }
