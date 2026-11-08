@@ -80,10 +80,15 @@ u32 func_02021d48(const char *s);
 int func_0203366c(void *self, int id);
 void func_02034c94(void *self, void *out, int a, int b, int c, int d, int e, int f);
 
+void func_02031840(void *self, const char *name);
+void func_0203375c(void *self, int id, int value);
+extern const u32 data_020b1e04[];
+
 extern void *data_020bc8bc[];
 extern const char data_020b2718[];
 extern const char data_020b2720[];
-extern const u8 data_020b1df0[];        // start time (2 bytes), then the start date (8 bytes)
+extern const u8 data_020b1df0[];
+extern const u8 data_020b1dfc[];        // start time (2 bytes), then the start date (8 bytes)
 extern u8 data_020f57d0;
 }
 
@@ -144,6 +149,28 @@ struct PlayerSlot {
     s16 b;
     u8 unk8[4];
 };
+
+typedef struct Name7 {
+    char c[7];
+} Name7;
+
+// One of the 137 entries at +0x8a78 (12 bytes).
+typedef struct ItemRecord {
+    u8 unk0;
+    u16 unk2;
+    u32 a : 7;
+    u32 b : 1;
+    u32 c : 1;
+    u32 d : 1;
+    u32 e : 6;
+    u32 f : 1;
+    u32 g : 7;
+    u32 h : 4;
+    u32 i : 1;
+    u32 j : 3;
+    u32 k : 6;
+    s32 l : 26;
+} ItemRecord;
 
 struct ZeroDate {
     ZeroDate() : a(0), b(0) {}
@@ -590,4 +617,265 @@ void func_02031590(void *self, BOOL on)
         AT(s8, 0x94) &= ~2;
     }
 }
+// Category of item `item` (0x1fd..0x25c), -1 for the others.
+int func_020315a8(void *self, int item)
+{
+    int category = -1;
+
+    switch (item) {
+    case 0x1fd:
+    case 0x1fe:
+        category = 5;
+        break;
+    case 0x227:
+    case 0x228:
+    case 0x229:
+    case 0x22a:
+    case 0x22b:
+        category = 6;
+        break;
+    case 0x246:
+    case 0x247:
+        category = 15;
+        break;
+    case 0x203:
+    case 0x204:
+    case 0x205:
+    case 0x206:
+        category = 1;
+        break;
+    case 0x1ff:
+    case 0x200:
+    case 0x201:
+    case 0x202:
+        category = 9;
+        break;
+    case 0x23b:
+    case 0x23c:
+    case 0x23d:
+        category = 15;
+        break;
+    case 0x207:
+    case 0x208:
+    case 0x209:
+    case 0x20a:
+        category = 0;
+        break;
+    case 0x230:
+    case 0x231:
+    case 0x232:
+        category = 10;
+        break;
+    case 0x21a:
+    case 0x21b:
+    case 0x21c:
+    case 0x21d:
+        category = 2;
+        break;
+    case 0x221:
+    case 0x222:
+    case 0x223:
+        category = 7;
+        break;
+    case 0x23e:
+    case 0x23f:
+    case 0x240:
+        category = 16;
+        break;
+    case 0x22d:
+    case 0x22e:
+    case 0x22f:
+        category = 11;
+        break;
+    case 0x20b:
+    case 0x20c:
+    case 0x20d:
+    case 0x20e:
+        category = 3;
+        break;
+    case 0x235:
+    case 0x236:
+    case 0x237:
+        category = 12;
+        break;
+    case 0x241:
+    case 0x242:
+    case 0x243:
+        category = 17;
+        break;
+    case 0x238:
+    case 0x239:
+        category = 8;
+        break;
+    case 0x216:
+    case 0x217:
+    case 0x218:
+    case 0x219:
+        category = 4;
+        break;
+    case 0x248:
+    case 0x249:
+        category = 18;
+        break;
+    case 0x224:
+    case 0x225:
+    case 0x226:
+        category = 13;
+        break;
+    case 0x25b:
+    case 0x25c:
+        category = 14;
+        break;
+    case 0x214:
+    case 0x215:
+        category = 19;
+        break;
+    case 0x233:
+    case 0x234:
+        category = 20;
+        break;
+    }
+    return category;
+}
+
+void func_020317f0(void *self)
+{
+    Name7 name = *(const Name7 *)data_020b1dfc;
+
+    func_02031840(self, name.c);
+}
+
+#ifdef NONMATCHING
+void func_02031840(void *self, const char *name)
+{
+    MI_CpuFill8(&AT(u8, 0x9068), 0, 13);
+    MI_CpuCopy8(name, &AT(u8, 0x9068), func_02021d48(name));
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02031840(void *self, const char *name) {
+    stmdb sp!, {r3, r4, r5, lr}
+    mov r5, r0
+    add r0, r5, #0x268
+    mov r4, r1
+    add r0, r0, #0x8800
+    mov r1, #0x0
+    mov r2, #0xd
+    bl MI_CpuFill8
+    mov r0, r4
+    bl func_02021d48
+    add r1, r5, #0x268
+    mov r2, r0
+    mov r0, r4
+    add r1, r1, #0x8800
+    bl MI_CpuCopy8
+    ldmia sp!, {r3, r4, r5, pc}
+}
+#endif
+
+s16 func_02031880(void *self)
+{
+    return func_0203366c(self, 0x321);
+}
+
+void func_0203189c(void *self)
+{
+    func_0203375c(self, 0x321, 1);
+}
+
+int func_020318b4(void *self)
+{
+    return func_0203366c(self, 0x24a);
+}
+
+#ifdef NONMATCHING
+void func_020318c8(void *self)
+{
+    ItemRecord *records = &AT(ItemRecord, 0x8a78);
+    int i;
+
+    for (i = 0; i < 0x89; i++) {
+        records[i].unk0 = 0;
+        records[i].unk2 = 0;
+        records[i].a = 0;
+        records[i].b = 0;
+        records[i].c = 0;
+        records[i].d = 0;
+        records[i].e = 10;
+        records[i].f = 0;
+        records[i].g = 0;
+        records[i].h = 0;
+        records[i].i = 0;
+        records[i].k = 0;
+        records[i].l = -1;
+    }
+    for (i = 0; i < 0x18; i++) {
+        records[data_020b1e04[i]].h = 1;
+        records[data_020b1e04[i]].k = 1;
+    }
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_020318c8(void *self) {
+    stmdb sp!, {r4, r5, r6, r7, r8, r9, r10, lr}
+    add r1, r0, #0x27c
+    add r2, r0, #0xa80
+    add ip, r1, #0x8800
+    mov r1, #0x0
+    add lr, r2, #0x8000
+    mov r3, r0
+    mov r2, r1
+    mvn r6, #0x3f
+_020318ec:
+    add r4, r3, #0x8000
+    add r5, r3, #0x8a00
+    strb r2, [r4, #0xa78]
+    strh r2, [r5, #0x7a]
+    ldr r4, [ip, #0x0]
+    add r1, r1, #0x1
+    bic r7, r4, #0x7f
+    bic r10, r7, #0x80
+    bic r9, r10, #0x100
+    bic r8, r9, #0x200
+    bic r4, r8, #0xfc00
+    orr r5, r4, #0x2800
+    bic r7, r5, #0x10000
+    bic r4, r7, #0xfe0000
+    bic r5, r4, #0xf000000
+    bic r4, r5, #0x10000000
+    str r5, [ip, #0x0]
+    str r4, [ip], #0xc
+    ldr r4, [lr, #0x0]
+    cmp r1, #0x89
+    bic r5, r4, #0x3f
+    and r4, r5, #0x3f
+    orr r4, r4, r6
+    str r5, [lr, #0x0]
+    str r4, [lr], #0xc
+    add r3, r3, #0xc
+    blt _020318ec
+    add r1, r0, #0x27c
+    add r0, r0, #0xa80
+    add r3, r0, #0x8000
+    ldr r5, [pc, #0x3c]
+    add r4, r1, #0x8800
+    mov r0, #0xc
+_02031970:
+    ldr r1, [r5, r2, lsl #0x2]
+    add r2, r2, #0x1
+    mul r6, r1, r0
+    ldr r1, [r4, r6]
+    cmp r2, #0x18
+    bic r1, r1, #0xf000000
+    orr r1, r1, #0x1000000
+    str r1, [r4, r6]
+    ldr r1, [r3, r6]
+    bic r1, r1, #0x3f
+    orr r1, r1, #0x1
+    str r1, [r3, r6]
+    blo _02031970
+    ldmia sp!, {r4, r5, r6, r7, r8, r9, r10, pc}
+    dcd data_020b1e04
+}
+#endif
 }
