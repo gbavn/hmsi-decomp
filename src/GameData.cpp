@@ -2,7 +2,7 @@
 // calendar, the weather forecast, the flags and everything else that is saved. Names are ours.
 //
 // The original is a single C++ file with ~190 functions; it is decompiled in pieces (this unit covers
-// 0x02030cfc..0x020342c8). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
+// 0x02030cfc..0x02034920). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
 #include <nitro.h>
 #include <string.h>
 
@@ -289,6 +289,17 @@ typedef struct Entry0ee {
     u8 unkf;
 } Entry0ee;
 
+typedef struct Rec8b {
+    s32 value;
+    s8 c;
+    Bytes3 d;
+} Rec8b;
+
+typedef struct Pair8 {
+    u32 a;
+    u32 b;
+} Pair8;
+
 typedef struct GameData {
     void **vt;
     u8 unk4;
@@ -330,7 +341,13 @@ typedef struct GameData {
     Bits30 bitsA;           // one bit per entry below (func_02077910 sets, func_020778c8 reads)
     Bits30 bitsB;
     Entry0ee ents[0xee];    // indexed by func_ov002_021a5e98(id)
-    u8 unkfae0[0x58];
+    s32 vals22[0x16];       // ids 0x15c..0x171 and 0x17c
+    Rec8b counts[0x170];    // ids 0x28..0x197 (counters, clamped)
+    u8 unk106b8[0x1c];
+    u32 unk106d4;
+    u32 unk106d8;
+    Pair8 pairs30[30];
+    Pair8 pairs4[4];
 } GameData;
 
 #define RECORDS(self) (((GameData *)(self))->records)
@@ -3634,6 +3651,448 @@ void func_02034290(void *obj, int i)
 
 void func_020342ac(void *obj)
 {
-    MI_CpuFill8(((GameData *)obj)->unkfae0, 0, sizeof(((GameData *)obj)->unkfae0));
+    MI_CpuFill8(((GameData *)obj)->vals22, 0, sizeof(((GameData *)obj)->vals22));
+}
+
+extern const s32 data_020b1efc[];
+extern const s32 data_020b1f00[];
+extern const s32 data_020bc888;
+extern const s32 data_020bc88c;
+
+void func_020342c8(void *obj, int id, s32 add)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    if (id != 0x17c) {
+        i = id - 0x15c;
+    } else {
+        i = 0x15;
+    }
+    self->vals22[i] += add;
+    self->vals22[i] = *func_02031a74(&self->vals22[i], data_020b1efc);
+    self->vals22[i] = *func_02031a60(&self->vals22[i], &data_020bc888);
+}
+
+s32 func_02034338(void *obj, int id)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    if (id != 0x17c) {
+        i = id - 0x15c;
+    } else {
+        i = 0x15;
+    }
+    return self->vals22[i];
+}
+
+#ifdef NONMATCHING
+void func_02034354(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+    s32 sum = 0;
+
+    for (i = 0; i < 0x16; i++) {
+        sum += self->vals22[i];
+        sum = *func_02031a74(&sum, data_020b1efc);
+    }
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02034354(void *obj) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    mov r4, #0x0
+    mov r5, r0
+    ldr r6, [pc, #0x40]
+    str r4, [sp, #0x0]
+    mov r0, r4
+    add r7, sp, #0x0
+_02034370:
+    add r1, r5, r4, lsl #0x2
+    add r1, r1, #0xf000
+    ldr r2, [r1, #0xae0]
+    mov r1, r6
+    add r2, r0, r2
+    mov r0, r7
+    str r2, [sp, #0x0]
+    bl func_02031a74
+    ldr r0, [r0, #0x0]
+    add r4, r4, #0x1
+    str r0, [sp, #0x0]
+    cmp r4, #0x16
+    blt _02034370
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+    dcd data_020b1efc
+}
+#endif
+
+int func_020343ac(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int n = 0;
+    int i;
+
+    for (i = 0; i < 0x16; i++) {
+        if (self->vals22[i] != 0) {
+            n++;
+        }
+    }
+    return n;
+}
+
+void func_020343dc(void *obj)
+{
+    MI_CpuFill8(((GameData *)obj)->counts, 0, sizeof(((GameData *)obj)->counts));
+}
+
+int func_020343f8(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int n = 0;
+    int i;
+
+    for (i = 0; i < 0x170; i++) {
+        if (self->counts[i].value != 0) {
+            n++;
+        }
+    }
+    return n;
+}
+
+void func_02034428(void *obj, int id, s8 v)
+{
+    ((GameData *)obj)->counts[id - 0x28].c = v;
+}
+
+s8 func_0203443c(void *obj, int id)
+{
+    return ((GameData *)obj)->counts[id - 0x28].c;
+}
+
+void func_02034450(void *obj, int id, s32 add)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    if (id == 0x167) {
+        id = 0x166;
+    }
+    i = id - 0x28;
+    self->counts[i].value += add;
+    self->counts[i].value = *func_02031a74(&self->counts[i].value, data_020b1f00);
+    self->counts[i].value = *func_02031a60(&self->counts[i].value, &data_020bc88c);
+    if (add <= 0) {
+        return;
+    }
+    if (id == 0x14e) {
+        func_0203375c(self, 0x324, add);
+    }
+    if (id == 0x40) {
+        func_0203375c(self, 0x322, add);
+    }
+}
+
+s32 func_02034514(void *obj, int id)
+{
+    return ((GameData *)obj)->counts[id - 0x28].value;
+}
+
+#ifdef NONMATCHING
+void func_02034528(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+    s32 sum = 0;
+
+    for (i = 0; i < 0x170; i++) {
+        sum += self->counts[i].value;
+        sum = *func_02031a74(&sum, data_020b1f00);
+    }
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02034528(void *obj) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    mov r4, #0x0
+    mov r5, r0
+    ldr r6, [pc, #0x40]
+    str r4, [sp, #0x0]
+    mov r0, r4
+    add r7, sp, #0x0
+_02034544:
+    add r1, r5, r4, lsl #0x3
+    add r1, r1, #0xf000
+    ldr r2, [r1, #0xb38]
+    mov r1, r6
+    add r2, r0, r2
+    mov r0, r7
+    str r2, [sp, #0x0]
+    bl func_02031a74
+    ldr r0, [r0, #0x0]
+    add r4, r4, #0x1
+    str r0, [sp, #0x0]
+    cmp r4, #0x170
+    blt _02034544
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+    dcd data_020b1f00
+}
+#endif
+
+s32 func_02034514(void *obj, int id);
+BOOL func_0203a3c8(int i);
+BOOL func_0203a3e4(int i);
+BOOL func_0203a414(int i);
+extern const s16 data_020b1f04[];
+extern const s16 data_020b1f0a[];
+
+#ifdef NONMATCHING
+void func_02034580(void *self)
+{
+    int i;
+    s32 sum = 0;
+
+    for (i = 0x67; i <= 0x69; i++) {
+        sum += func_02034514(self, i);
+        sum = *func_02031a74(&sum, data_020b1f00);
+    }
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02034580(void *self) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    mov r1, #0x0
+    ldr r4, [pc, #0x48]
+    mov r7, r0
+    str r1, [sp, #0x0]
+    mov r6, #0x67
+    add r5, sp, #0x0
+_0203459c:
+    mov r0, r7
+    mov r1, r6
+    bl func_02034514
+    ldr r2, [sp, #0x0]
+    mov r1, r4
+    add r2, r2, r0
+    mov r0, r5
+    str r2, [sp, #0x0]
+    bl func_02031a74
+    ldr r0, [r0, #0x0]
+    add r6, r6, #0x1
+    str r0, [sp, #0x0]
+    cmp r6, #0x69
+    ble _0203459c
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+    dcd data_020b1f00
+}
+#endif
+
+void func_020345dc(void *self)
+{
+    s32 sum = 0;
+
+    sum = func_02034514(self, 0x40) + func_02034514(self, 0x14e);
+    sum = *func_02031a74(&sum, data_020b1f00);
+}
+
+void func_0203462c(void *self)
+{
+    s32 sum = 0;
+    int i;
+
+    for (i = 0x15c; i < 0x171; i++) {
+        sum += func_02034514(self, i);
+        sum = *func_02031a74(&sum, data_020b1f00);
+    }
+    sum += func_02034514(self, 0x17c);
+    sum = *func_02031a74(&sum, data_020b1f00);
+}
+
+#ifdef NONMATCHING
+void func_020346c4(void *self)
+{
+    int i;
+    s32 sum = 0;
+
+    for (i = 0x3c; i <= 0x3f; i++) {
+        sum += func_02034514(self, i);
+        sum = *func_02031a74(&sum, data_020b1f00);
+    }
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_020346c4(void *self) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    mov r1, #0x0
+    ldr r4, [pc, #0x48]
+    mov r7, r0
+    str r1, [sp, #0x0]
+    mov r6, #0x3c
+    add r5, sp, #0x0
+_020346e0:
+    mov r0, r7
+    mov r1, r6
+    bl func_02034514
+    ldr r2, [sp, #0x0]
+    mov r1, r4
+    add r2, r2, r0
+    mov r0, r5
+    str r2, [sp, #0x0]
+    bl func_02031a74
+    ldr r0, [r0, #0x0]
+    add r6, r6, #0x1
+    str r0, [sp, #0x0]
+    cmp r6, #0x3f
+    ble _020346e0
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+    dcd data_020b1f00
+}
+#endif
+
+s32 func_02034720(void *self, int kind)
+{
+    s32 sum = 0;
+    BOOL (*has)(int);
+    int j;
+    int i;
+
+    switch (kind) {
+    case 0:
+        has = func_0203a3c8;
+        break;
+    case 1:
+        has = func_0203a3e4;
+        break;
+    case 2:
+        has = func_0203a414;
+        break;
+    case 3:
+        return sum;
+    default:
+        return 0;
+    }
+    for (j = 0, i = 0x28; i <= 0x36; i++, j++) {
+        if (has(j)) {
+            sum += func_02034514(self, i);
+            sum = *func_02031a74(&sum, data_020b1f00);
+        }
+    }
+    return sum;
+}
+
+#ifdef NONMATCHING
+s32 func_020347e4(void *self, int kind)
+{
+    int i;
+    s32 sum;
+    int n = 0;
+    const s16 *list = NULL;
+
+    switch (kind) {
+    case 0:
+    case 3:
+        return 0;
+    case 1:
+        list = data_020b1f04;
+        n = 3;
+        break;
+    case 2:
+        list = data_020b1f0a;
+        n = 2;
+        break;
+    }
+    sum = 0;
+    for (i = 0; i < n; i++) {
+        sum += func_02034514(self, *list++);
+        sum = *func_02031a74(&sum, data_020b1f00);
+    }
+    return sum;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm s32 func_020347e4(void *self, int kind) {
+    stmdb sp!, {r3, r4, r5, r6, r7, r8, r9, lr}
+    mov r4, #0x0
+    mov r7, r0
+    mov r5, r4
+    cmp r1, #0x3
+    addls pc, pc, r1, lsl #0x2
+    b _0203482c
+_02034800:
+    b _02034810
+    b _02034818
+    b _02034824
+    b _02034810
+_02034810:
+    mov r0, r4
+    ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
+_02034818:
+    ldr r4, [pc, #0x64]
+    mov r5, #0x3
+    b _0203482c
+_02034824:
+    ldr r4, [pc, #0x5c]
+    mov r5, #0x2
+_0203482c:
+    mov r6, #0x0
+    str r6, [sp, #0x0]
+    cmp r5, #0x0
+    ble _0203487c
+    ldr r8, [pc, #0x48]
+    add r9, sp, #0x0
+_02034844:
+    ldrsh r1, [r4], #0x2
+    mov r0, r7
+    bl func_02034514
+    ldr r2, [sp, #0x0]
+    mov r1, r8
+    add r2, r2, r0
+    mov r0, r9
+    str r2, [sp, #0x0]
+    bl func_02031a74
+    ldr r0, [r0, #0x0]
+    add r6, r6, #0x1
+    str r0, [sp, #0x0]
+    cmp r6, r5
+    blt _02034844
+_0203487c:
+    ldr r0, [sp, #0x0]
+    ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, pc}
+    dcd data_020b1f04
+    dcd data_020b1f0a
+    dcd data_020b1f00
+}
+#endif
+
+void func_02034890(void *obj, int id, const Bytes3 *d)
+{
+    GameData *self = (GameData *)obj;
+
+    self->counts[id - 0x28].d.b[0] = d->b[0];
+    self->counts[id - 0x28].d.b[1] = d->b[1];
+    self->counts[id - 0x28].d.b[2] = d->b[2];
+}
+
+Bytes3 *func_020348b8(void *obj, int id)
+{
+    return &((GameData *)obj)->counts[id - 0x28].d;
+}
+
+void func_020348cc(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    self->unk106d4 = 0;
+    self->unk106d8 = 0;
+    for (i = 0; i < 30; i++) {
+        self->pairs30[i].a = 0;
+        self->pairs30[i].b = 0;
+    }
+    for (i = 0; i < 4; i++) {
+        self->pairs4[i].a = 0;
+        self->pairs4[i].b = 0;
+    }
 }
 }
