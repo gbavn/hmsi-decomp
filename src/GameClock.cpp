@@ -23,6 +23,17 @@ typedef struct GameDay {
     s8 weekday;
 } GameDay;
 
+// A date zeroed by its constructor.
+struct ZeroDay {
+    ZeroDay() { ((u32 *)this)[1] = 0; ((u32 *)this)[0] = 0; }
+
+    u32 year;
+    s8 season;
+    s8 day;
+    s8 weekday;
+    s8 pad;
+};
+
 typedef struct Animal {
     u8 unk0[0x2c];
     GameTime time;
@@ -53,11 +64,20 @@ const GameTime *func_020352c8(int i);
 void func_02035524(GameDay *out);
 void func_02035560(int days);
 void func_02035870(GameDay *date);
-s8 func_02035784(GameDay *date);
+int func_02035784(GameDay *date);
 BOOL func_0205ec34(void *a);
 BOOL func_0205ecf8(void *a);
 void func_0205fb74(void *a, GameTime t);
 extern const GameTime data_020b2728[4][4];
+int func_020356dc(GameDay *date);
+void func_0203570c(GameDay *out, u32 n);
+u32 func_020357e8(u32 n, int add);
+u16 func_02035874(void);
+u32 func_020358b8(void);
+u32 func_020358d0(u32 max);
+void func_02035934(u32 *a, u32 *b);
+extern s8 data_020f57d8[36];
+extern u32 data_020bc948;
 
 void *func_020350d4(void *self)
 {
@@ -333,4 +353,239 @@ int func_02035544(void)
     return today.season;
 }
 
+
+// Moves the current date by `days`.
+void func_02035560(int days)
+{
+    GameDay d2;
+    GameDay d;
+    ClockState *s;
+
+    func_0203570c(&d, func_020357e8(func_020356dc(&data_020f57c0->date), days));
+    *(Words2 *)&d2 = *(Words2 *)&d;
+    d2.weekday = func_02035784(&d2);
+    s = data_020f57c0;
+    s->date.year = d2.year;
+    s->date.season = d2.season;
+    s->date.day = d2.day;
+    s->date.weekday = d2.weekday;
 }
+
+// `out` = `date` moved by `days`.
+void func_020355e0(GameDay *out, GameDay *date, int days)
+{
+    func_02035870(date);
+    func_0203570c(out, func_020357e8(func_020356dc(date), days));
+}
+
+// Days from `a` to `b`.
+int func_02035618(GameDay *a, GameDay *b)
+{
+    int na;
+
+    func_02035870(a);
+    func_02035870(b);
+    na = func_020356dc(a);
+    return func_020356dc(b) - na;
+}
+
+// Calendar page of the month of `date`: cell -> day (0..29), -1 for empty cells.
+#ifdef NONMATCHING
+s8 *func_0203564c(GameDay *date)
+{
+    GameDay first;
+    int i;
+    int wd;
+    s8 day;
+
+    func_02035870(date);
+    for (i = 0; i < 36; i++) {
+        data_020f57d8[i] = -1;
+    }
+    first = *date;
+    first.day = 0;
+    wd = func_02035784(&first);
+    day = 0;
+    for (i = wd; i < wd + 30; i++) {
+        data_020f57d8[i] = day++;
+    }
+    return data_020f57d8;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm s8 *func_0203564c(GameDay *date) {
+    stmdb sp!, {r4, lr}
+    sub sp, sp, #0x8
+    mov r4, r0
+    bl func_02035870
+    ldr r2, [pc, #0x74]
+    mov r1, #0x0
+    mvn r0, #0x0
+_02035668:
+    add r1, r1, #0x1
+    cmp r1, #0x24
+    strb r0, [r2], #0x1
+    blt _02035668
+    ldr r2, [r4, #0x0]
+    ldr r1, [r4, #0x4]
+    add r0, sp, #0x0
+    str r1, [sp, #0x4]
+    mov r1, #0x0
+    str r2, [sp, #0x0]
+    strb r1, [sp, #0x5]
+    bl func_02035784
+    add ip, r0, #0x1e
+    cmp r0, ip
+    mov r2, #0x0
+    bge _020356cc
+    ldr r1, [pc, #0x28]
+    add r3, r1, r0
+_020356b0:
+    add r1, r2, #0x1
+    add r0, r0, #0x1
+    mov r1, r1, lsl #0x18
+    strb r2, [r3], #0x1
+    cmp r0, ip
+    mov r2, r1, asr #0x18
+    blt _020356b0
+_020356cc:
+    ldr r0, [pc, #0x4]
+    add sp, sp, #0x8
+    ldmia sp!, {r4, pc}
+    dcd data_020f57d8
+}
+#endif
+
+// Day number: 4 seasons of 30 days per year.
+int func_020356dc(GameDay *date)
+{
+    func_02035870(date);
+    return date->year * 120 + date->season * 30 + date->day;
+}
+
+#ifdef NONMATCHING
+void func_0203570c(GameDay *out, u32 n)
+{
+    ZeroDay d;
+
+    d.year = n / 120;
+    d.season = n % 120 / 30;
+    d.day = n % 120 % 30;
+    *(Words2 *)out = *(Words2 *)&d;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_0203570c(GameDay *out, u32 n) {
+    stmdb sp!, {r3, r4, r5, lr}
+    sub sp, sp, #0x8
+    ldr lr, [pc, #0x64]
+    mov ip, #0x78
+    umull r3, r2, r1, lr
+    mov r2, r2, lsr #0x6
+    umull r2, r3, ip, r2
+    sub r2, r1, r2
+    umull r3, r4, r2, lr
+    umull ip, r3, r1, lr
+    umull r1, r5, r2, lr
+    mov r4, r4, lsr #0x4
+    mov lr, #0x1e
+    umull r1, ip, lr, r4
+    add lr, sp, #0x0
+    mov ip, #0x0
+    str ip, [lr, #0x4]
+    mov r5, r5, lsr #0x4
+    sub r4, r2, r1
+    strb r5, [sp, #0x4]
+    strb r4, [sp, #0x5]
+    str ip, [lr, #0x0]
+    mov r3, r3, lsr #0x6
+    ldr r1, [sp, #0x4]
+    str r3, [sp, #0x0]
+    str r3, [r0, #0x0]
+    str r1, [r0, #0x4]
+    add sp, sp, #0x8
+    ldmia sp!, {r3, r4, r5, pc}
+    dcd 0x88888889
+}
+#endif
+
+// Day of the week (0..6).
+int func_02035784(GameDay *date)
+{
+    u32 n;
+
+    func_02035870(date);
+    n = (u32)(date->year * 4 + date->season) % 7 * 30 + date->day;
+    return n % 7;
+}
+
+// `n + add`, kept inside 0..0xffffffff.
+u32 func_020357e8(u32 n, int add)
+{
+    double v = (double)n + (double)add;
+
+    if (v < 0.0) {
+        v = 0.0;
+    } else if (4294967295.0 < v) {
+        v = 4294967295.0;
+    }
+    return (u32)v;
+}
+
+void func_02035870(GameDay *date)
+{
+}
+
+u16 func_02035874(void)
+{
+    data_020bc948 = data_020bc948 * 0x41c64e6d + 0x3039;
+    return data_020bc948 >> 16;
+}
+
+void func_020358a8(u32 seed)
+{
+    data_020bc948 = seed;
+}
+
+u32 func_020358b8(void)
+{
+    u32 hi = func_02035874();
+
+    return func_02035874() | hi << 16;
+}
+
+// Random number 0..max.
+u32 func_020358d0(u32 max)
+{
+    return func_020358b8() % (max + 1);
+}
+
+}
+
+// Random number min..max.
+u32 RandRange(u32 min, u32 max)
+{
+    if (min > max) {
+        func_02035934(&min, &max);
+    }
+    return min + func_020358d0(max - min);
+}
+
+extern "C" {
+
+void func_02035934(u32 *a, u32 *b)
+{
+    u32 t = *a;
+
+    *a = *b;
+    *b = t;
+}
+
+// TRUE with `percent` % chance.
+BOOL func_02035948(u32 percent)
+{
+    return percent > func_020358d0(99);
+}
+
+}
+

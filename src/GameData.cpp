@@ -2995,10 +2995,10 @@ void func_020706f4(void *obj, u32 v);
 void func_02070744(void *obj, u32 v);
 void func_0207071c(void *obj, u32 v);
 void func_0207076c(void *obj, u32 v);
-void func_02024168(void);   // double runtime (u32 -> double, add, compare, double -> u32)
-void func_02023bdc(void);
-void func_02024b90(void);
-void func_02024044(void);
+void _dfltu(void);   // double runtime (u32 -> double, add, compare, double -> u32)
+void _dadd(void);
+void _dls(void);
+void _dfixu(void);
 
 typedef struct VarValue {
     int id;
@@ -3247,64 +3247,64 @@ asm u32 func_02033b30(void *self) {
     bl func_0203366c
     mov r6, r0
     mov r0, r5
-    bl func_02024168
+    bl _dfltu
     mov r5, r0
     mov r0, r4
     mov r7, r1
-    bl func_02024168
+    bl _dfltu
     mov r4, r0
     mov r0, r8
     mov r8, r1
-    bl func_02024168
+    bl _dfltu
     str r0, [sp, #0x0]
     mov r0, r9
     mov r9, r1
-    bl func_02024168
+    bl _dfltu
     str r0, [sp, #0x4]
     mov r0, r10
     mov r10, r1
-    bl func_02024168
+    bl _dfltu
     mov r11, r0
     mov r0, r6
     mov r6, r1
-    bl func_02024168
+    bl _dfltu
     mov r2, r0
     mov r3, r1
     mov r0, r11
     mov r1, r6
-    bl func_02023bdc
+    bl _dadd
     mov r2, r0
     mov r3, r1
     ldr r0, [sp, #0x4]
     mov r1, r10
-    bl func_02023bdc
+    bl _dadd
     mov r2, r0
     mov r3, r1
     ldr r0, [sp, #0x0]
     mov r1, r9
-    bl func_02023bdc
+    bl _dadd
     mov r2, r0
     mov r3, r1
     mov r0, r4
     mov r1, r8
-    bl func_02023bdc
+    bl _dadd
     mov r2, r0
     mov r3, r1
     mov r0, r5
     mov r1, r7
-    bl func_02023bdc
+    bl _dadd
     mov r4, r0
     mov r5, r1
     ldr r1, [pc, #0x3c]
     mov r2, r4
     mov r3, r5
     mov r0, #0x0
-    bl func_02024b90
+    bl _dls
     ldrlo r5, [pc, #0x28]
     movlo r4, #0x0
     mov r0, r4
     mov r1, r5
-    bl func_02024044
+    bl _dfixu
     add sp, sp, #0x8
     ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, r10, r11, pc}
     dcd 0x336
