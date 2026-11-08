@@ -686,6 +686,10 @@ src/AnimPlayer.cpp:
     complete
     .text       start:0x02036404 end:0x020365f8
 
+src/Archive.cpp:
+    complete
+    .text       start:0x02036f80 end:0x02037238
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
