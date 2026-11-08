@@ -289,6 +289,14 @@ typedef struct GameData {
     s32 unke280;
     Obj10 unke284;
     Obj16 objs[12];
+    char name1[13];
+    char name2[13];
+    u8 unke36a[2];
+    u32 flagBits[18];       // flags 0x000..0x23d: one bit each
+    u8 vars8[0xe3];         // flags 0x23e..0x320: one byte each
+    u8 unke497;
+    u16 vars16[16];         // flags 0x321..0x330
+    u32 vars32[15];         // flags 0x331..0x33f
 } GameData;
 
 #define RECORDS(self) (((GameData *)(self))->records)
@@ -2620,4 +2628,633 @@ void func_02033290(void *obj)
 void func_020332a8(void *self)
 {
 }
+
+void func_02070090(void *obj, int arg);
+int func_02041028(int id);
+u32 func_02041134(int id);
+u32 func_020410a4(int id);
+u32 func_02033974(void *self, int id, u32 value);
+void func_020333b4(void *self, const char *name);
+void func_02033444(void *self, const char *name);
+extern const u8 data_020b1e74[];
+extern const u8 data_020b1e7b[];
+extern const u32 data_020b1e84[];
+
+void func_020332ac(void *obj, u32 a, u32 b)
+{
+    ((GameData *)obj)->unke284.a = a;
+    ((GameData *)obj)->unke284.b = b;
+}
+
+void func_020332bc(void *obj, u8 v)
+{
+    ((GameData *)obj)->unke284.c = v;
+}
+
+void func_020332c8(void *obj, u8 v)
+{
+    ((GameData *)obj)->unke284.d = v;
+}
+
+void func_020332d4(void *obj, u32 *a, u32 *b)
+{
+    *a = ((GameData *)obj)->unke284.a;
+    *b = ((GameData *)obj)->unke284.b;
+}
+
+u8 func_020332ec(void *obj)
+{
+    return ((GameData *)obj)->unke284.c;
+}
+
+u8 func_020332f8(void *obj)
+{
+    return ((GameData *)obj)->unke284.d;
+}
+
+void func_02033304(void *self)
+{
+}
+
+int func_02033308(void *obj, int arg)
+{
+    GameData *self = (GameData *)obj;
+    u32 i;
+
+    for (i = 0; i < 12; i++) {
+        if (func_02070180(&self->objs[i])) {
+            func_02070090(&self->objs[i], arg);
+            return i;
+        }
+    }
+    return -1;
+}
+
+void func_02033364(void *self)
+{
+    Name7 name = *(const Name7 *)data_020b1e74;
+
+    func_020333b4(self, name.c);
+}
+
+#ifdef NONMATCHING
+void func_020333b4(void *self, const char *name)
+{
+    MI_CpuFill8(((GameData *)self)->name1, 0, 13);
+    MI_CpuCopy8(name, ((GameData *)self)->name1, func_02021d48(name));
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_020333b4(void *self, const char *name) {
+    stmdb sp!, {r3, r4, r5, lr}
+    mov r5, r0
+    add r0, r5, #0x350
+    mov r4, r1
+    add r0, r0, #0xe000
+    mov r1, #0x0
+    mov r2, #0xd
+    bl MI_CpuFill8
+    mov r0, r4
+    bl func_02021d48
+    add r1, r5, #0x350
+    mov r2, r0
+    mov r0, r4
+    add r1, r1, #0xe000
+    bl MI_CpuCopy8
+    ldmia sp!, {r3, r4, r5, pc}
+}
+#endif
+
+void func_020333f4(void *self)
+{
+    Name7 name = *(const Name7 *)data_020b1e7b;
+
+    func_02033444(self, name.c);
+}
+
+#ifdef NONMATCHING
+void func_02033444(void *self, const char *name)
+{
+    MI_CpuFill8(((GameData *)self)->name2, 0, 13);
+    MI_CpuCopy8(name, ((GameData *)self)->name2, func_02021d48(name));
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02033444(void *self, const char *name) {
+    stmdb sp!, {r3, r4, r5, lr}
+    mov r5, r0
+    add r0, r5, #0x5d
+    mov r4, r1
+    add r0, r0, #0xe300
+    mov r1, #0x0
+    mov r2, #0xd
+    bl MI_CpuFill8
+    mov r0, r4
+    bl func_02021d48
+    add r1, r5, #0x5d
+    mov r2, r0
+    mov r0, r4
+    add r1, r1, #0xe300
+    bl MI_CpuCopy8
+    ldmia sp!, {r3, r4, r5, pc}
+}
+#endif
+
+// Game flags/variables 0..0x33f. func_02041028(id) gives the storage: 0 = bit, 1 = byte, 2 = u16,
+// 3 = u32; func_02041134(id) the start value; func_020410a4(id) the maximum.
+
+// Sets every flag/variable to its start value.
+void func_02033484(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int id;
+
+    for (id = 0; id < 0x340; id++) {
+        switch (func_02041028(id)) {
+        case 0:
+            if (func_02041134(id)) {
+                self->flagBits[id / 32] |= 1 << (id % 32);
+            } else {
+                self->flagBits[id / 32] &= ~(1 << (id % 32));
+            }
+            break;
+        case 1:
+            self->vars8[id - 0x23e] = func_02041134(id);
+            break;
+        case 2:
+            self->vars16[id - 0x321] = func_02041134(id);
+            break;
+        case 3:
+            self->vars32[id - 0x331] = func_02041134(id);
+            break;
+        }
+    }
+}
+
+// Sets flag/variable `id` to `value`.
+void func_0203357c(void *obj, int id, u32 value)
+{
+    GameData *self = (GameData *)obj;
+
+    switch (func_02041028(id)) {
+    case 0:
+        if (value) {
+            self->flagBits[id / 32] |= 1 << (id % 32);
+        } else {
+            self->flagBits[id / 32] &= ~(1 << (id % 32));
+        }
+        break;
+    case 1:
+        self->vars8[id - 0x23e] = value;
+        break;
+    case 2:
+        self->vars16[id - 0x321] = value;
+        break;
+    case 3:
+        self->vars32[id - 0x331] = value;
+        break;
+    }
+}
+
+// Value of flag/variable `id` (flags give 0/1).
+int func_0203366c(void *obj, int id)
+{
+    GameData *self = (GameData *)obj;
+
+    switch (func_02041028(id)) {
+    case 0:
+        return (self->flagBits[id / 32] & (1 << (id % 32))) ? 1 : 0;
+    case 1:
+        return self->vars8[id - 0x23e];
+    case 2:
+        return self->vars16[id - 0x321];
+    case 3:
+        return self->vars32[id - 0x331];
+    }
+    return 0;
+}
+
+// Level (0..14) of variable `id` by the thresholds at data_020b1e84.
+int func_02033724(void *self, int id)
+{
+    u32 value = func_0203366c(self, id);
+    u32 i;
+
+    for (i = 0; i < 14; i++) {
+        if (value <= data_020b1e84[i]) {
+            return i;
+        }
+    }
+    return 14;
+}
+
+// Adds `value` to variable `id`, up to its maximum.
+void func_0203375c(void *obj, int id, int value)
+{
+    GameData *self = (GameData *)obj;
+    u32 max;
+    u32 add;
+
+    if (value == 0) {
+        return;
+    }
+    max = func_020410a4(id);
+    add = func_02033974(self, id, value);
+    switch (func_02041028(id)) {
+    case 0:
+        break;
+    case 1:
+        if (max - self->vars8[id - 0x23e] < add) {
+            self->vars8[id - 0x23e] = max;
+        } else {
+            self->vars8[id - 0x23e] += add;
+        }
+        break;
+    case 2:
+        if (max - self->vars16[id - 0x321] < add) {
+            self->vars16[id - 0x321] = max;
+        } else {
+            self->vars16[id - 0x321] += add;
+        }
+        break;
+    case 3:
+        if (max - self->vars32[id - 0x331] < add) {
+            self->vars32[id - 0x331] = max;
+        } else {
+            self->vars32[id - 0x331] += add;
+        }
+        break;
+    }
+}
+
+// Subtracts `value` from variable `id`, down to 0.
+void func_02033860(void *obj, int id, u32 value)
+{
+    GameData *self = (GameData *)obj;
+
+    switch (func_02041028(id)) {
+    case 0:
+        break;
+    case 1:
+        if (self->vars8[id - 0x23e] < value) {
+            self->vars8[id - 0x23e] = 0;
+        } else {
+            self->vars8[id - 0x23e] -= value;
+        }
+        break;
+    case 2:
+        if (self->vars16[id - 0x321] < value) {
+            self->vars16[id - 0x321] = 0;
+        } else {
+            self->vars16[id - 0x321] -= value;
+        }
+        break;
+    case 3:
+        if (self->vars32[id - 0x331] < value) {
+            self->vars32[id - 0x331] = 0;
+        } else {
+            self->vars32[id - 0x331] -= value;
+        }
+        break;
+    }
+}
+
+u32 func_02033940(void *self, int id)
+{
+    return func_020410a4(id);
+}
+
+typedef struct VarValueTable {
+    u32 w[12];
+} VarValueTable;
+extern const u32 data_020b1ebc[];
+extern void *data_020f57bc;
+void func_02021a30(void *array, u32 count, u32 size, void *cmp);
+u32 func_02025324(f32 v);
+void func_020706a4(void *obj, u32 v);
+void func_020706cc(void *obj, u32 v);
+void func_020706f4(void *obj, u32 v);
+void func_02070744(void *obj, u32 v);
+void func_0207071c(void *obj, u32 v);
+void func_0207076c(void *obj, u32 v);
+void func_02024168(void);   // double runtime (u32 -> double, add, compare, double -> u32)
+void func_02023bdc(void);
+void func_02024b90(void);
+void func_02024044(void);
+
+typedef struct VarValue {
+    int id;
+    u32 value;
+} VarValue;
+
+// qsort comparator: bigger values first.
+int func_02033950(const VarValue *a, const VarValue *b)
+{
+    if (a->value < b->value) {
+        return 1;
+    }
+    return -(a->value > b->value);
+}
+
+// Bonus for variables 0x331..0x336: x2 for the biggest one, x1.5 for the second.
+#ifdef NONMATCHING
+u32 func_02033974(void *self, int id, u32 value)
+{
+    VarValue list[6];
+
+    switch (id) {
+    case 0x331:
+    case 0x332:
+    case 0x333:
+    case 0x334:
+    case 0x335:
+    case 0x336:
+        break;
+    default:
+        return value;
+    }
+    *(VarValueTable *)list = *(const VarValueTable *)data_020b1ebc;
+    list[0].value = func_0203366c(self, 0x331);
+    list[1].value = func_0203366c(self, 0x332);
+    list[2].value = func_0203366c(self, 0x333);
+    list[3].value = func_0203366c(self, 0x334);
+    list[4].value = func_0203366c(self, 0x335);
+    list[5].value = func_0203366c(self, 0x336);
+    func_02021a30(list, 6, 8, (void *)func_02033950);
+    if (list[0].id == id) {
+        value *= 2;
+    } else if (list[1].id == id) {
+        value = func_02025324(value * 1.5f);
+    }
+    switch (id) {
+    case 0x331:
+        func_020706a4(data_020f57bc, value);
+        break;
+    case 0x332:
+        func_020706cc(data_020f57bc, value);
+        break;
+    case 0x333:
+        func_020706f4(data_020f57bc, value);
+        break;
+    case 0x334:
+        func_02070744(data_020f57bc, value);
+        break;
+    case 0x335:
+        func_0207071c(data_020f57bc, value);
+        break;
+    case 0x336:
+        func_0207076c(data_020f57bc, value);
+        break;
+    }
+    return value;
+}
+#else
+// Linker names used by the asm below.
+extern "C" {
+void _ffltu(void);
+void _fmul(void);
+}
+// NONMATCHING: kept as assembly until the C version matches.
+asm u32 func_02033974(void *self, int id, u32 value) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    sub sp, sp, #0x30
+    mov r5, r1
+    sub r1, r5, #0x31
+    sub r1, r1, #0x300
+    ldr ip, [pc, #0x180]
+    mov r6, r0
+    mov r4, r2
+    cmp r1, #0x5
+    addls pc, pc, r1, lsl #0x2
+    b _020339b8
+_020339a0:
+    b _020339c4
+    b _020339c4
+    b _020339c4
+    b _020339c4
+    b _020339c4
+    b _020339c4
+_020339b8:
+    add sp, sp, #0x30
+    mov r0, r4
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+_020339c4:
+    ldr r7, [pc, #0x148]
+    add lr, sp, #0x0
+    ldmia r7!, {r0, r1, r2, r3}
+    stmia lr!, {r0, r1, r2, r3}
+    ldmia r7!, {r0, r1, r2, r3}
+    stmia lr!, {r0, r1, r2, r3}
+    ldmia r7, {r0, r1, r2, r3}
+    stmia lr, {r0, r1, r2, r3}
+    mov r1, ip
+    mov r0, r6
+    bl func_0203366c
+    str r0, [sp, #0x4]
+    ldr r1, [pc, #0x11c]
+    mov r0, r6
+    bl func_0203366c
+    str r0, [sp, #0xc]
+    ldr r1, [pc, #0x110]
+    mov r0, r6
+    bl func_0203366c
+    str r0, [sp, #0x14]
+    mov r0, r6
+    mov r1, #0x334
+    bl func_0203366c
+    str r0, [sp, #0x1c]
+    ldr r1, [pc, #0xf4]
+    mov r0, r6
+    bl func_0203366c
+    str r0, [sp, #0x24]
+    ldr r1, [pc, #0xe8]
+    mov r0, r6
+    bl func_0203366c
+    str r0, [sp, #0x2c]
+    ldr r3, [pc, #0xdc]
+    add r0, sp, #0x0
+    mov r1, #0x6
+    mov r2, #0x8
+    bl func_02021a30
+    ldr r0, [sp, #0x0]
+    cmp r0, r5
+    moveq r4, r4, lsl #0x1
+    beq _02033a8c
+    ldr r0, [sp, #0x8]
+    cmp r0, r5
+    bne _02033a8c
+    mov r0, r4
+    bl _ffltu
+    mov r1, #0x3fc00000
+    bl _fmul
+    bl func_02025324
+    mov r4, r0
+_02033a8c:
+    ldr r0, [pc, #0x98]
+    sub r1, r5, #0x31
+    sub r1, r1, #0x300
+    ldr r0, [r0, #0x0]
+    cmp r1, #0x5
+    addls pc, pc, r1, lsl #0x2
+    b _02033b04
+_02033aa8:
+    b _02033ac0
+    b _02033acc
+    b _02033ad8
+    b _02033ae4
+    b _02033af0
+    b _02033afc
+_02033ac0:
+    mov r1, r4
+    bl func_020706a4
+    b _02033b04
+_02033acc:
+    mov r1, r4
+    bl func_020706cc
+    b _02033b04
+_02033ad8:
+    mov r1, r4
+    bl func_020706f4
+    b _02033b04
+_02033ae4:
+    mov r1, r4
+    bl func_02070744
+    b _02033b04
+_02033af0:
+    mov r1, r4
+    bl func_0207071c
+    b _02033b04
+_02033afc:
+    mov r1, r4
+    bl func_0207076c
+_02033b04:
+    mov r0, r4
+    add sp, sp, #0x30
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+    dcd 0x331
+    dcd data_020b1ebc
+    dcd 0x332
+    dcd 0x333
+    dcd 0x335
+    dcd 0x336
+    dcd func_02033950
+    dcd data_020f57bc
+}
+#endif
+
+// Sum of the variables 0x331..0x336, at most 1e9.
+#ifdef NONMATCHING
+u32 func_02033b30(void *self)
+{
+    u32 f = func_0203366c(self, 0x336);
+    u32 e = func_0203366c(self, 0x335);
+    u32 d = func_0203366c(self, 0x334);
+    u32 c = func_0203366c(self, 0x333);
+    u32 a = func_0203366c(self, 0x331);
+    u32 b = func_0203366c(self, 0x332);
+    double sum = (double)f + ((double)e + ((double)d + ((double)c + ((double)a + (double)b))));
+
+    if (sum > 1e9) {
+        sum = 1e9;
+    }
+    return (u32)sum;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm u32 func_02033b30(void *self) {
+    stmdb sp!, {r3, r4, r5, r6, r7, r8, r9, r10, r11, lr}
+    sub sp, sp, #0x8
+    ldr r1, [pc, #0x14c]
+    mov r6, r0
+    bl func_0203366c
+    mov r5, r0
+    ldr r1, [pc, #0x140]
+    mov r0, r6
+    bl func_0203366c
+    mov r4, r0
+    mov r0, r6
+    mov r1, #0x334
+    bl func_0203366c
+    mov r8, r0
+    ldr r1, [pc, #0x124]
+    mov r0, r6
+    bl func_0203366c
+    mov r9, r0
+    ldr r1, [pc, #0x118]
+    mov r0, r6
+    bl func_0203366c
+    mov r10, r0
+    ldr r1, [pc, #0x10c]
+    mov r0, r6
+    bl func_0203366c
+    mov r6, r0
+    mov r0, r5
+    bl func_02024168
+    mov r5, r0
+    mov r0, r4
+    mov r7, r1
+    bl func_02024168
+    mov r4, r0
+    mov r0, r8
+    mov r8, r1
+    bl func_02024168
+    str r0, [sp, #0x0]
+    mov r0, r9
+    mov r9, r1
+    bl func_02024168
+    str r0, [sp, #0x4]
+    mov r0, r10
+    mov r10, r1
+    bl func_02024168
+    mov r11, r0
+    mov r0, r6
+    mov r6, r1
+    bl func_02024168
+    mov r2, r0
+    mov r3, r1
+    mov r0, r11
+    mov r1, r6
+    bl func_02023bdc
+    mov r2, r0
+    mov r3, r1
+    ldr r0, [sp, #0x4]
+    mov r1, r10
+    bl func_02023bdc
+    mov r2, r0
+    mov r3, r1
+    ldr r0, [sp, #0x0]
+    mov r1, r9
+    bl func_02023bdc
+    mov r2, r0
+    mov r3, r1
+    mov r0, r4
+    mov r1, r8
+    bl func_02023bdc
+    mov r2, r0
+    mov r3, r1
+    mov r0, r5
+    mov r1, r7
+    bl func_02023bdc
+    mov r4, r0
+    mov r5, r1
+    ldr r1, [pc, #0x3c]
+    mov r2, r4
+    mov r3, r5
+    mov r0, #0x0
+    bl func_02024b90
+    ldrlo r5, [pc, #0x28]
+    movlo r4, #0x0
+    mov r0, r4
+    mov r1, r5
+    bl func_02024044
+    add sp, sp, #0x8
+    ldmia sp!, {r3, r4, r5, r6, r7, r8, r9, r10, r11, pc}
+    dcd 0x336
+    dcd 0x335
+    dcd 0x333
+    dcd 0x331
+    dcd 0x332
+    dcd 0x41cdcd65
+}
+#endif
 }
