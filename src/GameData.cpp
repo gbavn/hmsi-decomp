@@ -84,7 +84,13 @@ void func_02031840(void *self, const char *name);
 void func_0203375c(void *self, int id, int value);
 extern const u32 data_020b1e04[];
 
-BOOL func_02031f7c(void *self, int i);
+int func_02031f7c(void *self, int i);
+void func_02081280(void *obj);
+BOOL func_02070180(void *obj);
+void func_02070174(void *obj);
+void func_02090f28(void *item);
+void func_02082e34(void *obj, void *item);
+void func_02083b28(void *obj, int id, int count);
 int func_02080c9c(void *obj, int i);
 extern void *data_020f57c4;
 
@@ -184,6 +190,49 @@ typedef struct ItemRecord {
     ItemRecordBits2 bits2;
 } ItemRecord;
 
+typedef struct Entry16 {
+    u8 b[16];
+} Entry16;
+
+typedef struct Entry8 {
+    u8 b[8];
+} Entry8;
+
+typedef struct GameBits9384 {
+    u8 b0 : 1;
+    u8 b1 : 1;
+    u8 b2 : 1;
+} GameBits9384;
+
+// 12-byte item/shipping entry (constructor func_02090f28).
+typedef struct Bytes4 {
+    u8 b[4];
+} Bytes4;
+
+typedef struct Bytes2 {
+    u8 b[2];
+} Bytes2;
+
+typedef struct Item12 {
+    Bytes4 head;
+    s16 id;
+    Bytes2 fg;
+    u8 h;
+    u8 i;
+    u16 count;
+} Item12;
+
+// The 12 objects at +0xe290 (16 bytes; ctor func_0207005c).
+typedef struct Obj16 {
+    u8 a;
+    u8 b;
+    u8 c;
+    u8 d;
+    u8 unk4;
+    u8 flag;
+    u8 unk6[10];
+} Obj16;
+
 typedef struct GameData {
     void **vt;
     u8 unk4;
@@ -195,6 +244,13 @@ typedef struct GameData {
     char ranchName[13];
     u8 unk8a75[3];
     ItemRecord records[0x89];
+    Entry16 unk90e4[42];
+    GameBits9384 bits9384;
+    u8 unk9385[3];
+    Entry8 unk9388[2];
+    Entry8 unk9398[4];
+    Entry8 unk93b8[5];
+    Item12 items[40];
 } GameData;
 
 #define RECORDS(self) (((GameData *)(self))->records)
@@ -1149,5 +1205,224 @@ void func_02031f40(void *self, int i, int value)
 int func_02031f64(void *self, int i)
 {
     return RECORDS(self)[i].bits2.l;
+}
+
+// 1 if `i` is the current something (flag 0x240); 2 if its pair's state (flags 0x2ba..0x2be) is 3.
+int func_02031f7c(void *self, int i)
+{
+    if (i == func_0203366c(self, 0x240)) {
+        return 1;
+    }
+    switch (i) {
+    case 4:
+    case 10:
+        if (func_0203366c(self, 0x2bb) == 3) {
+            return 2;
+        }
+        break;
+    case 2:
+    case 9:
+        if (func_0203366c(self, 0x2ba) == 3) {
+            return 2;
+        }
+        break;
+    case 3:
+    case 11:
+        if (func_0203366c(self, 0x2bc) == 3) {
+            return 2;
+        }
+        break;
+    case 1:
+    case 12:
+        if (func_0203366c(self, 0x2bd) == 3) {
+            return 2;
+        }
+        break;
+    case 5:
+    case 13:
+        if (func_0203366c(self, 0x2be) == 3) {
+            return 2;
+        }
+        break;
+    }
+    return 0;
+}
+
+int func_02032080(void *self, int i)
+{
+    if (func_0203366c(self, 2) != 0 && i == func_0203366c(self, 0x242)) {
+        return 1;
+    }
+    switch (i) {
+    case 4:
+    case 10:
+        if (func_0203366c(self, 0x2bb) == 4) {
+            return 2;
+        }
+        break;
+    case 2:
+    case 9:
+        if (func_0203366c(self, 0x2ba) == 4) {
+            return 2;
+        }
+        break;
+    case 3:
+    case 11:
+        if (func_0203366c(self, 0x2bc) == 4) {
+            return 2;
+        }
+        break;
+    case 1:
+    case 12:
+        if (func_0203366c(self, 0x2bd) == 4) {
+            return 2;
+        }
+        break;
+    case 5:
+    case 13:
+        if (func_0203366c(self, 0x2be) == 4) {
+            return 2;
+        }
+        break;
+    }
+    return 0;
+}
+
+BOOL func_0203219c(void *self, int i)
+{
+    if (i == 0) {
+        if (func_0203366c(self, 0xca) == 1 && func_0203366c(self, 0xcb) == 0) {
+            return TRUE;
+        }
+        return FALSE;
+    }
+    return FALSE;
+}
+
+BOOL func_020321e4(void *self)
+{
+    int i;
+
+    for (i = 1; i < 0x22; i++) {
+        if (i == 0x20 || i == 0x21 || i == 0x1f || i == 0x1e || i == 0x1c || i == 0x1d || i == 6 || i == 0xe) {
+            continue;
+        }
+        if (func_02031b18(self, i) == 0) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+BOOL func_02032240(void *self)
+{
+    int i;
+
+    for (i = 0x22; i < 0x88; i++) {
+        if (i >= 0x22 && i <= 0x28) {
+            continue;
+        }
+        if (func_02031b18(self, i) == 0) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+void func_02032288(void *self)
+{
+    func_02081280(data_020f57c4);
+    ((GameData *)self)->bits9384.b1 = 0;
+    ((GameData *)self)->bits9384.b1 = 0;
+    ((GameData *)self)->bits9384.b2 = 0;
+}
+
+Entry16 *func_020322c8(void *self, int i)
+{
+    return &((GameData *)self)->unk90e4[i];
+}
+
+void func_020322d8(void *self)
+{
+    u32 i;
+    Obj16 *obj = (Obj16 *)&AT(u8, 0xe290);
+
+    for (i = 0; i < 12; i++, obj++) {
+        if (func_02070180(obj) == 0) {
+            Item12 item;
+
+            func_02090f28(&item);
+            item.id = obj->flag != 0 ? 0x52 : 0x51;
+            item.count = 1;
+            item.fg.b[0] = obj->b;
+            item.fg.b[1] = obj->c;
+            item.h = obj->d;
+            func_02082e34(data_020f57c4, &item);
+            func_02070174(obj);
+            func_02083b28(data_020f57c4, item.id, 1);
+        }
+    }
+}
+
+void func_0203238c(void *self, int on)
+{
+    ((GameData *)self)->bits9384.b0 = (u8)on;
+}
+
+void func_020323ac(void *self, int on)
+{
+    ((GameData *)self)->bits9384.b1 = (u8)on;
+}
+
+void func_020323cc(void *self, int on)
+{
+    ((GameData *)self)->bits9384.b2 = (u8)on;
+}
+
+bool func_020323ec(void *self)
+{
+    return ((GameData *)self)->bits9384.b0;
+}
+
+bool func_02032408(void *self)
+{
+    return ((GameData *)self)->bits9384.b1;
+}
+
+bool func_02032424(void *self)
+{
+    return ((GameData *)self)->bits9384.b2;
+}
+
+Entry8 *func_02032440(void *self, int i)
+{
+    return &((GameData *)self)->unk9388[i];
+}
+
+Entry8 *func_02032450(void *self, int i)
+{
+    return &((GameData *)self)->unk9398[i];
+}
+
+Entry8 *func_02032460(void *self, int i)
+{
+    return &((GameData *)self)->unk93b8[i];
+}
+
+void func_02032470(void *self)
+{
+    int i;
+
+    for (i = 0; i < 40; i++) {
+        Item12 item;
+
+        func_02090f28(&item);
+        ((GameData *)self)->items[i] = item;
+    }
+}
+
+Item12 *func_020324fc(void *self, int i)
+{
+    return &((GameData *)self)->items[i];
 }
 }
