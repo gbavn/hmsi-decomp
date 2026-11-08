@@ -690,6 +690,10 @@ src/Archive.cpp:
     complete
     .text       start:0x02036f80 end:0x02037238
 
+src/ScreenFade.cpp:
+    complete
+    .text       start:0x02037238 end:0x0203772c
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
