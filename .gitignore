@@ -4,3 +4,9 @@ __pycache__/
 
 # Build output
 build/
+
+# Copyrighted material: kept only locally, never published
+roms/
+extract/
+extracted/
+tools/mwccarm/
