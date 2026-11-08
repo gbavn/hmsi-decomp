@@ -6183,9 +6183,7 @@ gResCacheVtables kind:data(any) addr:0x020bc3b4
 gPackVtables kind:data(any) addr:0x020bc414
 gFontData kind:data(any) addr:0x020bc5ac
 gModel3DVtables kind:data(any) addr:0x020bc7b0
-data_020bc7e0 kind:data(any) addr:0x020bc7e0
-data_020bc7e8 kind:data(any) addr:0x020bc7e8
-data_020bc7f8 kind:data(any) addr:0x020bc7f8
+gTaskVtables kind:data(any) addr:0x020bc7e0
 data_020bc80c kind:data(any) addr:0x020bc80c
 data_020bc838 kind:data(any) addr:0x020bc838
 data_020bc854 kind:data(any) addr:0x020bc854
@@ -8278,7 +8276,8 @@ gFontFile kind:bss addr:0x020f572c
 data_020f5778 kind:bss addr:0x020f5778
 gRenderer3D kind:bss addr:0x020f577c
 data_020f5780 kind:bss addr:0x020f5780
-data_020f5784 kind:bss addr:0x020f5784
+gCurrentTaskManager kind:bss addr:0x020f5784
+data_020f5788 kind:bss addr:0x020f5788
 data_020f578c kind:bss addr:0x020f578c
 gSceneControl kind:bss addr:0x020f57b0
 data_020f57b8 kind:bss addr:0x020f57b8
