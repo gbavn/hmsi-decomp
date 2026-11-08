@@ -77,6 +77,21 @@ u32 func_020358b8(void);
 u32 func_020358d0(u32 max);
 void func_02035934(u32 *a, u32 *b);
 extern s8 data_020f57d8[36];
+int func_0203366c(void *self, int id);
+int func_020311b4(void *self, int day);
+void func_020311cc(void *self, int day, int weather);
+void func_020355e0(GameDay *out, GameDay *date, int days);
+int func_02035968(GameDay *date);
+typedef struct DayTable18 { u32 w[36]; } DayTable18;
+typedef struct DayTable8 { u32 w[16]; } DayTable8;
+typedef struct DayTable4 { u32 w[8]; } DayTable4;
+extern const GameDay data_020b27d0[18];
+extern const GameDay data_020b2748;
+extern const s8 data_020b2750[4][8];
+extern const GameDay data_020b2790[8];
+extern const GameDay data_020b2770[4];
+extern const u8 data_020b2860[];
+extern const u8 data_020b2868[];
 extern u32 data_020bc948;
 
 void *func_020350d4(void *self)
@@ -165,6 +180,11 @@ GameTime *func_020351b0(void)
 }
 
 } // extern "C"
+
+static inline BOOL IsSameDay(GameDay *a, GameDay *b)
+{
+    return (BOOL)(func_020356dc(a) == func_020356dc(b));
+}
 
 static inline BOOL IsEarlier(const GameTime *a, const GameTime *b)
 {
@@ -587,5 +607,318 @@ BOOL func_02035948(u32 percent)
     return percent > func_020358d0(99);
 }
 
+
+// Weather of the day `date`: 0 sunny, ... 6/7 storms (see docs/MODDING.md).
+// Festival days get 0..2, the first day of the game 1, some fixed dates their own rule; the rest is a
+// roll against the season's table (8 cumulative chances in percent).
+#ifdef NONMATCHING
+int func_02035968(GameDay *date)
+{
+    GameDay festivals[18];
+    GameDay start;
+    u32 roll;
+    u32 sum;
+    u32 i;
+    int weather;
+
+    *(DayTable18 *)festivals = *(const DayTable18 *)data_020b27d0;
+    for (i = 0; i < 18; i++) {
+        if (date->season == festivals[i].season && date->day == festivals[i].day) {
+            return func_020358d0(2);
+        }
+    }
+    *(Words2 *)&start = *(const Words2 *)&data_020b2748;
+    if (IsSameDay(date, &start)) {
+        return 1;
+    }
+    if (date->season == 1 && date->day == 25) {
+        return 0;
+    }
+    if (date->season == 3 && date->day == 3) {
+        return func_020358d0(1) ? 1 : 5;
+    }
+    if (date->season == 3 && date->day == 23 && func_0203366c(data_020f57c0, 0x242) != 0xff) {
+        return func_020358d0(1) == 0 ? 1 : 0;
+    }
+    if (date->season == 3 && date->day == 24) {
+        return func_020358d0(1) == 0 ? 1 : 0;
+    }
+    roll = func_020358b8() / 42950 / 1000;
+    sum = 0;
+    weather = 1;
+    for (i = 0; i < 8; i++) {
+        sum += data_020b2750[date->season][i];
+        if (roll < sum) {
+            weather = i;
+            break;
+        }
+    }
+    if (weather == 6) {
+        GameDay calm[8];
+
+        *(DayTable8 *)calm = *(const DayTable8 *)data_020b2790;
+        for (i = 0; i < 8; i++) {
+            if (date->season == calm[i].season && date->day == calm[i].day) {
+                return 0;
+            }
+        }
+    }
+    if (weather == 7) {
+        GameDay snow[4];
+
+        *(DayTable4 *)snow = *(const DayTable4 *)data_020b2770;
+        for (i = 0; i < 4; i++) {
+            if (date->season == snow[i].season && date->day == snow[i].day) {
+                return 5;
+            }
+        }
+    }
+    if (weather == 7 && date->season == 3 && date->day == 23 && func_0203366c(data_020f57c0, 0x242) == 0xff) {
+        return 5;
+    }
+    return weather;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm int func_02035968(GameDay *date) {
+    stmdb sp!, {r4, r5, r6, r7, r8, lr}
+    sub sp, sp, #0xf8
+    ldr r7, [pc, #0x2c0]
+    add r6, sp, #0x68
+    mov r5, r0
+    mov r4, #0x9
+_02035980:
+    ldmia r7!, {r0, r1, r2, r3}
+    stmia r6!, {r0, r1, r2, r3}
+    subs r4, r4, #0x1
+    bne _02035980
+    ldrsb r6, [r5, #0x4]
+    mov r4, #0x0
+    add r3, sp, #0x68
+_0203599c:
+    add r2, r3, r4, lsl #0x3
+    ldrsb r0, [r2, #0x4]
+    cmp r6, r0
+    ldreqsb r1, [r5, #0x5]
+    ldreqsb r0, [r2, #0x5]
+    cmpeq r1, r0
+    bne _020359c8
+    mov r0, #0x2
+    bl func_020358d0
+    add sp, sp, #0xf8
+    ldmia sp!, {r4, r5, r6, r7, r8, pc}
+_020359c8:
+    add r4, r4, #0x1
+    cmp r4, #0x12
+    blo _0203599c
+    ldr r1, [pc, #0x260]
+    mov r0, r5
+    ldr r2, [r1, #0x4]
+    ldr r1, [r1, #0x0]
+    str r2, [sp, #0x4]
+    str r1, [sp, #0x0]
+    bl func_020356dc
+    mov r4, r0
+    add r0, sp, #0x0
+    bl func_020356dc
+    cmp r4, r0
+    moveq r0, #0x1
+    movne r0, #0x0
+    cmp r0, #0x0
+    addne sp, sp, #0xf8
+    movne r0, #0x1
+    ldmneia sp!, {r4, r5, r6, r7, r8, pc}
+    ldrsb r1, [r5, #0x4]
+    cmp r1, #0x1
+    ldreqsb r0, [r5, #0x5]
+    cmpeq r0, #0x19
+    addeq sp, sp, #0xf8
+    moveq r0, #0x0
+    ldmeqia sp!, {r4, r5, r6, r7, r8, pc}
+    cmp r1, #0x3
+    ldreqsb r0, [r5, #0x5]
+    cmpeq r0, #0x3
+    bne _02035a60
+    mov r0, #0x1
+    bl func_020358d0
+    cmp r0, #0x0
+    movne r0, #0x1
+    add sp, sp, #0xf8
+    moveq r0, #0x5
+    ldmia sp!, {r4, r5, r6, r7, r8, pc}
+_02035a60:
+    cmp r1, #0x3
+    ldreqsb r0, [r5, #0x5]
+    cmpeq r0, #0x17
+    bne _02035aa4
+    ldr r0, [pc, #0x1c8]
+    ldr r1, [pc, #0x1c8]
+    ldr r0, [r0, #0x0]
+    bl func_0203366c
+    cmp r0, #0xff
+    beq _02035aa4
+    mov r0, #0x1
+    bl func_020358d0
+    cmp r0, #0x0
+    movne r0, #0x0
+    add sp, sp, #0xf8
+    moveq r0, #0x1
+    ldmia sp!, {r4, r5, r6, r7, r8, pc}
+_02035aa4:
+    ldrsb r0, [r5, #0x4]
+    cmp r0, #0x3
+    ldreqsb r0, [r5, #0x5]
+    cmpeq r0, #0x18
+    bne _02035ad4
+    mov r0, #0x1
+    bl func_020358d0
+    cmp r0, #0x0
+    movne r0, #0x0
+    add sp, sp, #0xf8
+    moveq r0, #0x1
+    ldmia sp!, {r4, r5, r6, r7, r8, pc}
+_02035ad4:
+    bl func_020358b8
+    ldr r2, [pc, #0x168]
+    ldrsb lr, [r5, #0x4]
+    umull r2, r3, r0, r2
+    sub r0, r0, r3
+    add r3, r3, r0, lsr #0x1
+    ldr r0, [pc, #0x158]
+    mov r1, #0x0
+    add r7, r0, lr, lsl #0x3
+    ldr r0, [pc, #0x150]
+    mov r3, r3, lsr #0xf
+    umull r0, r2, r3, r0
+    mov r6, r1
+    mov r4, #0x1
+    mov r2, r2, lsr #0x6
+_02035b10:
+    ldrsb r0, [r7, #0x0]
+    add r1, r1, r0
+    cmp r2, r1
+    movlo r4, r6
+    blo _02035b34
+    add r6, r6, #0x1
+    cmp r6, #0x8
+    add r7, r7, #0x1
+    blo _02035b10
+_02035b34:
+    cmp r4, #0x6
+    bne _02035b9c
+    ldr r8, [pc, #0x110]
+    add r7, sp, #0x28
+    ldmia r8!, {r0, r1, r2, r3}
+    mov r6, r7
+    stmia r7!, {r0, r1, r2, r3}
+    ldmia r8!, {r0, r1, r2, r3}
+    stmia r7!, {r0, r1, r2, r3}
+    ldmia r8!, {r0, r1, r2, r3}
+    stmia r7!, {r0, r1, r2, r3}
+    ldmia r8, {r0, r1, r2, r3}
+    stmia r7, {r0, r1, r2, r3}
+    mov ip, #0x0
+_02035b6c:
+    add r2, r6, ip, lsl #0x3
+    ldrsb r0, [r2, #0x4]
+    cmp lr, r0
+    ldreqsb r1, [r5, #0x5]
+    ldreqsb r0, [r2, #0x5]
+    cmpeq r1, r0
+    addeq sp, sp, #0xf8
+    moveq r0, #0x0
+    ldmeqia sp!, {r4, r5, r6, r7, r8, pc}
+    add ip, ip, #0x1
+    cmp ip, #0x8
+    blo _02035b6c
+_02035b9c:
+    cmp r4, #0x7
+    bne _02035bf4
+    ldr r7, [pc, #0xac]
+    add r6, sp, #0x8
+    ldmia r7!, {r0, r1, r2, r3}
+    mov ip, r6
+    stmia r6!, {r0, r1, r2, r3}
+    ldmia r7, {r0, r1, r2, r3}
+    stmia r6, {r0, r1, r2, r3}
+    mov r3, #0x0
+_02035bc4:
+    add r2, ip, r3, lsl #0x3
+    ldrsb r0, [r2, #0x4]
+    cmp lr, r0
+    ldreqsb r1, [r5, #0x5]
+    ldreqsb r0, [r2, #0x5]
+    cmpeq r1, r0
+    addeq sp, sp, #0xf8
+    moveq r0, #0x5
+    ldmeqia sp!, {r4, r5, r6, r7, r8, pc}
+    add r3, r3, #0x1
+    cmp r3, #0x4
+    blo _02035bc4
+_02035bf4:
+    cmp r4, #0x7
+    ldreqsb r0, [r5, #0x4]
+    cmpeq r0, #0x3
+    ldreqsb r0, [r5, #0x5]
+    cmpeq r0, #0x17
+    bne _02035c2c
+    ldr r0, [pc, #0x2c]
+    ldr r1, [pc, #0x2c]
+    ldr r0, [r0, #0x0]
+    bl func_0203366c
+    cmp r0, #0xff
+    addeq sp, sp, #0xf8
+    moveq r0, #0x5
+    ldmeqia sp!, {r4, r5, r6, r7, r8, pc}
+_02035c2c:
+    mov r0, r4
+    add sp, sp, #0xf8
+    ldmia sp!, {r4, r5, r6, r7, r8, pc}
+    dcd data_020b27d0
+    dcd data_020b2748
+    dcd data_020f57c0
+    dcd 0x242
+    dcd 0x869f3d13
+    dcd data_020b2750
+    dcd 0x10624dd3
+    dcd data_020b2790
+    dcd data_020b2770
+}
+#endif
+
+// Weather of forecast day `day` (0 = today).
+int func_02035c5c(int day)
+{
+    return func_020311b4(data_020f57c0, day);
 }
 
+// New day: the forecast moves one day and day 6 is rolled.
+void func_02035c78(void)
+{
+    int i;
+    GameDay d;
+    GameDay later;
+    GameDay today;
+    ClockState *s;
+
+    for (i = -1; i < 6; i++) {
+        func_020311cc(data_020f57c0, i, func_020311b4(data_020f57c0, i + 1));
+    }
+    func_02035524(&today);
+    func_020355e0(&later, &today, 6);
+    s = data_020f57c0;
+    *(Words2 *)&d = *(Words2 *)&later;
+    func_020311cc(s, 6, func_02035968(&d));
+}
+
+u8 func_02035d04(void)
+{
+    return data_020b2860[func_020311b4(data_020f57c0, 0)];
+}
+
+u8 func_02035d2c(void)
+{
+    return data_020b2868[func_020311b4(data_020f57c0, 0)];
+}
+
+}
