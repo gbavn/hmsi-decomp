@@ -186,7 +186,7 @@ void IslandScene::Func4()
 
 void *IslandScene::operator new(size_t size)
 {
-    return Task::operator new(size, data_020f578c.mSceneManager);
+    return Task::operator new(size, gSceneTaskManagers[6]);
 }
 
 void IslandScene::InitGraphics()

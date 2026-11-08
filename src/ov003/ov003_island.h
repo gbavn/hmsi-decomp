@@ -37,11 +37,6 @@ extern void *data_020f57c0;
 void Gfx_Dummy0(void);
 void Gfx_InitMain3D(void);
 
-struct TaskSystem {
-    u8 unk0[0x18];
-    TaskManager *mSceneManager;
-};
-extern TaskSystem data_020f578c;
 
 class IslandCamera {
 public:

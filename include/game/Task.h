@@ -46,4 +46,7 @@ public:
 
 extern SceneControl *gSceneControl;
 
+// The task manager of each scene (0x020f578c), created by the scene manager when the scene starts.
+extern TaskManager *gSceneTaskManagers[9];
+
 #endif
