@@ -2,7 +2,7 @@
 // calendar, the weather forecast, the flags and everything else that is saved. Names are ours.
 //
 // The original is a single C++ file with ~190 functions; it is decompiled in pieces (this unit covers
-// 0x02030cfc..0x02033ca4). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
+// 0x02030cfc..0x020342c8). Its .data/.rodata/.bss stay in assembly for now and are used by symbol.
 #include <nitro.h>
 #include <string.h>
 
@@ -263,6 +263,32 @@ typedef struct Obj10 {
     u8 d;
 } Obj10;
 
+typedef struct Rec12 {
+    s16 id;
+    u32 a;
+    u32 b;
+} Rec12;
+
+typedef struct Rec8 {
+    s32 value;
+    u16 h;
+    s8 c;
+} Rec8;
+
+typedef struct Bits30 {
+    u8 b[30];
+} Bits30;
+
+typedef struct Bytes3 {
+    u8 b[3];
+} Bytes3;
+
+typedef struct Entry0ee {
+    s16 v[6];
+    Bytes3 c;
+    u8 unkf;
+} Entry0ee;
+
 typedef struct GameData {
     void **vt;
     u8 unk4;
@@ -297,6 +323,14 @@ typedef struct GameData {
     u8 unke497;
     u16 vars16[16];         // flags 0x321..0x330
     u32 vars32[15];         // flags 0x331..0x33f
+    s16 queue[50];          // ids waiting (-1 = free)
+    Rec12 recs12[15];
+    Rec8 recs8[0x8f];
+    Rec8 recs8b[0x28];
+    Bits30 bitsA;           // one bit per entry below (func_02077910 sets, func_020778c8 reads)
+    Bits30 bitsB;
+    Entry0ee ents[0xee];    // indexed by func_ov002_021a5e98(id)
+    u8 unkfae0[0x58];
 } GameData;
 
 #define RECORDS(self) (((GameData *)(self))->records)
@@ -3257,4 +3291,349 @@ asm u32 func_02033b30(void *self) {
     dcd 0x41cdcd65
 }
 #endif
+
+BOOL func_02033d8c(void *obj);
+s32 func_02033f14(void *obj, int i);
+const s32 *func_0202f140(const s32 *a, const s32 *b);
+extern const s32 data_020b1eec[];
+extern const s32 data_020b1ef0[];
+extern const s32 data_020bc880;
+
+void func_02033ca4(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    MIi_CpuClear16(0xffff, self->queue, sizeof(self->queue));
+    for (i = 0; i < 15; i++) {
+        self->recs12[i].id = -1;
+        self->recs12[i].a = 0;
+    }
+}
+
+// Adds `id` to the queue (once).
+void func_02033cf4(void *obj, s16 id)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    for (i = 0; i < 50; i++) {
+        if (id == self->queue[i]) {
+            return;
+        }
+        if (self->queue[i] == -1) {
+            self->queue[i] = id;
+            return;
+        }
+    }
+}
+
+// Takes the first id out of the queue.
+#ifdef NONMATCHING
+s16 func_02033d30(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    s16 first = self->queue[0];
+    int i;
+
+    for (i = 1; i < 50; i++) {
+        self->queue[i - 1] = self->queue[i];
+    }
+    self->queue[49] = -1;
+    return first;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm s16 func_02033d30(void *obj) {
+    add r1, r0, #0xe400
+    ldrsh r3, [r1, #0xf4]
+    mov ip, #0x1
+_02033d3c:
+    add r1, r0, ip, lsl #0x1
+    add r1, r1, #0xe400
+    ldrsh r2, [r1, #0xf4]
+    add ip, ip, #0x1
+    cmp ip, #0x32
+    strh r2, [r1, #0xf2]
+    blt _02033d3c
+    add r1, r0, #0xe500
+    mvn r2, #0x0
+    mov r0, r3
+    strh r2, [r1, #0x56]
+    bx lr
+}
+#endif
+
+s16 func_02033d6c(void *obj)
+{
+    GameData *self = (GameData *)obj;
+
+    if (func_02033d8c(self)) {
+        return -1;
+    }
+    return self->queue[0];
+}
+
+BOOL func_02033d8c(void *obj)
+{
+    return ((GameData *)obj)->queue[0] == -1;
+}
+
+void func_02033da8(void *obj, s16 id, u32 a, u32 b)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    for (i = 0; i < 15; i++) {
+        if (id == self->recs12[i].id) {
+            return;
+        }
+        if (self->recs12[i].id == -1) {
+            self->recs12[i].id = id;
+            self->recs12[i].a = a;
+            self->recs12[i].b = b;
+            return;
+        }
+    }
+}
+
+s16 func_02033e04(void *obj, u32 *a, u32 *b)
+{
+    GameData *self = (GameData *)obj;
+    s16 first = self->recs12[0].id;
+    int i;
+
+    *a = self->recs12[0].a;
+    *b = self->recs12[0].b;
+    for (i = 1; i < 15; i++) {
+        self->recs12[i - 1].id = self->recs12[i].id;
+        self->recs12[i - 1].a = self->recs12[i].a;
+        self->recs12[i - 1].b = self->recs12[i].b;
+    }
+    self->recs12[14].id = -1;
+    return first;
+}
+
+BOOL func_02033e70(void *obj)
+{
+    return ((GameData *)obj)->recs12[0].id == -1;
+}
+
+void func_02033e8c(void *obj)
+{
+    MI_CpuFill8(((GameData *)obj)->recs8, 0, sizeof(((GameData *)obj)->recs8));
+}
+
+void func_02033eac(void *obj, int i, s32 add)
+{
+    GameData *self = (GameData *)obj;
+
+    self->recs8[i].value += add;
+    self->recs8[i].value = *func_02031a74(&self->recs8[i].value, data_020b1eec);
+    self->recs8[i].value = *func_02031a60(&self->recs8[i].value, &data_020bc880);
+}
+
+s32 func_02033f14(void *obj, int i)
+{
+    return ((GameData *)obj)->recs8[i].value;
+}
+
+void func_02033f24(void *obj, int i, u16 v)
+{
+    ((GameData *)obj)->recs8[i].h = v;
+}
+
+u16 func_02033f34(void *obj, int i)
+{
+    return ((GameData *)obj)->recs8[i].h;
+}
+
+void func_02033f44(void *obj, int i, s8 v)
+{
+    ((GameData *)obj)->recs8[i].c = v;
+}
+
+s8 func_02033f54(void *obj, int i)
+{
+    return ((GameData *)obj)->recs8[i].c;
+}
+
+void func_02033f64(void *self)
+{
+    s32 sum = 0;
+    int i;
+
+    for (i = 0; i < 0x8f; i++) {
+        sum += func_02033f14(self, i);
+        sum = *func_0202f140(&sum, data_020b1ef0);
+    }
+}
+
+int func_02033fbc(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int n = 0;
+    int i;
+
+    for (i = 0; i < 0x8f; i++) {
+        if (self->recs8[i].value != 0) {
+            n++;
+        }
+    }
+    return n;
+}
+
+void func_02033fec(void *obj)
+{
+    MI_CpuFill8(((GameData *)obj)->recs8b, 0, sizeof(((GameData *)obj)->recs8b));
+}
+
+void func_02034290(void *obj, int i);
+int func_ov002_021a5e98(int id);
+void func_ov002_021a5ca0(void *ent, int id);
+void func_02077910(void *bits, int i, int on);
+int func_020778c8(void *bits, int i);
+extern const s32 data_020b1ef4[];
+extern const s32 data_020bc884;
+
+void func_02034008(void *obj, int i, s32 add)
+{
+    GameData *self = (GameData *)obj;
+
+    self->recs8b[i].value += add;
+    self->recs8b[i].value = *func_02031a74(&self->recs8b[i].value, data_020b1ef4);
+    self->recs8b[i].value = *func_02031a60(&self->recs8b[i].value, &data_020bc884);
+}
+
+s32 func_02034070(void *obj, int i)
+{
+    return ((GameData *)obj)->recs8b[i].value;
+}
+
+int func_02034080(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int n = 0;
+    int i;
+
+    for (i = 0; i < 0x28; i++) {
+        if (self->recs8b[i].value != 0) {
+            n++;
+        }
+    }
+    return n;
+}
+
+void func_020340b0(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int i;
+
+    for (i = 0; i < 0xee; i++) {
+        func_02034290(self, i);
+        MI_CpuFill8(&self->ents[i].c, 0, sizeof(Bytes3));
+    }
+}
+
+void func_020340fc(void *obj, int id, int on)
+{
+    GameData *self = (GameData *)obj;
+    int i = func_ov002_021a5e98(id);
+
+    if (on) {
+        func_ov002_021a5ca0(&self->ents[i], id);
+    }
+    func_02077910(&self->bitsA, i, on);
+}
+
+BOOL func_02034148(void *obj, int id)
+{
+    GameData *self = (GameData *)obj;
+
+    return func_020778c8(&self->bitsA, func_ov002_021a5e98(id)) != 0;
+}
+
+#ifdef NONMATCHING
+void func_02034178(void *obj, int id, const Bytes3 *c)
+{
+    GameData *self = (GameData *)obj;
+    int i = func_ov002_021a5e98(id);
+
+    self->ents[i].c = *c;
+}
+#else
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_02034178(void *obj, int id, const Bytes3 *c) {
+    stmdb sp!, {r3, r4, r5, lr}
+    mov r5, r0
+    mov r4, r2
+    mov r0, r1
+    bl func_ov002_021a5e98
+    add r1, r5, #0xc
+    add r2, r1, #0xec00
+    ldrb r1, [r4, #0x0]
+    add r3, r2, r0, lsl #0x4
+    strb r1, [r2, r0, lsl #0x4]
+    ldrb r0, [r4, #0x1]
+    strb r0, [r3, #0x1]
+    ldrb r0, [r4, #0x2]
+    strb r0, [r3, #0x2]
+    ldmia sp!, {r3, r4, r5, pc}
+}
+#endif
+
+Bytes3 *func_020341b4(void *obj, int id)
+{
+    GameData *self = (GameData *)obj;
+
+    return &self->ents[func_ov002_021a5e98(id)].c;
+}
+
+int func_020341d4(void *obj)
+{
+    GameData *self = (GameData *)obj;
+    int n = 0;
+    int i;
+
+    for (i = 0; i < 0xee; i++) {
+        if (func_020778c8(&self->bitsA, i)) {
+            n++;
+        }
+    }
+    return n;
+}
+
+BOOL func_0203420c(void *obj, int id)
+{
+    GameData *self = (GameData *)obj;
+
+    return func_020778c8(&self->bitsB, func_ov002_021a5e98(id)) != 0;
+}
+
+void func_0203423c(void *obj, int id, int on)
+{
+    GameData *self = (GameData *)obj;
+
+    func_02077910(&self->bitsB, func_ov002_021a5e98(id), on);
+}
+
+s16 func_02034268(void *obj, int i, int j)
+{
+    return ((GameData *)obj)->ents[i].v[j];
+}
+
+void func_0203427c(void *obj, int i, s16 value, int j)
+{
+    ((GameData *)obj)->ents[i].v[j] = value;
+}
+
+void func_02034290(void *obj, int i)
+{
+    MIi_CpuClear32(0xffffffff, &((GameData *)obj)->ents[i], 12);
+}
+
+void func_020342ac(void *obj)
+{
+    MI_CpuFill8(((GameData *)obj)->unkfae0, 0, sizeof(((GameData *)obj)->unkfae0));
+}
 }
