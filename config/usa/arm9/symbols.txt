@@ -1414,8 +1414,8 @@ _ZN14Renderer2DBaseD2Ev kind:function(arm,size=0x14) addr:0x0202be70
 _ZN9SpriteVecC1Ev kind:function(arm,size=0x14) addr:0x0202be84
 _ZN14Renderer2DBaseD1Ev kind:function(arm,size=0x14) addr:0x0202be98
 _ZN14Renderer2DBaseD0Ev kind:function(arm,size=0x24) addr:0x0202beac
-func_0202bed0 kind:function(arm,size=0x24) addr:0x0202bed0
-func_0202bef4 kind:function(arm,size=0x1c) addr:0x0202bef4
+_Z11RegisterOamPK9GXOamAttrti kind:function(arm,size=0x24) addr:0x0202bed0 local
+_Z14RegisterAffinePK7MtxFx22 kind:function(arm,size=0x1c) addr:0x0202bef4 local
 func_0202bf10 kind:function(arm,size=0x7c) addr:0x0202bf10
 func_0202bf8c kind:function(arm,size=0x10) addr:0x0202bf8c
 func_0202bf9c kind:function(arm,size=0x88) addr:0x0202bf9c
@@ -8289,7 +8289,8 @@ data_020ec870 kind:bss addr:0x020ec870
 gSpriteDepthStep kind:bss addr:0x020ec878
 gRenderer2D kind:bss addr:0x020ec87c
 data_020ec880 kind:bss addr:0x020ec880
-data_020ec888 kind:bss addr:0x020ec888
+gOamManager kind:bss addr:0x020ec888
+data_020ec88c kind:bss addr:0x020ec88c
 data_020ec890 kind:bss addr:0x020ec890
 data_020ec894 kind:bss addr:0x020ec894
 data_020ec8a0 kind:bss addr:0x020ec8a0
