@@ -84,6 +84,18 @@ void func_02031840(void *self, const char *name);
 void func_0203375c(void *self, int id, int value);
 extern const u32 data_020b1e04[];
 
+BOOL func_02031f7c(void *self, int i);
+int func_02080c9c(void *obj, int i);
+extern void *data_020f57c4;
+
+BOOL func_0203f1f0(void *obj, int i);
+extern const s32 data_020bc874;
+extern const s32 data_020bc878;
+extern const s32 data_020bc87c;
+extern void *gResidents;
+const s32 *func_02031a60(const s32 *a, const s32 *b);
+const s32 *func_02031a74(const s32 *a, const s32 *b);
+
 extern void *data_020bc8bc[];
 extern const char data_020b2718[];
 extern const char data_020b2720[];
@@ -109,14 +121,6 @@ typedef struct Bytes5 {
     u8 b[5];
 } Bytes5;
 
-typedef struct GameData {
-    void **vt;
-    u8 unk4;
-    s8 initialized;
-    u8 unk6[0x18 - 6];
-    u32 weather[7];         // forecast: [0] = today
-    u32 weatherYesterday;
-} GameData;
 
 // A position-like triple, zeroed by its constructor.
 struct ZeroVec {
@@ -155,22 +159,45 @@ typedef struct Name7 {
 } Name7;
 
 // One of the 137 entries at +0x8a78 (12 bytes).
-typedef struct ItemRecord {
-    u8 unk0;
-    u16 unk2;
-    u32 a : 7;
+typedef struct ItemRecordBits {
+    s32 a : 7;
     u32 b : 1;
     u32 c : 1;
     u32 d : 1;
-    u32 e : 6;
+    s32 e : 6;
     u32 f : 1;
-    u32 g : 7;
-    u32 h : 4;
+    s32 g : 7;
+    s32 h : 4;
     u32 i : 1;
     u32 j : 3;
-    u32 k : 6;
+} ItemRecordBits;
+
+typedef struct ItemRecordBits2 {
+    s32 k : 6;
     s32 l : 26;
+} ItemRecordBits2;
+
+typedef struct ItemRecord {
+    u8 unk0;
+    u16 unk2;
+    ItemRecordBits bits;
+    ItemRecordBits2 bits2;
 } ItemRecord;
+
+typedef struct GameData {
+    void **vt;
+    u8 unk4;
+    s8 initialized;
+    u8 unk6[0x18 - 6];
+    u32 weather[7];         // forecast: [0] = today
+    u32 weatherYesterday;
+    u8 unk38[0x8a68 - 0x38];
+    char ranchName[13];
+    u8 unk8a75[3];
+    ItemRecord records[0x89];
+} GameData;
+
+#define RECORDS(self) (((GameData *)(self))->records)
 
 struct ZeroDate {
     ZeroDate() : a(0), b(0) {}
@@ -748,8 +775,8 @@ void func_020317f0(void *self)
 #ifdef NONMATCHING
 void func_02031840(void *self, const char *name)
 {
-    MI_CpuFill8(&AT(u8, 0x9068), 0, 13);
-    MI_CpuCopy8(name, &AT(u8, 0x9068), func_02021d48(name));
+    MI_CpuFill8(((GameData *)self)->ranchName, 0, 13);
+    MI_CpuCopy8(name, ((GameData *)self)->ranchName, func_02021d48(name));
 }
 #else
 // NONMATCHING: kept as assembly until the C version matches.
@@ -797,21 +824,21 @@ void func_020318c8(void *self)
     for (i = 0; i < 0x89; i++) {
         records[i].unk0 = 0;
         records[i].unk2 = 0;
-        records[i].a = 0;
-        records[i].b = 0;
-        records[i].c = 0;
-        records[i].d = 0;
-        records[i].e = 10;
-        records[i].f = 0;
-        records[i].g = 0;
-        records[i].h = 0;
-        records[i].i = 0;
-        records[i].k = 0;
-        records[i].l = -1;
+        records[i].bits.a = 0;
+        records[i].bits.b = 0;
+        records[i].bits.c = 0;
+        records[i].bits.d = 0;
+        records[i].bits.e = 10;
+        records[i].bits.f = 0;
+        records[i].bits.g = 0;
+        records[i].bits.h = 0;
+        records[i].bits.i = 0;
+        records[i].bits2.k = 0;
+        records[i].bits2.l = -1;
     }
     for (i = 0; i < 0x18; i++) {
-        records[data_020b1e04[i]].h = 1;
-        records[data_020b1e04[i]].k = 1;
+        records[data_020b1e04[i]].bits.h = 1;
+        records[data_020b1e04[i]].bits2.k = 1;
     }
 }
 #else
@@ -878,4 +905,249 @@ _02031970:
     dcd data_020b1e04
 }
 #endif
+// Adds `amount` (scaled by the multiplier at +0x98) to record `i`'s value, clamped to 0..0xffff.
+#ifdef NONMATCHING
+void func_020319ac(void *self, int i, int amount)
+{
+    s32 value;
+
+    if (func_02031f7c(self, i)) {
+        return;
+    }
+    value = RECORDS(self)[i].unk2 + (s32)(amount * AT(f32, 0x98));
+    value = *func_02031a60(&value, &data_020bc874);
+    if (func_0203f1f0(gResidents, i)) {
+        value = *func_02031a74(&value, &data_020bc878);
+    } else {
+        value = *func_02031a74(&value, &data_020bc87c);
+    }
+    RECORDS(self)[i].unk2 = value;
+}
+#else
+// Linker names used by the asm below.
+extern "C" {
+void _ZN9Residents10IsResidentEi(void);
+void _ffix(void);
+void _fflt(void);
+void _fmul(void);
+}
+// NONMATCHING: kept as assembly until the C version matches.
+asm void func_020319ac(void *self, int i, int amount) {
+    stmdb sp!, {r3, r4, r5, r6, r7, lr}
+    mov r7, r0
+    mov r4, r1
+    mov r6, r2
+    bl func_02031f7c
+    cmp r0, #0x0
+    ldmneia sp!, {r3, r4, r5, r6, r7, pc}
+    mov r0, #0xc
+    mul r5, r4, r0
+    add r1, r7, #0x7a
+    mov r0, r6
+    ldr r7, [r7, #0x98]
+    add r6, r1, #0x8a00
+    bl _fflt
+    mov r1, r7
+    bl _fmul
+    bl _ffix
+    ldrh r2, [r6, r5]
+    ldr r1, [pc, #0x54]
+    add r2, r2, r0
+    add r0, sp, #0x0
+    str r2, [sp, #0x0]
+    bl func_02031a60
+    ldr r2, [r0, #0x0]
+    ldr r0, [pc, #0x40]
+    mov r1, r4
+    ldr r0, [r0, #0x0]
+    str r2, [sp, #0x0]
+    bl _ZN9Residents10IsResidentEi
+    cmp r0, #0x0
+    add r0, sp, #0x0
+    beq _02031a38
+    ldr r1, [pc, #0x24]
+    bl func_02031a74
+    b _02031a40
+_02031a38:
+    ldr r1, [pc, #0x1c]
+    bl func_02031a74
+_02031a40:
+    ldr r0, [r0, #0x0]
+    str r0, [sp, #0x0]
+    strh r0, [r6, r5]
+    ldmia sp!, {r3, r4, r5, r6, r7, pc}
+    dcd data_020bc874
+    dcd gResidents
+    dcd data_020bc878
+    dcd data_020bc87c
+}
+#endif
+
+const s32 *func_02031a60(const s32 *a, const s32 *b)
+{
+    return *a > *b ? a : b;
+}
+
+const s32 *func_02031a74(const s32 *a, const s32 *b)
+{
+    return *a < *b ? a : b;
+}
+
+void func_02031a88(void *self, int i, u16 value)
+{
+    if (func_02031f7c(self, i)) {
+        return;
+    }
+    RECORDS(self)[i].unk2 = value;
+}
+
+u16 func_02031ab8(void *self, int i)
+{
+    if (i == 0xd7) {
+        i = func_0203366c(self, 4) == 0 ? 0x1c : 0x1d;
+    }
+    return RECORDS(self)[i].unk2;
+}
+
+void func_02031af0(void *self, int i, int value)
+{
+    RECORDS(self)[i].bits.h = value;
+}
+
+int func_02031b18(void *self, int i)
+{
+    return RECORDS(self)[i].bits.h;
+}
+
+int func_02031b34(void)
+{
+    void *obj = data_020f57c4;
+    int sum = 0;
+    int i;
+
+    for (i = 0; i < 7; i++) {
+        sum += func_02080c9c(obj, i);
+    }
+    return sum;
+}
+
+void func_02031b70(void *self, int i, int value)
+{
+    RECORDS(self)[i].bits.a = value;
+}
+
+void func_02031b98(void *self, int i)
+{
+    if (RECORDS(self)[i].bits.a < 30) {
+        RECORDS(self)[i].bits.a++;
+    }
+}
+
+int func_02031bd4(void *self, int i)
+{
+    return RECORDS(self)[i].bits.a;
+}
+
+void func_02031bf0(void *self, int i, BOOL value)
+{
+    RECORDS(self)[i].bits.b = value;
+}
+
+BOOL func_02031c18(void *self, int i)
+{
+    return RECORDS(self)[i].bits.b == 1;
+}
+
+void func_02031c40(void *self, int i, BOOL value)
+{
+    RECORDS(self)[i].bits.c = value;
+}
+
+BOOL func_02031c68(void *self, int i)
+{
+    return RECORDS(self)[i].bits.c == 1;
+}
+
+void func_02031c90(void *self, int i, BOOL value)
+{
+    RECORDS(self)[i].bits.d = value;
+}
+
+BOOL func_02031cb8(void *self, int i)
+{
+    return RECORDS(self)[i].bits.d == 1;
+}
+
+void func_02031ce0(void *self, int i, int value)
+{
+    RECORDS(self)[i].bits.e = value;
+    RECORDS(self)[i].bits.e = RECORDS(self)[i].bits.e <= 0 ? 0 : RECORDS(self)[i].bits.e;
+    RECORDS(self)[i].bits.e = RECORDS(self)[i].bits.e >= 10 ? 10 : RECORDS(self)[i].bits.e;
+}
+
+int func_02031d50(void *self, int i)
+{
+    return RECORDS(self)[i].bits.e;
+}
+
+void func_02031d6c(void *self, int i, int value)
+{
+    RECORDS(self)[i].bits.g = value;
+    RECORDS(self)[i].bits.g = RECORDS(self)[i].bits.g <= 0 ? 0 : RECORDS(self)[i].bits.g;
+    RECORDS(self)[i].bits.g = RECORDS(self)[i].bits.g >= 30 ? 30 : RECORDS(self)[i].bits.g;
+}
+
+int func_02031ddc(void *self, int i)
+{
+    return RECORDS(self)[i].bits.g;
+}
+
+void func_02031df8(void *self, int i, int value)
+{
+    RECORDS(self)[i].bits2.k = value;
+}
+
+void func_02031e20(void *self, int i)
+{
+    RECORDS(self)[i].bits2.k = RECORDS(self)[i].bits2.k + 1;
+    RECORDS(self)[i].bits2.k = RECORDS(self)[i].bits2.k >= 16 ? 16 : RECORDS(self)[i].bits2.k;
+}
+
+int func_02031e78(void *self, int i)
+{
+    return RECORDS(self)[i].bits2.k;
+}
+
+void func_02031e94(void *self, int i, BOOL value)
+{
+    RECORDS(self)[i].bits.f = value;
+}
+
+BOOL func_02031ebc(void *self, int i)
+{
+    return RECORDS(self)[i].bits.f == 1;
+}
+
+void func_02031ee4(void *self, int i, BOOL value)
+{
+    RECORDS(self)[i].bits.i = value;
+}
+
+BOOL func_02031f0c(void *self, int i)
+{
+    if (i == 0x25) {
+        return FALSE;
+    }
+    return RECORDS(self)[i].bits.i == 1;
+}
+
+void func_02031f40(void *self, int i, int value)
+{
+    RECORDS(self)[i].bits2.l = value;
+}
+
+int func_02031f64(void *self, int i)
+{
+    return RECORDS(self)[i].bits2.l;
+}
 }
