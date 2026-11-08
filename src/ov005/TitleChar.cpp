@@ -80,7 +80,7 @@ BOOL TitleChar::Update()
     } else {
         func_0202b1a4(mMark, mX, mY, mZ - FX32_ONE);
     }
-    func_0202bc20(data_020ec87c, mMark);
+    func_0202bc20(gRenderer2D, mMark);
     return TRUE;
 }
 

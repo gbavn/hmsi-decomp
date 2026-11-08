@@ -242,7 +242,7 @@ BOOL TitleMain::Update()
             }
         }
         func_02029fe8(data_020ec870);
-        func_0202bbf4(data_020ec87c);
+        func_0202bbf4(gRenderer2D);
         func_02035ed4(1, 0);
         mState = 2;
         break;
@@ -271,7 +271,7 @@ BOOL TitleMain::Update()
         data_020ec698 = 1;
         return FALSE;
     }
-    func_0202bd70(data_020ec87c);
+    func_0202bd70(gRenderer2D);
     func_02037410();
     return TRUE;
 }
@@ -419,7 +419,7 @@ _0215917c:
     dcd sTitleManagers
     dcd sTitleManagers
     dcd data_020ec870
-    dcd data_020ec87c
+    dcd gRenderer2D
     dcd data_020f57c0
     dcd gSceneControl
     dcd data_020ec698
@@ -441,7 +441,7 @@ void TitleMain::Draw()
     NNS_G2dSetupSoftwareSpriteCamera();
     func_0202a1a0(data_020ec870, 0);
     func_0202abe4(data_020ec870);
-    func_0202bdd4(data_020ec87c);
+    func_0202bdd4(gRenderer2D);
     gRenderer3D->Flush();
 }
 
@@ -484,7 +484,7 @@ void TitleMain::InitGraphics()
 void TitleMain::BeginFrame()
 {
     func_02029fe8(data_020ec870);
-    func_0202bbf4(data_020ec87c);
+    func_0202bbf4(gRenderer2D);
     gRenderer3D->Begin();
     G3X_Reset();
     G3X_ResetMtxStack();

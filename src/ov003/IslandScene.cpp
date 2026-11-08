@@ -24,7 +24,7 @@ IslandScene::~IslandScene()
         delete mView;
     }
     func_02029fe8(data_020ec870);
-    func_0202bbf4(data_020ec87c);
+    func_0202bbf4(gRenderer2D);
     gRenderer3D->Begin();
     gSceneControl->Request(mNextScene);
 }
@@ -87,7 +87,7 @@ _02155d24:
     ldmia sp!, {r4, pc}
     dcd _ZTV11IslandScene+8
     dcd data_020ec870
-    dcd data_020ec87c
+    dcd gRenderer2D
     dcd gRenderer3D
     dcd gSceneControl
 }
@@ -128,7 +128,7 @@ _02155dc0:
     ldmia sp!, {r4, pc}
     dcd _ZTV11IslandScene+8
     dcd data_020ec870
-    dcd data_020ec87c
+    dcd gRenderer2D
     dcd gRenderer3D
     dcd gSceneControl
 }

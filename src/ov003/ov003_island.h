@@ -30,7 +30,7 @@ void *func_0202feb0(const char *path);
 Model3D *func_02030020(void *res, u32 idx);
 void func_02030298(Model3D *model, void *anm, int type);
 extern void *data_020ec870;
-extern void *data_020ec87c;
+extern void *gRenderer2D;
 extern void *data_020f57c0;
 }
 

@@ -625,6 +625,16 @@ src/Gfx2D.cpp:
     .text       start:0x02029198 end:0x02029380
     .data       start:0x020bc2dc end:0x020bc2fc
 
+src/Sprite2D.cpp:
+    complete
+    .text       start:0x0202aec0 end:0x0202bed0
+    .rodata     start:0x020b1d64 end:0x020b1da4
+    .data       start:0x020bc374 end:0x020bc3a4
+
+src/Renderer2DBaseVtable.cpp:
+    complete
+    .data       start:0x020bc3a4 end:0x020bc3b4
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
@@ -671,6 +681,10 @@ libs/NitroSDK/libraries/fs/src/fs_command_default.c:
 src/Gfx2DData.cpp:
     complete
     .bss        start:0x020ec858 end:0x020ec85c
+
+src/Sprite2DData.cpp:
+    complete
+    .bss        start:0x020ec878 end:0x020ec880
 
 libs/NitroSDK/libraries/fs/src/fs_archive.c:
     complete

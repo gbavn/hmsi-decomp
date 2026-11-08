@@ -48,7 +48,7 @@ BOOL TitleButton::Draw(BOOL active)
     if (active) {
         Button::Update();
     }
-    renderer = data_020ec87c;
+    renderer = gRenderer2D;
     if (mTouched || mDecided) {
         switch (mIndex) {
         case 0:

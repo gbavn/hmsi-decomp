@@ -29,7 +29,7 @@ void func_02036c74(int vram, int offset);
 int func_02036d48(int vram);
 extern u8 data_0214d920[];
 void func_02035e8c(int se, int unk);   // play a sound effect
-extern void *data_020ec87c;            // the 2D sprite renderer
+extern void *gRenderer2D;            // the 2D sprite renderer
 BOOL func_020374f8(int screen);        // a screen fade is running
 void func_02037284(int type, int a, int b);   // start a screen fade
 void func_02035f30(void);
@@ -227,7 +227,7 @@ public:
     TitleSubScene4E();                  // 0x020ab4fc
     u8 unk14[0x38 - 0x14];
 };
-// A 2D sprite drawn by the renderer at data_020ec87c (ARM9 0x0202b...).
+// A 2D sprite drawn by the renderer at gRenderer2D (ARM9 0x0202b...).
 struct Sprite2D {
     u8 unk0[0x10];
     fx32 y;

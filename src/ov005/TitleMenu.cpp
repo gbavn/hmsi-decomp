@@ -583,7 +583,7 @@ void TitleMenu::BlinkPrompt()
 {
     mBlink++;
     if (mBlink < 30) {
-        func_0202bc20(data_020ec87c, mSprites[0]);
+        func_0202bc20(gRenderer2D, mSprites[0]);
     }
     if (mBlink > 60) {
         mBlink = 0;

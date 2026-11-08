@@ -99,7 +99,10 @@ def main():
     proto = args[1] if len(args) > 1 else f"void {func}(void)"
     body = convert(func, load_names(), "--literal-pool" in sys.argv)
     print("// NONMATCHING: kept as assembly until the C version matches.")
-    print(f"asm {proto} {{")
+    if proto.startswith('extern "C" '):
+        print(f'extern "C" asm {proto[len("extern \"C\" "):]} {{')
+    else:
+        print(f"asm {proto} {{")
     print("\n".join(body))
     print("}")
 
