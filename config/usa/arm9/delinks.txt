@@ -686,6 +686,14 @@ src/AnimPlayer.cpp:
     complete
     .text       start:0x02036404 end:0x020365f8
 
+src/OamList.cpp:
+    complete
+    .text       start:0x020365f8 end:0x02036d70
+
+src/VramQueue.cpp:
+    complete
+    .text       start:0x02036d70 end:0x02036f80
+
 src/Archive.cpp:
     complete
     .text       start:0x02036f80 end:0x02037238
