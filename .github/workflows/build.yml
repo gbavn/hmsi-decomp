@@ -17,12 +17,19 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    # mwccarm waits forever on a license dialog if it cannot find its license; do not hang for hours.
+    timeout-minutes: 45
     strategy:
       matrix:
         version: [usa]
     env:
       OBJDIFF_VERSION: v3.8.3
     steps:
+      # The repository is stored with LF line endings; keep them as committed on Windows.
+      - name: Keep LF line endings
+        shell: bash
+        run: git config --global core.autocrlf false
+
       - name: Checkout
         uses: actions/checkout@v4
 
@@ -32,6 +39,7 @@ jobs:
           repository: gbavn/sunshine-islands-decomp
           ref: afaf7db2dd3d2861a30e637034ad9637373453fa
           token: ${{ secrets.PRIVATE_ASSETS_TOKEN }}
+          persist-credentials: false
           path: private
           sparse-checkout: |
             roms
@@ -45,6 +53,11 @@ jobs:
           mv private/tools/mwccarm tools/mwccarm
           rm -rf private
           echo "bbb18e8a4aa9fd845223d679c0e9207dc9374477 *roms/sunshine_islands_usa.nds" | sha1sum -c -
+          # scripts/build.py points LM_LICENSE_FILE at this file.
+          if [ ! -f tools/mwccarm/license.dat ]; then
+            echo "::error::tools/mwccarm/license.dat not found"
+            exit 1
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
