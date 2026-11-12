@@ -706,6 +706,10 @@ src/GroundObject.cpp:
     complete
     .text       start:0x0203772c end:0x02038558
 
+src/CropData.cpp:
+    complete
+    .text       start:0x02039208 end:0x0203ab28
+
 src/Backup.cpp:
     complete
     .text       start:0x0203ab28 end:0x0203b07c
