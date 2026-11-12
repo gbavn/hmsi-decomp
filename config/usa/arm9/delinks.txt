@@ -730,6 +730,10 @@ src/Residents.cpp:
     complete
     .text       start:0x0203cc24 end:0x02040390
 
+src/Weather.cpp:
+    complete
+    .text       start:0x02040390 end:0x02040ab8
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
