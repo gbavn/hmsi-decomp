@@ -728,7 +728,7 @@ src/XbbSprite.cpp:
 
 src/Residents.cpp:
     complete
-    .text       start:0x0203cc24 end:0x0203e918
+    .text       start:0x0203cc24 end:0x02040390
 
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
