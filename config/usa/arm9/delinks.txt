@@ -718,6 +718,10 @@ src/Backup.cpp:
     complete
     .text       start:0x0203ab28 end:0x0203b07c
 
+src/PlayerSprite.cpp:
+    complete
+    .text       start:0x0203b07c end:0x0203c04c
+
 libs/NitroSDK/libraries/fx/src/fx_mtx33.c:
     complete
     .text       start:0x020ab890 end:0x020abbb0
