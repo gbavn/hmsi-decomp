@@ -104,7 +104,7 @@ int func_02055800(int place);
 int func_02055898(int a);
 void *func_020788d4(u32 size);
 void *func_02077a08(void *self, int who, ScheduleMove *m, void *pos);
-void func_02078620(int a);
+void func_02078620(Npc *npc);
 ScheduleMove *func_02080de4(void *self, int who, int a);
 BOOL func_02053ef4(void *a);
 void func_ov002_021d0f8c(void *a, int msg, int b, int c, int d, int e, int f, int g, int h);
@@ -117,7 +117,16 @@ void func_0203d1fc(Residents *self);
 Npc *func_0203d324(Residents *self);
 Npc *func_0203d5cc(Residents *self);
 BOOL func_0203d824(Residents *self, VecFx32 *a, VecFx32 *b);
-int func_0203e5dc(Residents *self, int who);
+BOOL func_0203e40c(Residents *self, int item);
+BOOL func_0203f1b4(Residents *self, int who);
+void func_020319ac(void *self, int who, int amount);
+void func_02080d20(void *self, int who, int amount);
+void func_02031af0(void *self, int who, int v);
+void func_02031b70(void *self, int who, int v);
+void func_02031ce0(void *self, int who, int v);
+void func_02031d6c(void *self, int who, int v);
+void func_02031df8(void *self, int who, int v);
+Npc *func_0203e5dc(Residents *self, int who);
 void func_0203e760(Residents *self);
 int func_0203e820(Residents *self, int who);
 ScheduleMove *func_0203e830(Residents *self, int who);
@@ -982,6 +991,588 @@ _0203d7e8:
 BOOL func_0203d824(Residents *self, VecFx32 *a, VecFx32 *b)
 {
     return VEC_Distance(a, b) <= 0x4800;
+}
+
+
+typedef struct Pet {
+    u8 unk0[4];
+    s16 love;
+    u8 unk6[0x14 - 6];
+} Pet;
+
+// 6 entries at +0xe168 of the game data (pets?), friendship 0-1000.
+#define HORSES ((Pet *)((u8 *)data_020f57c0 + 0xe168))
+
+static inline void AddClamped(s16 *p, int n)
+{
+    *p += n;
+    if (*p > 1000) {
+        *p = 1000;
+    }
+    if (*p < 0) {
+        *p = 0;
+    }
+}
+
+// After event `kind` (a festival missed, ...), the residents concerned lose friendship (-100 or -300).
+void func_0203d844(Residents *self, int kind, int item)
+{
+    int who;
+    void *gd = data_020f57c0;
+    for (who = 0; who < 0x89; who++) {
+        if (!func_0203f1b4(gResidents, who)) {
+            continue;
+        }
+        if (func_02031b18(gd, who) != 1) {
+            continue;
+        }
+        switch (kind) {
+        case 2:
+            if (who < 0x22 || who > 0x4f) {
+                func_020319ac(gd, who, -100);
+            }
+            break;
+        case 1:
+            if (who == 0x9) {
+                func_020319ac(gd, 0x9, -100);
+            }
+            if (who == 0x1) {
+                func_020319ac(gd, 0x1, -100);
+            }
+            if (who == 0x10) {
+                func_020319ac(gd, 0x10, -100);
+            }
+            if (who == 0x11) {
+                func_020319ac(gd, 0x11, -100);
+            }
+            if (who == 0x2) {
+                func_020319ac(gd, 0x2, -100);
+            }
+            if (who == 0xa) {
+                func_020319ac(gd, 0xa, -100);
+            }
+            if (who == 0x12) {
+                func_020319ac(gd, 0x12, -100);
+            }
+            if (who == 0x13) {
+                func_020319ac(gd, 0x13, -100);
+            }
+            if (who == 0x14) {
+                func_020319ac(gd, 0x14, -100);
+            }
+            if (who == 0xc) {
+                func_020319ac(gd, 0xc, -100);
+            }
+            if (who == 0x5e) {
+                func_020319ac(gd, 0x5e, -100);
+            }
+            if (who == 0x5f) {
+                func_020319ac(gd, 0x5f, -100);
+            }
+            if (who == 0x65) {
+                func_020319ac(gd, 0x65, -100);
+            }
+            break;
+        case 3:
+            if (who == 0x15) {
+                func_020319ac(gd, 0x15, -100);
+            }
+            if (who == 0x16) {
+                func_020319ac(gd, 0x16, -100);
+            }
+            if (who == 0x4) {
+                func_020319ac(gd, 0x4, -100);
+            }
+            if (who == 0x17) {
+                func_020319ac(gd, 0x17, -100);
+            }
+            if (who == 0x3) {
+                func_020319ac(gd, 0x3, -100);
+            }
+            if (who == 0xb) {
+                func_020319ac(gd, 0xb, -100);
+            }
+            if (who == 0x5) {
+                func_020319ac(gd, 0x5, -100);
+            }
+            if (who == 0xe) {
+                func_020319ac(gd, 0xe, -100);
+            }
+            if (who == 0x6) {
+                func_020319ac(gd, 0x6, -100);
+            }
+            if (who == 0x20) {
+                func_020319ac(gd, 0x20, -100);
+            }
+            if (who == 0x21) {
+                func_020319ac(gd, 0x21, -100);
+            }
+            if (who == 0x1f) {
+                func_020319ac(gd, 0x1f, -100);
+            }
+            if (who == 0x1e) {
+                func_020319ac(gd, 0x1e, -100);
+            }
+            if (who == 0x66) {
+                func_020319ac(gd, 0x66, -100);
+            }
+            if (who == 0x6c) {
+                func_020319ac(gd, 0x6c, -100);
+            }
+            if (who == 0x73) {
+                func_020319ac(gd, 0x73, -100);
+            }
+            if (who == 0x74) {
+                func_020319ac(gd, 0x74, -100);
+            }
+            if (who == 0x81) {
+                func_020319ac(gd, 0x81, -100);
+            }
+            break;
+        case 6:
+            if (who == 0xf) {
+                func_020319ac(gd, 0xf, -100);
+            }
+            if (who == 0x19) {
+                func_020319ac(gd, 0x19, -100);
+            }
+            break;
+        case 7:
+            if (who == 0x17) {
+                func_020319ac(gd, 0x17, -100);
+            }
+            if (who == 0x4) {
+                func_020319ac(gd, 0x4, -100);
+            }
+            if (who == 0x65) {
+                func_020319ac(gd, 0x65, -100);
+            }
+            if (who == 0x66) {
+                func_020319ac(gd, 0x66, -100);
+            }
+            if (who == 0xd) {
+                func_020319ac(gd, 0xd, -100);
+            }
+            break;
+        case 5:
+            if (who == 0x7) {
+                func_020319ac(gd, 0x7, -100);
+            }
+            if (who == 0x1a) {
+                func_020319ac(gd, 0x1a, -100);
+            }
+            if (who == 0x8) {
+                func_020319ac(gd, 0x8, -100);
+            }
+            if (who == 0x18) {
+                func_020319ac(gd, 0x18, -100);
+            }
+            if (who == 0x1b) {
+                func_020319ac(gd, 0x1b, -100);
+            }
+            break;
+        case 8:
+            if (who == 0xd) {
+                func_020319ac(gd, 0xd, -100);
+            }
+            break;
+        case 11:
+            func_02080d20(data_020f57c4, who, -100);
+            break;
+        case 21:
+            if (who == 0x9) {
+                func_020319ac(gd, 0x9, -300);
+            }
+            if (who == 0x1) {
+                func_020319ac(gd, 0x1, -300);
+            }
+            if (who == 0x10) {
+                func_020319ac(gd, 0x10, -300);
+            }
+            if (who == 0x11) {
+                func_020319ac(gd, 0x11, -300);
+            }
+            break;
+        case 23:
+            if (who == 0x2) {
+                func_020319ac(gd, 0x2, -300);
+            }
+            if (who == 0xa) {
+                func_020319ac(gd, 0xa, -300);
+            }
+            if (who == 0x12) {
+                func_020319ac(gd, 0x12, -300);
+            }
+            break;
+        case 20:
+            if (who == 0x13) {
+                func_020319ac(gd, 0x13, -300);
+            }
+            if (who == 0x14) {
+                func_020319ac(gd, 0x14, -300);
+            }
+            break;
+        case 22:
+            if (who == 0x15) {
+                func_020319ac(gd, 0x15, -300);
+            }
+            if (who == 0x16) {
+                func_020319ac(gd, 0x16, -300);
+            }
+            break;
+        case 24:
+        case 25:
+            if (who == 0x17) {
+                func_020319ac(gd, 0x17, -300);
+            }
+            if (who == 0x4) {
+                func_020319ac(gd, 0x4, -300);
+            }
+            break;
+        case 26:
+            if (who == 0xc) {
+                func_020319ac(gd, 0xc, -300);
+            }
+            break;
+        case 27:
+            if (who == 0x3) {
+                func_020319ac(gd, 0x3, -300);
+            }
+            break;
+        case 37:
+            if (who == 0xb) {
+                func_020319ac(gd, 0xb, -300);
+            }
+            break;
+        case 12:
+            if (who == 0x8) {
+                func_020319ac(gd, 0x8, -300);
+            }
+            if (who == 0x18) {
+                func_020319ac(gd, 0x18, -300);
+            }
+            break;
+        case 38:
+            if (who == 0xf) {
+                func_020319ac(gd, 0xf, -300);
+            }
+            if (who == 0x19) {
+                func_020319ac(gd, 0x19, -300);
+            }
+            break;
+        case 39:
+            if (who == 0xd) {
+                func_020319ac(gd, 0xd, -300);
+            }
+            break;
+        case 13:
+            if (who == 0x7) {
+                func_020319ac(gd, 0x7, -300);
+            }
+            if (who == 0x1a) {
+                func_020319ac(gd, 0x1a, -300);
+            }
+            break;
+        case 31:
+            if (who == 0x5) {
+                func_020319ac(gd, 0x5, -300);
+            }
+            if (who == 0xe) {
+                func_020319ac(gd, 0xe, -300);
+            }
+            if (who == 0x6) {
+                func_020319ac(gd, 0x6, -300);
+            }
+            if (who == 0x20) {
+                func_020319ac(gd, 0x20, -300);
+            }
+            if (who == 0x21) {
+                func_020319ac(gd, 0x21, -300);
+            }
+            if (who == 0x1f) {
+                func_020319ac(gd, 0x1f, -300);
+            }
+            if (who == 0x1e) {
+                func_020319ac(gd, 0x1e, -300);
+            }
+            if (who == 0x6c) {
+                func_020319ac(gd, 0x6c, -300);
+            }
+            break;
+        case 32:
+            if (who == 0x1f) {
+                func_020319ac(gd, 0x1f, -300);
+            }
+            if (who == 0x1e) {
+                func_020319ac(gd, 0x1e, -300);
+            }
+            break;
+        case 33:
+            if (who == 0x20) {
+                func_020319ac(gd, 0x20, -300);
+            }
+            if (who == 0x21) {
+                func_020319ac(gd, 0x21, -300);
+            }
+            break;
+        case 34:
+            if (who == 0x5) {
+                func_020319ac(gd, 0x5, -300);
+            }
+            break;
+        case 35:
+            if (who == 0xe) {
+                func_020319ac(gd, 0xe, -300);
+            }
+            if (who == 0x6) {
+                func_020319ac(gd, 0x6, -300);
+            }
+            break;
+        case 36:
+            if (who == 0x6c) {
+                func_020319ac(gd, 0x6c, -300);
+            }
+            break;
+        case 28:
+            if (who == 0x73) {
+                func_020319ac(gd, 0x73, -300);
+            }
+            break;
+        case 29:
+            if (who == 0x81) {
+                func_020319ac(gd, 0x81, -300);
+            }
+            break;
+        case 40:
+            if (who == 0x65) {
+                func_020319ac(gd, 0x65, -300);
+            }
+            break;
+        case 41:
+            if (who == 0x5f) {
+                func_020319ac(gd, 0x5f, -300);
+            }
+            break;
+        case 42:
+            if (who == 0x5e) {
+                func_020319ac(gd, 0x5e, -300);
+            }
+            break;
+        case 43:
+            if (who == 0x66) {
+                func_020319ac(gd, 0x66, -300);
+            }
+            break;
+        }
+    }
+    if (kind != 10) {
+        return;
+    }
+    if (!func_0203e40c(self, item)) {
+        return;
+    }
+    AddClamped(&HORSES[0].love, -5);
+    AddClamped(&HORSES[1].love, -5);
+    AddClamped(&HORSES[2].love, -5);
+    AddClamped(&HORSES[3].love, -5);
+    AddClamped(&HORSES[4].love, -5);
+    AddClamped(&HORSES[5].love, -5);
+}
+
+// Does giving `item` count? (FALSE for 0x28-0x5c, 0x67-0x69, 0x14e-0x151, 0x186-0x18b)
+BOOL func_0203e40c(Residents *self, int item)
+{
+    BOOL ret = TRUE;
+    switch (item) {
+    case 0x28:
+    case 0x29:
+    case 0x2a:
+    case 0x2b:
+    case 0x2c:
+    case 0x2d:
+    case 0x2e:
+    case 0x2f:
+    case 0x30:
+    case 0x31:
+    case 0x32:
+    case 0x33:
+    case 0x34:
+    case 0x35:
+    case 0x36:
+    case 0x37:
+    case 0x38:
+    case 0x39:
+    case 0x3a:
+    case 0x3b:
+    case 0x3c:
+    case 0x3d:
+    case 0x3e:
+    case 0x3f:
+    case 0x40:
+    case 0x41:
+    case 0x42:
+    case 0x43:
+    case 0x44:
+    case 0x45:
+    case 0x46:
+    case 0x47:
+    case 0x48:
+    case 0x49:
+    case 0x4a:
+    case 0x4b:
+    case 0x4c:
+    case 0x4d:
+    case 0x4e:
+    case 0x4f:
+    case 0x50:
+    case 0x51:
+    case 0x52:
+    case 0x53:
+    case 0x54:
+    case 0x55:
+    case 0x56:
+    case 0x57:
+    case 0x58:
+    case 0x59:
+    case 0x5a:
+    case 0x5b:
+    case 0x5c:
+    case 0x67:
+    case 0x68:
+    case 0x69:
+    case 0x14e:
+    case 0x14f:
+    case 0x150:
+    case 0x151:
+    case 0x186:
+    case 0x187:
+    case 0x188:
+    case 0x189:
+    case 0x18a:
+    case 0x18b:
+        ret = FALSE;
+        break;
+    }
+    return ret;
+}
+
+Npc *func_0203e5dc(Residents *self, int who)
+{
+    NpcList *list = data_020ec6ac.npcs;
+    if (list == NULL) {
+        return NULL;
+    }
+    for (Npc *npc = list->head->next; npc != list->head; npc = npc->next) {
+        if (who == npc->id) {
+            return npc;
+        }
+    }
+    return NULL;
+}
+
+// Sets today's schedule of resident `who`.
+void func_0203e624(Residents *self, int who, ScheduleEntry *src)
+{
+    ScheduleEntry *t = self->today;
+    t[who].day = src->day;
+    ScheduleEntry *e = &t[who];
+    e->weather = src->weather;
+    e->season = src->season;
+    e->numConds = src->numConds;
+    e->numMoves = src->numMoves;
+    if (src->numConds > 0) {
+        e->conds = new u32[src->numConds];
+        MI_CpuCopy8(src->conds, e->conds, src->numConds * sizeof(u32));
+    } else {
+        e->conds = NULL;
+    }
+    e->moves = new ScheduleMove[src->numMoves];
+    MI_CpuCopy8(src->moves, e->moves, src->numMoves * sizeof(ScheduleMove));
+}
+
+void func_0203e6b8(Residents *self, int who)
+{
+    if (!func_0203f1b4(gResidents, who)) {
+        return;
+    }
+    if (self->today[who].conds != NULL) {
+        delete[] self->today[who].conds;
+        self->today[who].conds = NULL;
+    }
+    if (self->today[who].moves != NULL) {
+        delete[] self->today[who].moves;
+        self->today[who].moves = NULL;
+    }
+    if (self->special[who].conds != NULL) {
+        delete[] self->special[who].conds;
+        self->special[who].conds = NULL;
+    }
+    if (self->special[who].moves != NULL) {
+        delete[] self->special[who].moves;
+        self->special[who].moves = NULL;
+    }
+}
+
+void func_0203e760(Residents *self)
+{
+    for (int who = 0; who < 0x89; who++) {
+        func_0203e6b8(self, who);
+    }
+}
+
+// Sets the special schedule (day kind 10) of resident `who`.
+void func_0203e788(Residents *self, int who, ScheduleEntry *src)
+{
+    ScheduleEntry *t = self->special;
+    t[who].day = src->day;
+    ScheduleEntry *e = &t[who];
+    e->weather = src->weather;
+    e->season = src->season;
+    e->numConds = src->numConds;
+    e->numMoves = src->numMoves;
+    if (src->numConds > 0) {
+        e->conds = new u32[src->numConds];
+        MI_CpuCopy8(src->conds, e->conds, src->numConds * sizeof(u32));
+    } else {
+        e->conds = NULL;
+    }
+    e->moves = new ScheduleMove[src->numMoves];
+    MI_CpuCopy8(src->moves, e->moves, src->numMoves * sizeof(ScheduleMove));
+}
+
+int func_0203e820(Residents *self, int who)
+{
+    return self->special[who].moves->place;
+}
+
+ScheduleMove *func_0203e830(Residents *self, int who)
+{
+    return self->special[who].moves;
+}
+
+void func_0203e83c(Residents *self, int who)
+{
+    void *gd = data_020f57c0;
+    func_02031af0(gd, who, 1);
+    func_02031b70(gd, who, 0);
+    func_02031ce0(gd, who, 10);
+    func_02031df8(gd, who, 1);
+}
+
+void func_0203e890(Residents *self, int who)
+{
+    void *gd = data_020f57c0;
+    func_02031af0(gd, who, 2);
+    func_02031d6c(gd, who, 0x1e);
+}
+
+void func_0203e8c4(Residents *self, int who)
+{
+    void *gd = data_020f57c0;
+    func_02031af0(gd, who, 1);
+    func_02031b70(gd, who, 0);
+    func_02031ce0(gd, who, 10);
+    func_02031d6c(gd, who, 0x1e);
 }
 
 }
