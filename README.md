@@ -9,12 +9,12 @@ This repository does **not** contain any game data. You need your own legally ob
 
 | Module | Code | Functions |
 |---|---|---|
-| ARM9 main | 26.74% | 1719 / 5626 |
+| ARM9 main | 31.20% | 1913 / 5626 |
 | ITCM | 23.78% | 11 / 20 |
 | Overlay 1, 3, 5, 8, 9 | 100% | all |
 | Overlay 4 | 8.13% | 40 / 447 |
 | Overlay 2 (the main game) | 0% | 0 / 2915 |
-| **Total** | **17.61%** | **1934 / 9172** |
+| **Total** | **20.10%** | **2128 / 9172** |
 
 The rebuilt ROM is identical to the original except for 4 header bytes (the secure area CRC, which needs
 the ARM7 BIOS to compute; the code itself is byte-identical).
